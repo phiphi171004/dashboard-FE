@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = 'https://be-dashboard-hoclaptrinh.onrender.com/api';
 
 // In-memory access token (clears when tab closes/reloads)
 let accessTokenMemory = null;
@@ -41,22 +41,46 @@ export const fetchCsrfToken = async (force = false) => {
   csrfTokenFetching = true;
   
   try {
+    console.log('🔄 Fetching CSRF token from:', `${API_BASE_URL}/auth/csrf-token`);
     const response = await fetch(`${API_BASE_URL}/auth/csrf-token`, {
       method: 'GET',
       credentials: 'include',
     });
     
+    console.log('📥 CSRF token response status:', response.status, response.statusText);
+    
     if (!response.ok) {
-      throw new Error('Failed to fetch CSRF token');
+      const errorText = await response.text();
+      console.error('❌ CSRF token fetch failed:', response.status, response.statusText, errorText);
+      throw new Error(`Failed to fetch CSRF token: ${response.status} ${response.statusText}`);
     }
     
     const data = await response.json();
+    console.log('📥 CSRF token response data:', data);
+    
     // CSRF token is set in cookie by server, but we also get it in response
-    csrfTokenFetched = true;
-    return data.data?.csrf_token || getCsrfToken();
+    const token = data.data?.csrf_token || getCsrfToken();
+    
+    if (token) {
+      csrfTokenFetched = true;
+      console.log('✅ CSRF token fetched successfully:', token.substring(0, 20) + '...');
+      // Double check cookie
+      const cookieToken = getCsrfToken();
+      if (cookieToken) {
+        console.log('✅ CSRF token also found in cookie');
+      } else {
+        console.warn('⚠️ CSRF token not found in cookie after fetch');
+      }
+      return token;
+    } else {
+      console.error('❌ CSRF token not found in response or cookie');
+      throw new Error('CSRF token not found in response');
+    }
   } catch (error) {
-    console.error('Error fetching CSRF token:', error);
-    return null;
+    console.error('❌ Error fetching CSRF token:', error);
+    csrfTokenFetching = false;
+    csrfTokenFetched = false; // Reset flag on error
+    throw error; // Throw error instead of returning null
   } finally {
     csrfTokenFetching = false;
   }
@@ -309,17 +333,30 @@ async function apiCall(endpoint, options = {}) {
     // If endpoint needs CSRF token but we don't have it, fetch it first
     if (needsCsrf && !csrfToken) {
       console.log('🔒 CSRF token missing for', basePath, '- fetching...');
-      csrfToken = await fetchCsrfToken();
-      if (!csrfToken) {
-        console.warn('⚠️ Failed to fetch CSRF token for', basePath);
-      } else {
-        console.log('✅ CSRF token fetched successfully');
+      try {
+        csrfToken = await fetchCsrfToken();
+        if (!csrfToken) {
+          // Double check cookie after fetch
+          csrfToken = getCsrfToken();
+        }
+        if (!csrfToken) {
+          throw new Error('Failed to obtain CSRF token. Please refresh the page and try again.');
+        }
+        console.log('✅ CSRF token obtained successfully for', basePath);
+      } catch (error) {
+        console.error('❌ Failed to fetch CSRF token for', basePath, ':', error);
+        throw new Error(`CSRF token required but could not be fetched: ${error.message}`);
       }
     }
     
     // Always add CSRF token to header if we have it and endpoint needs it
     if (csrfToken && needsCsrf) {
       headers['x-csrf-token'] = csrfToken;
+      console.log('📤 CSRF token added to request header for', basePath);
+    } else if (needsCsrf && !csrfToken) {
+      // This should not happen if logic above is correct, but add safety check
+      console.error('❌ CSRF token required but not available for', basePath);
+      throw new Error('CSRF token is required for this request but is not available');
     }
 
     // Log request for verify-reset-token debugging
