@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://be-dashboard-hoclaptrinh.onrender.com/api';
+const API_BASE_URL = 'https://api.shopsheap.online/api';
 
 // In-memory access token (clears when tab closes/reloads)
 let accessTokenMemory = null;
@@ -15,11 +15,15 @@ export const clearAccessToken = () => {
   sessionStorage.removeItem('temp_access_token');
 };
 
-// Read CSRF token from cookie (double submit)
+// Read CSRF token from cookie only (double submit cookie pattern)
 const getCsrfToken = () => {
   if (typeof document === 'undefined') return null;
   const match = document.cookie.match(/(?:^|;\s*)csrf_token=([^;]+)/);
-  return match ? decodeURIComponent(match[1]) : null;
+  const token = match ? decodeURIComponent(match[1]) : null;
+  if (token) {
+    console.log('🍪 Reading CSRF token from cookie:', token.substring(0, 20) + '...');
+  }
+  return token;
 };
 
 // Flag to prevent multiple simultaneous CSRF token fetches
@@ -58,23 +62,38 @@ export const fetchCsrfToken = async (force = false) => {
     const data = await response.json();
     console.log('📥 CSRF token response data:', data);
     
-    // CSRF token is set in cookie by server, but we also get it in response
-    const token = data.data?.csrf_token || getCsrfToken();
+    // Wait longer for cookie to be set by browser (especially for cross-origin)
+    // Try multiple times to read from cookie
+    let token = null;
+    for (let i = 0; i < 5; i++) {
+      await new Promise(resolve => setTimeout(resolve, 200));
+      token = getCsrfToken();
+      if (token) {
+        console.log(`✅ CSRF token found in cookie (attempt ${i + 1}):`, token.substring(0, 20) + '...');
+        break;
+      }
+      console.log(`⏳ Waiting for cookie... (attempt ${i + 1}/5)`);
+    }
     
     if (token) {
       csrfTokenFetched = true;
-      console.log('✅ CSRF token fetched successfully:', token.substring(0, 20) + '...');
-      // Double check cookie
-      const cookieToken = getCsrfToken();
-      if (cookieToken) {
-        console.log('✅ CSRF token also found in cookie');
-      } else {
-        console.warn('⚠️ CSRF token not found in cookie after fetch');
+      // Verify token matches response (should match if cookie was set correctly)
+      const responseToken = data.data?.csrf_token;
+      if (responseToken && token !== responseToken) {
+        console.error('❌ Cookie token does NOT match response token!');
+        console.error('Cookie token:', token.substring(0, 20) + '...');
+        console.error('Response token:', responseToken.substring(0, 20) + '...');
+        console.error('⚠️ This means cookie was not updated. Using cookie token anyway.');
+        // Still use cookie token (it's what browser will send)
+      } else if (responseToken && token === responseToken) {
+        console.log('✅ Cookie token matches response token');
       }
       return token;
     } else {
-      console.error('❌ CSRF token not found in response or cookie');
-      throw new Error('CSRF token not found in response');
+      console.error('❌ CSRF token not found in cookie after fetch');
+      console.log('🔍 All cookies:', document.cookie);
+      console.log('🔍 Response token:', data.data?.csrf_token?.substring(0, 20) + '...');
+      throw new Error('CSRF token not found in cookie after fetch');
     }
   } catch (error) {
     console.error('❌ Error fetching CSRF token:', error);
@@ -153,19 +172,12 @@ async function refreshAccessToken() {
   if (!currentAccessToken) {
     throw new Error('No access token available for refresh');
   }
-  
-  // Ensure we have CSRF token before refreshing
-  let csrfToken = getCsrfToken();
-  if (!csrfToken) {
-    csrfToken = await fetchCsrfToken();
-  }
 
   const response = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${currentAccessToken}`, // Always send access token (even if expired) for verification
-      ...(csrfToken ? { 'x-csrf-token': csrfToken } : {})
+      'Authorization': `Bearer ${currentAccessToken}` // Always send access token (even if expired) for verification
     },
     // Refresh token is stored in HTTP-only cookie
     credentials: 'include',
@@ -316,47 +328,6 @@ async function apiCall(endpoint, options = {}) {
     
     if (currentAccessToken) {
       headers['Authorization'] = `Bearer ${currentAccessToken}`;
-    }
-    // Always include CSRF token for authenticated requests and sensitive public endpoints
-    // For public endpoints like login/register, CSRF is optional but recommended
-    let csrfToken = getCsrfToken();
-    const publicEndpointsWithoutCsrf = [
-      '/auth/login', 
-      '/auth/register', 
-      '/auth/csrf-token',
-      '/auth/verify-reset-token' // Public endpoint, doesn't need CSRF token
-    ];
-    
-    // Use basePath for comparison (remove query string)
-    const needsCsrf = !publicEndpointsWithoutCsrf.includes(basePath);
-    
-    // If endpoint needs CSRF token but we don't have it, fetch it first
-    if (needsCsrf && !csrfToken) {
-      console.log('🔒 CSRF token missing for', basePath, '- fetching...');
-      try {
-        csrfToken = await fetchCsrfToken();
-        if (!csrfToken) {
-          // Double check cookie after fetch
-          csrfToken = getCsrfToken();
-        }
-        if (!csrfToken) {
-          throw new Error('Failed to obtain CSRF token. Please refresh the page and try again.');
-        }
-        console.log('✅ CSRF token obtained successfully for', basePath);
-      } catch (error) {
-        console.error('❌ Failed to fetch CSRF token for', basePath, ':', error);
-        throw new Error(`CSRF token required but could not be fetched: ${error.message}`);
-      }
-    }
-    
-    // Always add CSRF token to header if we have it and endpoint needs it
-    if (csrfToken && needsCsrf) {
-      headers['x-csrf-token'] = csrfToken;
-      console.log('📤 CSRF token added to request header for', basePath);
-    } else if (needsCsrf && !csrfToken) {
-      // This should not happen if logic above is correct, but add safety check
-      console.error('❌ CSRF token required but not available for', basePath);
-      throw new Error('CSRF token is required for this request but is not available');
     }
 
     // Log request for verify-reset-token debugging
@@ -555,6 +526,5 @@ export default {
   getAccessToken,
   clearAccessToken,
   hashPassword,
-  fetchCsrfToken,
 };
 

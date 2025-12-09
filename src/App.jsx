@@ -125,14 +125,11 @@ function App() {
     }
   }, []);
 
-  // Fetch CSRF token and refresh access token if needed when app loads/reloads
+  // Refresh access token if needed when app loads/reloads
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const { fetchCsrfToken, getAccessToken, refreshAccessToken } = await import('./services/api.js');
-        
-        // Fetch CSRF token first
-        await fetchCsrfToken();
+        const { getAccessToken } = await import('./services/api.js');
         
         // If user is authenticated but no access token in memory (page reloaded),
         // try to refresh token using temp_access_token from sessionStorage
