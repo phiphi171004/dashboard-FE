@@ -113,11 +113,13 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
     !isResetPasswordRoute && !!sessionStorage.getItem('user')
   );
-
-  // Khởi tạo thông tin giảng viên mặc định khi app load
-  useEffect(() => {
-    teacherService.initDefaultTeacher();
-  }, []);
+  
+  console.log('🔍 App render check:', {
+    currentPath,
+    isResetPasswordRoute,
+    hasUser: !!sessionStorage.getItem('user'),
+    isAuthenticated
+  });
 
   // Sync selectedDashboard with sessionStorage when it changes
   useEffect(() => {
