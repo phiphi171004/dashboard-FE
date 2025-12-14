@@ -63,13 +63,13 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
   const searchRef = useRef(null);
   const searchDropdownRef = useRef(null);
 
-  // Menu items for function search
+  // Menu items for navigation search
   const menuItems = [
-    { id: 'dashboard', label: 'Tổng quan', icon: '📊' },
-    { id: 'courses', label: 'Khóa học', icon: '📖' },
-    { id: 'exercises', label: 'Bài tập', icon: '📚' },
-    { id: 'feedback', label: 'Lỗi & Phản hồi', icon: '🐛' },
-    { id: 'profile', label: 'Hồ sơ', icon: '👤' }
+    { id: 'dashboard', label: 'Trang chủ', icon: '📊', keywords: ['trang chủ', 'home', 'dashboard', 'tổng quan', 'trang chu', 'trangchu'] },
+    { id: 'courses', label: 'Khóa học', icon: '📖', keywords: ['khóa học', 'khoa hoc', 'course', 'courses', 'môn học', 'mon hoc'] },
+    { id: 'exercises', label: 'Bài tập', icon: '📚', keywords: ['bài tập', 'bai tap', 'exercise', 'exercises', 'assignment', 'assignments'] },
+    { id: 'feedback', label: 'Lỗi & Phản hồi', icon: '🐛', keywords: ['lỗi', 'loi', 'phản hồi', 'phan hoi', 'feedback', 'bug', 'error'] },
+    { id: 'profile', label: 'Hồ sơ', icon: '👤', keywords: ['hồ sơ', 'ho so', 'profile', 'thông tin', 'thong tin', 'cá nhân', 'ca nhan'] }
   ];
 
   // Fetch user info from API
@@ -104,21 +104,42 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Check if click is on a search result button or inside dropdown
+      const isSearchResultButton = event.target.closest('button[data-search-result]');
+      const isInsideDropdown = searchDropdownRef.current && searchDropdownRef.current.contains(event.target);
+      
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setUserMenuOpen(false);
       }
-      if (searchRef.current && !searchRef.current.contains(event.target) &&
-          searchDropdownRef.current && !searchDropdownRef.current.contains(event.target)) {
-        setShowSearchDropdown(false);
+      
+      // Don't close search dropdown if clicking on a search result button or inside dropdown
+      if (!isSearchResultButton && !isInsideDropdown) {
+        if (searchRef.current && !searchRef.current.contains(event.target)) {
+          setShowSearchDropdown(false);
+        }
       }
+      
       if (notificationRef.current && !notificationRef.current.contains(event.target)) {
         setNotificationOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    // Use a delay to ensure click handlers execute first
+    const handleClickOutsideDelayed = (event) => {
+      // Only delay for touch events, not mouse events
+      if (event.type === 'touchstart') {
+        setTimeout(() => handleClickOutside(event), 150);
+      } else {
+        setTimeout(() => handleClickOutside(event), 0);
+      }
+    };
+
+    // Support both mouse and touch events for mobile
+    document.addEventListener('mousedown', handleClickOutsideDelayed);
+    document.addEventListener('touchstart', handleClickOutsideDelayed);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutsideDelayed);
+      document.removeEventListener('touchstart', handleClickOutsideDelayed);
     };
   }, []);
 
@@ -199,9 +220,15 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
     const query = searchQuery.toLowerCase().trim();
     const results = [];
 
-    // 1. Tìm kiếm chức năng (menu items)
+    // 1. Tìm kiếm chức năng (menu items) - để điều hướng giữa các trang
     menuItems.forEach(item => {
-      if (item.label.toLowerCase().includes(query) || item.id.toLowerCase().includes(query)) {
+      const labelMatch = item.label.toLowerCase().includes(query);
+      const idMatch = item.id.toLowerCase().includes(query);
+      const keywordMatch = item.keywords && item.keywords.some(keyword => 
+        keyword.toLowerCase().includes(query) || query.includes(keyword.toLowerCase())
+      );
+      
+      if (labelMatch || idMatch || keywordMatch) {
         results.push({
           type: 'action',
           label: item.label,
@@ -334,7 +361,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
 
   const getTypeLabel = (type) => {
     const labels = {
-      'action': 'Chức năng',
+      'action': 'Điều hướng',
       'course': 'Khóa học',
       'group': 'Nhóm học tập',
       'assignment': 'Bài tập',
@@ -375,18 +402,111 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
   };
 
   return (
-    <header className="bg-white border-b border-gray-200 shadow-sm">
+    <header className="bg-white border-b border-gray-200 shadow-sm relative z-50">
       <div className="flex items-center justify-between h-16 px-4 sm:px-6">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2 flex-1 min-w-0">
           {/* Mobile menu button */}
           <button
             onClick={onMenuClick}
-            className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors flex-shrink-0"
           >
             <Menu />
           </button>
           
-          {/* Search bar */}
+          {/* Search bar - Mobile */}
+          <div className="md:hidden flex-1 min-w-0 mx-2">
+            <div className="relative" ref={searchRef} style={{ zIndex: 100 }}>
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => searchQuery && setShowSearchDropdown(true)}
+                placeholder="Tìm kiếm..."
+                className="w-full pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setShowSearchDropdown(false);
+                  }}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
+                >
+                  ×
+                </button>
+              )}
+              
+              {/* Search Dropdown Results - Mobile */}
+              {showSearchDropdown && searchResults.length > 0 && (
+                <div
+                  ref={searchDropdownRef}
+                  className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-[100]"
+                  style={{ touchAction: 'manipulation' }}
+                >
+                  {searchResults.map((result, index) => (
+                    <button
+                      key={`${result.type}-${result.id}`}
+                      type="button"
+                      data-search-result="true"
+                      onMouseDown={(e) => {
+                        // Prevent default to avoid losing focus
+                        e.preventDefault();
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Execute action immediately - it will handle closing dropdown
+                        if (result.action) {
+                          result.action();
+                        }
+                      }}
+                      onTouchStart={(e) => {
+                        // Prevent scrolling when touching
+                        e.stopPropagation();
+                      }}
+                      onTouchEnd={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Execute action immediately - it will handle closing dropdown
+                        if (result.action) {
+                          result.action();
+                        }
+                      }}
+                      className={`w-full text-left px-4 py-3 active:bg-gray-100 transition-colors touch-manipulation ${
+                        index === selectedIndex ? 'bg-primary-50' : ''
+                      }`}
+                      style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent', cursor: 'pointer', userSelect: 'none' }}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <span className="text-2xl">{result.icon}</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <p className="font-medium text-gray-800 truncate text-sm">{result.label}</p>
+                            <span className="text-xs text-gray-500 ml-2">{getTypeLabel(result.type)}</span>
+                          </div>
+                          {result.subtitle && (
+                            <p className="text-xs text-gray-600 truncate">{result.subtitle}</p>
+                          )}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {showSearchDropdown && searchQuery && searchResults.length === 0 && (
+                <div
+                  ref={searchDropdownRef}
+                  className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-[100]"
+                >
+                  <p className="text-gray-600 text-center text-sm">Không tìm thấy kết quả</p>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* Search bar - Desktop */}
           <div className="hidden md:flex items-center">
             <div className="relative" ref={searchRef}>
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -395,7 +515,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => searchQuery && setShowSearchDropdown(true)}
-                placeholder="Tìm kiếm chức năng, khóa học, bài tập..."
+                placeholder="Tìm kiếm trang, khóa học, bài tập..."
                 className="pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent w-80 text-sm"
               />
               {searchQuery && (
@@ -410,7 +530,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
                 </button>
               )}
               
-              {/* Search Dropdown Results */}
+              {/* Search Dropdown Results - Desktop */}
               {showSearchDropdown && searchResults.length > 0 && (
                 <div
                   ref={searchDropdownRef}

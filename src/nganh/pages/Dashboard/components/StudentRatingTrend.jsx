@@ -12,6 +12,7 @@ import {
   Customized
 } from 'recharts';
 import { BarChart3, CalendarRange } from 'lucide-react';
+import { coursePerformanceData } from '../../../data/coursePerformanceData';
 
 const LEVELS = [
   { key: 'xs', label: 'Xuất sắc', color: '#4c8bf5' },
@@ -37,8 +38,18 @@ const TOTAL_STUDENTS = {
   2025: 215
 };
 
-const GOOD_BENCHMARK = 70; // % Khá trở lên
+const GOOD_BENCHMARK = 70; // % >= Khá
 const WEAK_BENCHMARK = 10; // % Yếu/Kém tối đa
+
+const LEVEL_THRESHOLDS = [
+  { key: 'xs', min: 9 },
+  { key: 'g', min: 8.5 },
+  { key: 'kg', min: 7.5 },
+  { key: 'k', min: 7 },
+  { key: 'tbk', min: 6 },
+  { key: 'tb', min: 5 },
+  { key: 'yk', min: 0 }
+];
 
 const currentYear = new Date().getFullYear();
 const YEAR_OPTIONS = Array.from({ length: 12 }, (_, idx) => currentYear - idx).filter((y) => y >= 2013);
@@ -46,8 +57,7 @@ const YEAR_OPTIONS = Array.from({ length: 12 }, (_, idx) => currentYear - idx).f
 const statusColor = (status) => (status === 'good' ? '#16a34a' : status === 'warning' ? '#f59e0b' : '#ef4444');
 
 const SummaryItem = ({ label, value, tone = 'default' }) => {
-  const toneClass =
-    tone === 'up' ? 'text-green-600' : tone === 'down' ? 'text-red-600' : 'text-gray-800';
+  const toneClass = tone === 'up' ? 'text-green-600' : tone === 'down' ? 'text-red-600' : 'text-gray-800';
   return (
     <div className="p-3 rounded-lg border border-gray-200 bg-white shadow-sm">
       <p className="text-xs text-gray-500">{label}</p>
@@ -56,10 +66,57 @@ const SummaryItem = ({ label, value, tone = 'default' }) => {
   );
 };
 
+const determineLevelKey = (score) => {
+  if (!Number.isFinite(score)) return 'tb';
+  const threshold = LEVEL_THRESHOLDS.find((lvl) => score >= lvl.min);
+  return threshold?.key || 'tb';
+};
+
+const buildStudentLevelDirectory = () => {
+  const years = Object.keys(RATING_DISTRIBUTION);
+  const directory = years.reduce((acc, year) => {
+    acc[year] = LEVELS.reduce((lvlAcc, lvl) => {
+      lvlAcc[lvl.key] = [];
+      return lvlAcc;
+    }, {});
+    return acc;
+  }, {});
+
+  const students = coursePerformanceData?.students || [];
+  students.forEach((student, idx) => {
+    const courses = Object.values(student.courses || {});
+    const avgScore =
+      !courses.length
+        ? null
+        : Math.round(
+            (courses.reduce((sum, course) => sum + (course?.avgScore || 0), 0) / courses.length) * 10
+          ) / 10;
+    const levelKey = determineLevelKey(avgScore ?? 0);
+    const targetYear = years[idx % years.length];
+    directory[targetYear][levelKey].push({
+      id: student.studentId,
+      name: student.name,
+      className: student.className,
+      avgScore: avgScore ?? 0
+    });
+  });
+
+  years.forEach((year) => {
+    LEVELS.forEach((lvl) => {
+      directory[year][lvl.key].sort((a, b) => (b.avgScore || 0) - (a.avgScore || 0));
+    });
+  });
+
+  return directory;
+};
+
+const STUDENT_LEVEL_DIRECTORY = buildStudentLevelDirectory();
+
 const StudentRatingTrend = ({ title, description }) => {
   const [startYear, setStartYear] = useState(Math.max(currentYear - 3, 2022));
   const [hoveredYear, setHoveredYear] = useState(null);
   const [clickedInfo, setClickedInfo] = useState(null);
+  const studentLevelDirectory = useMemo(() => STUDENT_LEVEL_DIRECTORY, []);
 
   const chartData = useMemo(() => {
     const years = Array.from({ length: 4 }, (_, i) => startYear + i);
@@ -142,7 +199,8 @@ const StudentRatingTrend = ({ title, description }) => {
     const pct = point[levelKey] || 0;
     const count = point[`${levelKey}_count`] || 0;
     const levelLabel = LEVELS.find((l) => l.key === levelKey)?.label || levelKey;
-    setClickedInfo({ year, levelLabel, pct, count, total });
+    const students = studentLevelDirectory?.[year]?.[levelKey] || [];
+    setClickedInfo({ year, levelLabel, levelKey, pct, count, total, students });
   };
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -152,19 +210,31 @@ const StudentRatingTrend = ({ title, description }) => {
       <div className="bg-white p-3 border border-gray-200 rounded-lg shadow w-64">
         <p className="text-sm font-medium text-gray-900 mb-1">Năm {label}</p>
         <p className="text-xs text-gray-500 mb-2">Tổng: {point.totalStudents || 0} sinh viên</p>
-        <div className="space-y-1 max-h-40 overflow-auto pr-1">
+        <div className="space-y-2 max-h-48 overflow-auto pr-1">
           {payload.map((entry) => {
             const delta = point?.[`${entry.dataKey}_delta`];
             const deltaText = delta === null || delta === undefined ? '' : `${delta >= 0 ? '+' : ''}${delta}%`;
             return (
-              <div key={entry.name} className="text-sm text-gray-700 flex items-center gap-2">
-                <span className="inline-block h-3 w-3 rounded-full" style={{ backgroundColor: entry.fill }}></span>
-                <span className="font-medium">{entry.name}:</span>
-                <span className="font-semibold">{entry.value}%</span>
-                <span className="text-xs text-gray-500">({point?.[`${entry.dataKey}_count`] || 0} SV)</span>
-                <span className={`text-xs ${delta > 0 ? 'text-green-600' : delta < 0 ? 'text-red-600' : 'text-gray-500'}`}>
-                  {deltaText}
-                </span>
+              <div key={entry.name} className="text-sm text-gray-700 space-y-0.5">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-block h-3 w-3 rounded-full" style={{ backgroundColor: entry.fill }}></span>
+                    <span className="font-medium">{entry.name}</span>
+                  </div>
+                  <span className="font-semibold">{entry.value}%</span>
+                </div>
+                <div className="pl-5 flex items-center justify-between text-xs text-gray-500">
+                  <span>
+                    {point?.[`${entry.dataKey}_count`] || 0}/{point.totalStudents || 0} sinh viên
+                  </span>
+                  {deltaText && (
+                    <span
+                      className={`font-semibold ${delta > 0 ? 'text-green-600' : delta < 0 ? 'text-red-600' : 'text-gray-500'}`}
+                    >
+                      {deltaText}
+                    </span>
+                  )}
+                </div>
               </div>
             );
           })}
@@ -202,8 +272,7 @@ const StudentRatingTrend = ({ title, description }) => {
   );
 
   const StatusBadges = useCallback(
-    (props) => {
-      const { xAxisMap, yAxisMap } = props;
+    ({ xAxisMap, yAxisMap }) => {
       if (!xAxisMap || !yAxisMap) return null;
       const xAxis = xAxisMap[0];
       const yAxis = yAxisMap[0];
@@ -310,13 +379,32 @@ const StudentRatingTrend = ({ title, description }) => {
       {clickedInfo && (
         <div className="mt-3 text-sm text-gray-700 p-3 rounded-lg border border-gray-200 bg-white">
           <div className="font-semibold text-gray-900 mb-1">
-            {clickedInfo.levelLabel} – Năm {clickedInfo.year}
+            {clickedInfo.levelLabel} · Năm {clickedInfo.year}
           </div>
-          <div className="text-sm">
-            Tỉ lệ: <span className="font-semibold">{clickedInfo.pct}%</span> ({clickedInfo.count}/
+          <div className="text-sm mb-2">
+            Tỷ lệ: <span className="font-semibold">{clickedInfo.pct}%</span> ({clickedInfo.count}/
             {clickedInfo.total} sinh viên)
           </div>
-          <div className="text-xs text-gray-500">* Danh sách sinh viên: dữ liệu mock, chưa có chi tiết.</div>
+          {clickedInfo.students && clickedInfo.students.length > 0 ? (
+            <div className="max-h-48 overflow-auto divide-y divide-gray-100">
+              {clickedInfo.students.slice(0, 12).map((student) => (
+                <div key={`${student.id}-${clickedInfo.levelKey}`} className="py-2 flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-gray-900">{student.name}</p>
+                    <p className="text-xs text-gray-500">
+                      {student.id} · Lớp {student.className}
+                    </p>
+                  </div>
+                  <span className="text-xs font-semibold text-primary-600">{student.avgScore?.toFixed(1) ?? '0.0'}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-xs text-gray-500">Chưa có dữ liệu minh họa cho nhóm này.</p>
+          )}
+          <div className="text-[11px] text-gray-400 mt-2">
+            Danh sách sinh viên được sinh từ kho dữ liệu giả lập để tham khảo nhanh.
+          </div>
         </div>
       )}
 
