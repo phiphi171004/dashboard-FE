@@ -38,9 +38,7 @@ const Login = ({ setIsAuthenticated }) => {
       }
       
       const hashedPassword = await hashPassword(formData.password);
-      console.log('🔐 Attempting login...');
       const response = await authAPI.login({ ...loginData, password: hashedPassword });
-      console.log('✅ Login response received:', response);
       
       // Check response structure
       if (!response || !response.data) {
@@ -63,13 +61,10 @@ const Login = ({ setIsAuthenticated }) => {
       sessionStorage.removeItem('dashboardType');
       
       // Lưu access token vào bộ nhớ tạm (in-memory) và sessionStorage (tạm thời để dùng khi refresh)
-      console.log('💾 Saving access token to memory and sessionStorage...');
       setAccessToken(response.data.access_token);
       // Lưu tạm vào sessionStorage để dùng khi refresh token (sẽ xóa sau khi refresh thành công)
       sessionStorage.setItem('temp_access_token', response.data.access_token);
       sessionStorage.setItem('user', JSON.stringify(response.data.user));
-      console.log('✅ Access token saved to memory and sessionStorage');
-      console.log('🔍 Verifying temp_access_token in sessionStorage:', sessionStorage.getItem('temp_access_token') ? 'EXISTS' : 'MISSING');
 
       // Decode JWT để lấy role
       const decodedToken = decodeJWT(response.data.access_token);
@@ -81,7 +76,6 @@ const Login = ({ setIsAuthenticated }) => {
       }
 
       const userRole = decodedToken.role;
-      console.log('👤 User role:', userRole);
 
       // Update auth state
       if (setIsAuthenticated) {
@@ -99,9 +93,7 @@ const Login = ({ setIsAuthenticated }) => {
         dashboardType = 'nghanh';
       }
       
-      console.log('💾 Saving dashboardType to sessionStorage:', dashboardType);
       sessionStorage.setItem('dashboardType', dashboardType);
-      console.log('✅ DashboardType saved, verifying...', sessionStorage.getItem('dashboardType'));
       
       // Force page reload to ensure state is synced with sessionStorage
       // This also ensures access token is preserved in memory (via temp_access_token)

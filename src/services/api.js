@@ -20,9 +20,6 @@ const getCsrfToken = () => {
   if (typeof document === 'undefined') return null;
   const match = document.cookie.match(/(?:^|;\s*)csrf_token=([^;]+)/);
   const token = match ? decodeURIComponent(match[1]) : null;
-  if (token) {
-    console.log('🍪 Reading CSRF token from cookie:', token.substring(0, 20) + '...');
-  }
   return token;
 };
 
@@ -45,13 +42,10 @@ export const fetchCsrfToken = async (force = false) => {
   csrfTokenFetching = true;
   
   try {
-    console.log('🔄 Fetching CSRF token from:', `${API_BASE_URL}/auth/csrf-token`);
     const response = await fetch(`${API_BASE_URL}/auth/csrf-token`, {
       method: 'GET',
       credentials: 'include',
     });
-    
-    console.log('📥 CSRF token response status:', response.status, response.statusText);
     
     if (!response.ok) {
       const errorText = await response.text();
@@ -60,7 +54,6 @@ export const fetchCsrfToken = async (force = false) => {
     }
     
     const data = await response.json();
-    console.log('📥 CSRF token response data:', data);
     
     // Wait longer for cookie to be set by browser (especially for cross-origin)
     // Try multiple times to read from cookie
@@ -69,10 +62,8 @@ export const fetchCsrfToken = async (force = false) => {
       await new Promise(resolve => setTimeout(resolve, 200));
       token = getCsrfToken();
       if (token) {
-        console.log(`✅ CSRF token found in cookie (attempt ${i + 1}):`, token.substring(0, 20) + '...');
         break;
       }
-      console.log(`⏳ Waiting for cookie... (attempt ${i + 1}/5)`);
     }
     
     if (token) {
@@ -81,18 +72,11 @@ export const fetchCsrfToken = async (force = false) => {
       const responseToken = data.data?.csrf_token;
       if (responseToken && token !== responseToken) {
         console.error('❌ Cookie token does NOT match response token!');
-        console.error('Cookie token:', token.substring(0, 20) + '...');
-        console.error('Response token:', responseToken.substring(0, 20) + '...');
-        console.error('⚠️ This means cookie was not updated. Using cookie token anyway.');
         // Still use cookie token (it's what browser will send)
-      } else if (responseToken && token === responseToken) {
-        console.log('✅ Cookie token matches response token');
       }
       return token;
     } else {
       console.error('❌ CSRF token not found in cookie after fetch');
-      console.log('🔍 All cookies:', document.cookie);
-      console.log('🔍 Response token:', data.data?.csrf_token?.substring(0, 20) + '...');
       throw new Error('CSRF token not found in cookie after fetch');
     }
   } catch (error) {

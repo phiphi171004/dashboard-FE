@@ -8,8 +8,6 @@ const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 
-  console.log('🚀 ResetPassword component mounted');
-  console.log('🔑 Token from URL:', token ? token.substring(0, 10) + '...' : 'NO TOKEN');
 
   const [formData, setFormData] = useState({
     password: '',
@@ -25,21 +23,15 @@ const ResetPassword = () => {
 
   // Verify token on mount
   useEffect(() => {
-    console.log('📋 useEffect triggered, token:', token ? token.substring(0, 10) + '...' : 'NO TOKEN');
-    
     const verifyToken = async () => {
       if (!token) {
-        console.log('⚠️ No token found in URL');
         setTokenValid(false);
         setValidating(false);
         return;
       }
 
       try {
-        console.log('🔍 Verifying token:', token?.substring(0, 10) + '...');
-        console.log('🌐 About to call authAPI.verifyResetToken...');
         const response = await authAPI.verifyResetToken(token);
-        console.log('✅ Token verification response:', response);
         if (response && response.success) {
         setTokenValid(true);
         } else {
