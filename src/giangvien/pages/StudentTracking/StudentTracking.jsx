@@ -7,6 +7,7 @@ import StudentList from './components/StudentList';
 import StudentAnalytics from './components/StudentAnalytics';
 import StudentDetailModal from './components/StudentDetailModal';
 import { mockStudentTrackingData } from '../../data/mockData';
+import localStorageService from '../../services/localStorageService';
 
 const StudentTracking = () => {
   const [students, setStudents] = useState([]);
@@ -25,6 +26,19 @@ const StudentTracking = () => {
 
   useEffect(() => {
     loadStudentData();
+    
+    // Reload khi quay lại trang (visibility change)
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        loadStudentData();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [filters]);
 
   const loadStudentData = async () => {
@@ -32,7 +46,16 @@ const StudentTracking = () => {
       setLoading(true);
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 800));
-      setStudents(mockStudentTrackingData.students);
+      
+      // Lấy tất cả sinh viên từ localStorage
+      const storedStudents = localStorageService.getStudents();
+      
+      // Nếu có dữ liệu trong localStorage, dùng nó
+      // Nếu không, dùng mockData
+      const studentsToUse = storedStudents || mockStudentTrackingData.students;
+      
+      setStudents(studentsToUse);
+      console.log('📊 Đã load', studentsToUse.length, 'sinh viên từ', storedStudents ? 'localStorage' : 'mockData');
     } catch (error) {
       console.error('Error loading student data:', error);
     } finally {

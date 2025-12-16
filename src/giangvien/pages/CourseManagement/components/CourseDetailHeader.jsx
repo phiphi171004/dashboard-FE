@@ -1,6 +1,7 @@
-import { ArrowLeft, Edit, Share2, MoreVertical, Award, Clock, Users, TrendingUp, Download, Trash2, Copy, Check } from 'lucide-react';
+import { ArrowLeft, Edit, Share2, MoreVertical, Award, Clock, Users, TrendingUp, Trash2, Copy, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import ExportDropdown from '../../../components/ExportDropdown';
 
 const CourseDetailHeader = ({ course, onEdit, onDelete }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -109,6 +110,16 @@ const CourseDetailHeader = ({ course, onEdit, onDelete }) => {
 
           {/* Action Buttons */}
           <div className="flex items-center gap-3">
+            {/* Export Dropdown */}
+            <div className="export-dropdown-white">
+              <ExportDropdown 
+                onExport={(format, options) => {
+                  console.log('Exporting course report:', format, options);
+                  handleExport();
+                }}
+              />
+            </div>
+
             {/* Share Button */}
             <button 
               onClick={handleShare}
@@ -149,14 +160,6 @@ const CourseDetailHeader = ({ course, onEdit, onDelete }) => {
                     onClick={() => setShowDropdown(false)}
                   />
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-20">
-                    <button
-                      onClick={handleExport}
-                      className="w-full flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      <Download size={18} />
-                      <span className="text-sm font-medium">Xuất báo cáo</span>
-                    </button>
-                    
                     <button
                       onClick={handleShare}
                       className="w-full flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"

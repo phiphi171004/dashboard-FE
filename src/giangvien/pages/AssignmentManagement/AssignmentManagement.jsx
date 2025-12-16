@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Search, Filter, Calendar, Users, Clock, CheckCircle, AlertTriangle, FileText, Eye, Edit, Trash2 } from 'lucide-react';
+import { Plus, Filter, Calendar, Users, Clock, CheckCircle, AlertTriangle, FileText, Eye, Edit, Trash2 } from 'lucide-react';
 import AssignmentStats from './components/AssignmentStats';
 import AssignmentFilters from './components/AssignmentFilters';
 import AssignmentList from './components/AssignmentList';
+import SmartSearchInput from '../../components/SmartSearchInput';
 import { mockAssignmentData } from '../../data/mockData';
 
 const AssignmentManagement = () => {
@@ -118,16 +119,12 @@ const AssignmentManagement = () => {
       <div className="card p-6">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
           <div className="flex items-center space-x-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <input
-                type="text"
-                placeholder="Tìm kiếm bài tập..."
-                value={searchTerm}
-                onChange={(e) => handleSearch(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent w-80"
-              />
-            </div>
+            <SmartSearchInput
+              value={searchTerm}
+              onChange={handleSearch}
+              placeholder="Tìm kiếm bài tập..."
+              className="w-80"
+            />
           </div>
           
           <AssignmentFilters 

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Filter, Download, RefreshCw } from 'lucide-react';
+import { Filter, RefreshCw } from 'lucide-react';
+import ExportDropdown from '../../../components/ExportDropdown';
 
 const DashboardHeader = ({ filters, onFilterChange }) => {
   const courseOptions = [
@@ -79,10 +80,11 @@ const DashboardHeader = ({ filters, onFilterChange }) => {
             <span>Làm mới</span>
           </button>
           
-          <button className="btn-primary flex items-center space-x-2">
-            <Download className="h-4 w-4" />
-            <span>Xuất báo cáo</span>
-          </button>
+          <ExportDropdown 
+            onExport={(format, options) => {
+              console.log('Exporting dashboard report:', format, options);
+            }}
+          />
         </div>
       </div>
     </div>

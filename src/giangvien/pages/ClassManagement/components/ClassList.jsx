@@ -1,8 +1,37 @@
-import React from 'react';
-import { Users, TrendingUp, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { Users, TrendingUp, ExternalLink, UserPlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import AddNewStudentModal from './AddNewStudentModal';
 
-const ClassList = ({ classes }) => {
+const ClassList = ({ classes, onAddStudent }) => {
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [selectedClass, setSelectedClass] = useState(null);
+
+  const handleAddStudent = (studentData) => {
+    // Gọi callback từ parent để cập nhật state
+    if (onAddStudent && selectedClass) {
+      onAddStudent(selectedClass.id, studentData);
+    }
+    
+    // Hiển thị thông báo thành công
+    const notification = document.createElement('div');
+    notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in';
+    notification.innerHTML = `
+      <div class="flex items-center space-x-2">
+        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span>✅ Đã thêm sinh viên ${studentData.name} vào lớp ${selectedClass.name}</span>
+      </div>
+    `;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+  };
+
+  const openAddModal = (classItem) => {
+    setSelectedClass(classItem);
+    setShowAddModal(true);
+  };
   const getStatusBadge = (status) => {
     const statusConfig = {
       active: { class: 'status-badge status-active', text: 'Đang diễn ra' },
@@ -100,20 +129,42 @@ const ClassList = ({ classes }) => {
                     </span>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <Link 
-                    to={`/classes/${classItem.id}`}
-                    className="text-primary-600 hover:text-primary-900 inline-flex items-center"
-                  >
-                    Chi tiết
-                    <ExternalLink className="h-3 w-3 ml-1" />
-                  </Link>
+                <td className="px-6 py-4 whitespace-nowrap text-right">
+                  <div className="flex items-center justify-end space-x-2">
+                    <button
+                      onClick={() => openAddModal(classItem)}
+                      className="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all text-sm font-medium"
+                    >
+                      <UserPlus className="h-4 w-4 mr-1" />
+                      Thêm SV
+                    </button>
+                    <Link 
+                      to={`/classes/${classItem.id}`}
+                      className="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
+                    >
+                      Chi tiết
+                      <ExternalLink className="h-3 w-3 ml-1" />
+                    </Link>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {/* Add Student Modal */}
+      {selectedClass && (
+        <AddNewStudentModal
+          isOpen={showAddModal}
+          onClose={() => {
+            setShowAddModal(false);
+            setSelectedClass(null);
+          }}
+          onAdd={handleAddStudent}
+          classData={selectedClass}
+        />
+      )}
     </div>
   );
 };

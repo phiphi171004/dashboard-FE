@@ -1,5 +1,6 @@
 import React from 'react';
-import { Users, Download, Grid, BarChart3, Filter } from 'lucide-react';
+import { Users, Grid, BarChart3, Filter } from 'lucide-react';
+import ExportDropdown from '../../../components/ExportDropdown';
 
 const StudentTrackingHeader = ({
   totalStudents,
@@ -52,13 +53,12 @@ const StudentTrackingHeader = ({
             </button>
           </div>
 
-          <button
-            onClick={onExport}
-            className="btn-secondary flex items-center space-x-2"
-          >
-            <Download className="h-4 w-4" />
-            <span>Xuất báo cáo</span>
-          </button>
+          <ExportDropdown 
+            onExport={(format, options) => {
+              console.log('Exporting student tracking report:', format, options);
+              if (onExport) onExport();
+            }}
+          />
         </div>
       </div>
 

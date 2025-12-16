@@ -78,6 +78,7 @@ const AssignmentDetail = () => {
 
   const tabs = [
     { id: 'submissions', label: 'Bài nộp', count: assignment.submissions?.length || 0 },
+    { id: 'auto-grading', label: '🤖 Tự động chấm', count: null, highlight: true },
     { id: 'analytics', label: 'Phân tích', count: null },
     { id: 'grading', label: 'Chấm điểm', count: assignment.submissions?.filter(s => s.status === 'pending').length || 0 }
   ];
@@ -118,7 +119,7 @@ const AssignmentDetail = () => {
                 activeTab === tab.id
                   ? 'border-primary-500 text-primary-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+              } ${tab.highlight ? 'bg-gradient-to-r from-blue-50 to-indigo-50 px-3 rounded-t-lg' : ''}`}
             >
               {tab.label}
               {tab.count !== null && (
@@ -135,6 +136,20 @@ const AssignmentDetail = () => {
       <div className="space-y-6">
         {activeTab === 'submissions' && (
           <SubmissionList submissions={assignment.submissions} assignmentId={assignment.id} />
+        )}
+        {activeTab === 'auto-grading' && (
+          <div className="card p-6 text-center">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">🤖 Tự Động Chấm Bài</h3>
+            <p className="text-gray-600 mb-6">
+              Hệ thống tự động chấm điểm giúp tiết kiệm 80-90% thời gian chấm bài
+            </p>
+            <Link
+              to={`/assignments/${assignment.id}/auto-grading`}
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg"
+            >
+              Vào trang tự động chấm →
+            </Link>
+          </div>
         )}
         {activeTab === 'analytics' && (
           <AssignmentAnalytics analytics={assignment.analytics} assignmentId={assignment.id} />

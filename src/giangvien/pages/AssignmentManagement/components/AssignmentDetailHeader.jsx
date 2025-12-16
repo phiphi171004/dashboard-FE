@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Edit, Trash2, Download, Users, Clock, Calendar, FileText, CheckCircle, AlertTriangle, MapPin, X } from 'lucide-react';
+import { Edit, Trash2, Users, Clock, Calendar, FileText, CheckCircle, AlertTriangle, MapPin, X, Download } from 'lucide-react';
+import ExportDropdown from '../../../components/ExportDropdown';
 
 const AssignmentDetailHeader = ({ assignment }) => {
   const [showModal, setShowModal] = useState(false);
@@ -117,10 +118,11 @@ const AssignmentDetailHeader = ({ assignment }) => {
             <Edit className="h-4 w-4" />
             <span>Chỉnh sửa</span>
           </Link>
-          <button className="btn-secondary flex items-center space-x-2">
-            <Download className="h-4 w-4" />
-            <span>Xuất báo cáo</span>
-          </button>
+          <ExportDropdown 
+            onExport={(format, options) => {
+              console.log('Exporting assignment report:', format, options);
+            }}
+          />
         </div>
       </div>
 

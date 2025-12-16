@@ -126,6 +126,14 @@ const AssignmentList = ({ assignments, onDelete }) => {
               </div>
 
               <div className="flex items-center space-x-2 ml-4">
+                <Link
+                  to={`/assignments/${assignment.id}/auto-grading`}
+                  className="px-3 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-sm font-medium rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all shadow-sm flex items-center space-x-1"
+                  title="Tự động chấm bài"
+                >
+                  <span>🤖</span>
+                  <span>Tự động chấm</span>
+                </Link>
                 <button
                   onClick={() => handleShowDetails(assignment)}
                   className="p-2 text-gray-400 hover:text-info-600 hover:bg-info-50 rounded-lg transition-colors"

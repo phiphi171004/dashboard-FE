@@ -20,6 +20,10 @@ import AssignmentManagement from './giangvien/pages/AssignmentManagement/Assignm
 import AssignmentDetail from './giangvien/pages/AssignmentManagement/AssignmentDetail';
 import AssignmentCreate from './giangvien/pages/AssignmentManagement/AssignmentCreate';
 import AssignmentEdit from './giangvien/pages/AssignmentManagement/AssignmentEdit';
+import AutoGradingPage from './giangvien/pages/AssignmentManagement/AutoGradingPage';
+import LearningPath from './giangvien/pages/LearningPath/LearningPath';
+import ModuleDetail from './giangvien/pages/LearningPath/ModuleDetail';
+import WeekDetail from './giangvien/pages/LearningPath/WeekDetail';
 import Reports from './giangvien/pages/Reports/Reports';
 import Settings from './giangvien/pages/Settings/Settings';
 
@@ -220,6 +224,9 @@ function App() {
               <Routes>
                 <Route path="/" element={<DashboardTeacher />} />
                 <Route path="/dashboard" element={<DashboardTeacher />} />
+                <Route path="/learning-path" element={<LearningPath />} />
+                <Route path="/learning-path/:id" element={<ModuleDetail />} />
+                <Route path="/learning-path/:id/week" element={<WeekDetail />} />
                 <Route path="/courses" element={<CourseManagement />} />
                 <Route path="/courses/:id" element={<CourseDetail />} />
                 <Route path="/classes" element={<ClassManagement />} />
@@ -229,6 +236,7 @@ function App() {
                 <Route path="/assignments/create" element={<AssignmentCreate />} />
                 <Route path="/assignments/:id" element={<AssignmentDetail />} />
                 <Route path="/assignments/:id/edit" element={<AssignmentEdit />} />
+                <Route path="/assignments/:id/auto-grading" element={<AutoGradingPage />} />
                 <Route path="/reports" element={<Reports />} />
                 <Route path="/settings" element={<Settings />} />
               </Routes>

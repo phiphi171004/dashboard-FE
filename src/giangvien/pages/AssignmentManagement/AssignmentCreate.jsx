@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, Eye, Upload, X, Calendar, Clock, Users, FileText } from 'lucide-react';
+import { ArrowLeft, Save, Eye, Upload, X, Calendar, Clock, Users, FileText, Plus, Trash2 } from 'lucide-react';
 
 const AssignmentCreate = () => {
   const navigate = useNavigate();
@@ -19,7 +19,24 @@ const AssignmentCreate = () => {
     showScoreToStudents: true,
     requireFiles: true,
     allowedFileTypes: ['pdf', 'doc', 'docx', 'txt'],
-    maxFileSize: 10
+    maxFileSize: 10,
+    // Auto Grading
+    enableAutoGrading: false,
+    assignmentType: 'code',
+    programmingLanguage: 'python',
+    timeLimit: 5,
+    memoryLimit: 256
+  });
+  
+  const [testCases, setTestCases] = useState([
+    { input: '', output: '', score: 10 }
+  ]);
+  
+  const [gradingCriteria, setGradingCriteria] = useState({
+    testCases: 60,
+    codeQuality: 20,
+    performance: 10,
+    documentation: 10
   });
   const [attachedFiles, setAttachedFiles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -306,6 +323,233 @@ const AssignmentCreate = () => {
               </div>
             </div>
 
+            {/* Auto Grading Configuration */}
+            <div className="card p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="p-2 bg-blue-600 rounded-lg">
+                  <span className="text-2xl">🤖</span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Cấu Hình Tự Động Chấm</h3>
+                  <p className="text-sm text-gray-600">Tiết kiệm 80-90% thời gian chấm bài</p>
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="enableAutoGrading"
+                    checked={formData.enableAutoGrading}
+                    onChange={handleInputChange}
+                    className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="ml-3 text-sm font-medium text-gray-900">
+                    ✅ Bật tự động chấm điểm
+                  </span>
+                </label>
+              </div>
+
+              {formData.enableAutoGrading && (
+                <div className="space-y-4 pl-8 border-l-4 border-blue-300">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Loại bài tập
+                      </label>
+                      <select
+                        name="assignmentType"
+                        value={formData.assignmentType}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="code">Bài tập lập trình (Code)</option>
+                        <option value="quiz">Trắc nghiệm (Quiz)</option>
+                        <option value="essay">Tự luận (Essay)</option>
+                      </select>
+                    </div>
+
+                    {formData.assignmentType === 'code' && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Ngôn ngữ lập trình
+                        </label>
+                        <select
+                          name="programmingLanguage"
+                          value={formData.programmingLanguage}
+                          onChange={handleInputChange}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="python">Python</option>
+                          <option value="javascript">JavaScript</option>
+                          <option value="java">Java</option>
+                          <option value="cpp">C++</option>
+                          <option value="c">C</option>
+                        </select>
+                      </div>
+                    )}
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Thời gian chạy tối đa (giây)
+                      </label>
+                      <input
+                        type="number"
+                        name="timeLimit"
+                        value={formData.timeLimit}
+                        onChange={handleInputChange}
+                        min="1"
+                        max="60"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Memory tối đa (MB)
+                      </label>
+                      <input
+                        type="number"
+                        name="memoryLimit"
+                        value={formData.memoryLimit}
+                        onChange={handleInputChange}
+                        min="64"
+                        max="1024"
+                        step="64"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Test Cases */}
+                  {formData.assignmentType === 'code' && (
+                    <div className="mt-6 p-4 bg-white rounded-lg border border-blue-200">
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="font-semibold text-gray-900">📋 Test Cases</h4>
+                        <button
+                          type="button"
+                          onClick={() => setTestCases([...testCases, { input: '', output: '', score: 10 }])}
+                          className="flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+                        >
+                          <Plus className="h-4 w-4" />
+                          <span>Thêm Test Case</span>
+                        </button>
+                      </div>
+
+                      <div className="space-y-3">
+                        {testCases.map((testCase, index) => (
+                          <div key={index} className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-gray-700">Test Case {index + 1}</span>
+                              {testCases.length > 1 && (
+                                <button
+                                  type="button"
+                                  onClick={() => setTestCases(testCases.filter((_, i) => i !== index))}
+                                  className="text-red-600 hover:text-red-700"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </button>
+                              )}
+                            </div>
+                            <div className="grid grid-cols-3 gap-2">
+                              <input
+                                type="text"
+                                placeholder="Input"
+                                value={testCase.input}
+                                onChange={(e) => {
+                                  const newTestCases = [...testCases];
+                                  newTestCases[index].input = e.target.value;
+                                  setTestCases(newTestCases);
+                                }}
+                                className="px-2 py-1 text-sm border border-gray-300 rounded"
+                              />
+                              <input
+                                type="text"
+                                placeholder="Expected Output"
+                                value={testCase.output}
+                                onChange={(e) => {
+                                  const newTestCases = [...testCases];
+                                  newTestCases[index].output = e.target.value;
+                                  setTestCases(newTestCases);
+                                }}
+                                className="px-2 py-1 text-sm border border-gray-300 rounded"
+                              />
+                              <input
+                                type="number"
+                                placeholder="Điểm"
+                                value={testCase.score}
+                                onChange={(e) => {
+                                  const newTestCases = [...testCases];
+                                  newTestCases[index].score = parseInt(e.target.value) || 0;
+                                  setTestCases(newTestCases);
+                                }}
+                                className="px-2 py-1 text-sm border border-gray-300 rounded"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Grading Criteria */}
+                  <div className="mt-4 p-4 bg-white rounded-lg border border-blue-200">
+                    <h4 className="font-semibold text-gray-900 mb-3">🎯 Tiêu Chí Chấm Điểm</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-700">Test cases passed</span>
+                        <input
+                          type="number"
+                          value={gradingCriteria.testCases}
+                          onChange={(e) => setGradingCriteria({...gradingCriteria, testCases: parseInt(e.target.value)})}
+                          className="w-20 px-2 py-1 text-sm border border-gray-300 rounded"
+                        />
+                        <span className="text-sm text-gray-600">điểm</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-700">Code quality</span>
+                        <input
+                          type="number"
+                          value={gradingCriteria.codeQuality}
+                          onChange={(e) => setGradingCriteria({...gradingCriteria, codeQuality: parseInt(e.target.value)})}
+                          className="w-20 px-2 py-1 text-sm border border-gray-300 rounded"
+                        />
+                        <span className="text-sm text-gray-600">điểm</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-700">Performance</span>
+                        <input
+                          type="number"
+                          value={gradingCriteria.performance}
+                          onChange={(e) => setGradingCriteria({...gradingCriteria, performance: parseInt(e.target.value)})}
+                          className="w-20 px-2 py-1 text-sm border border-gray-300 rounded"
+                        />
+                        <span className="text-sm text-gray-600">điểm</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-700">Documentation</span>
+                        <input
+                          type="number"
+                          value={gradingCriteria.documentation}
+                          onChange={(e) => setGradingCriteria({...gradingCriteria, documentation: parseInt(e.target.value)})}
+                          className="w-20 px-2 py-1 text-sm border border-gray-300 rounded"
+                        />
+                        <span className="text-sm text-gray-600">điểm</span>
+                      </div>
+                      <div className="pt-2 border-t border-gray-200">
+                        <div className="flex items-center justify-between font-semibold">
+                          <span className="text-sm text-gray-900">Tổng</span>
+                          <span className="text-lg text-blue-600">
+                            {Object.values(gradingCriteria).reduce((a, b) => a + b, 0)} điểm
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* File Attachments */}
             <div className="card p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -461,37 +705,37 @@ const AssignmentCreate = () => {
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="card p-6">
-              <div className="space-y-3">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full btn-primary flex items-center justify-center space-x-2"
-                >
-                  {loading ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                      <span>Đang tạo...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Save className="h-4 w-4" />
-                      <span>Tạo Bài Tập</span>
-                    </>
-                  )}
-                </button>
-                
-                <Link
-                  to="/assignments"
-                  className="w-full btn-secondary flex items-center justify-center space-x-2"
-                >
-                  <X className="h-4 w-4" />
-                  <span>Hủy</span>
-                </Link>
-              </div>
-            </div>
+
           </div>
+        </div>
+
+        {/* Sticky Action Buttons - Compact */}
+        <div className="fixed bottom-6 right-6 z-50 flex items-center space-x-3">
+          <Link
+            to="/assignments"
+            className="px-4 py-2 bg-white text-gray-700 font-medium rounded-lg hover:bg-gray-100 transition-colors shadow-lg border border-gray-200 flex items-center space-x-2"
+          >
+            <X className="h-4 w-4" />
+            <span>Hủy</span>
+          </Link>
+          
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <span>Đang tạo...</span>
+              </>
+            ) : (
+              <>
+                <Save className="h-4 w-4" />
+                <span>Tạo Bài Tập</span>
+              </>
+            )}
+          </button>
         </div>
       </form>
     </div>

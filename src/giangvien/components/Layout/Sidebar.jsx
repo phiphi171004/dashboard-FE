@@ -9,7 +9,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const navigation = [
     { name: 'Trang Chủ', href: '/dashboard', icon: Home, current: location.pathname === '/' || location.pathname === '/dashboard' },
-    { name: 'Quản Lý Khóa Học', href: '/courses', icon: BookOpen, current: location.pathname === '/courses' || location.pathname.startsWith('/courses/') },
+    { name: 'Lộ Trình Học', href: '/learning-path', icon: BookOpen, current: location.pathname === '/learning-path' },
     { name: 'Quản Lý Lớp Học', href: '/classes', icon: GraduationCap, current: location.pathname === '/classes' || location.pathname.startsWith('/classes/') },
     { name: 'Quản Lý Bài Tập', href: '/assignments', icon: FileText, current: location.pathname === '/assignments' || location.pathname.startsWith('/assignments/') },
     { name: 'Theo Dõi Sinh Viên', href: '/students', icon: Users, current: location.pathname === '/students' },

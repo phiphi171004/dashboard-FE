@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Filter, Plus, Grid, List, Download, RefreshCw } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Grid, List, RefreshCw } from 'lucide-react';
 import ClassCard from './components/ClassCard';
 import ClassList from './components/ClassList';
 import ClassFilters from './components/ClassFilters';
 import ClassStats from './components/ClassStats';
 import StudentPerformanceDistribution from './components/StudentPerformanceDistribution';
-import { mockClassData } from '../../data/mockData';
+import ExportDropdown from '../../components/ExportDropdown';
+import SmartSearchInput from '../../components/SmartSearchInput';
+import { mockClassData, mockStudentTrackingData } from '../../data/mockData';
+import localStorageService from '../../services/localStorageService';
 
 const ClassManagement = () => {
   const [classes, setClasses] = useState([]);
@@ -21,7 +24,27 @@ const ClassManagement = () => {
   });
 
   useEffect(() => {
+    // Khởi tạo localStorage từ mockData lần đầu
+    localStorageService.initializeFromMockData({
+      classDetails: mockClassData.classDetails,
+      classes: mockClassData.classes,
+      students: mockStudentTrackingData.students
+    });
+    
     loadClassData();
+    
+    // Reload khi quay lại trang (visibility change)
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        loadClassData();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -32,8 +55,33 @@ const ClassManagement = () => {
     try {
       setLoading(true);
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setClasses(mockClassData.classes);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Lấy dữ liệu từ localStorage
+      const storedClasses = localStorageService.getClasses();
+      const classDetails = localStorageService.getClassDetails();
+      
+      let classesToUse = storedClasses || mockClassData.classes;
+      
+      // Đồng bộ số lượng sinh viên từ classDetails
+      if (classDetails) {
+        classesToUse = classesToUse.map(classItem => {
+          const details = classDetails[classItem.id];
+          if (details && details.students) {
+            return {
+              ...classItem,
+              enrolledStudents: details.students.length
+            };
+          }
+          return classItem;
+        });
+        
+        // Lưu lại vào localStorage để đồng bộ
+        localStorageService.saveClasses(classesToUse);
+      }
+      
+      setClasses(classesToUse);
+      console.log('📊 Đã load dữ liệu lớp học từ localStorage');
     } catch (error) {
       console.error('Error loading class data:', error);
     } finally {
@@ -91,6 +139,82 @@ const ClassManagement = () => {
     console.log('Exporting class data...');
   };
 
+  // Hàm xử lý thêm sinh viên - cập nhật state và localStorage
+  const handleAddStudent = (classId, studentData) => {
+    // Tìm thông tin lớp học
+    const classInfo = classes.find(c => c.id === classId);
+    
+    // Tạo đối tượng sinh viên mới
+    const newStudent = {
+      id: Date.now(), // Tạo ID tạm thời
+      name: studentData.name,
+      studentId: studentData.studentId,
+      email: studentData.email || `${studentData.studentId}@student.edu.vn`,
+      phone: studentData.phone || '',
+      status: 'active',
+      completionRate: 0,
+      averageScore: 0,
+      completedAssignments: 0,
+      totalAssignments: 0,
+      scoreChange: 0,
+      enrollmentDate: new Date().toISOString().split('T')[0],
+      courses: classInfo ? [{ id: classInfo.courseId, name: classInfo.course }] : [],
+      classes: classInfo ? [{ id: classInfo.id, name: classInfo.name }] : [],
+      recentAssignments: [],
+      notes: [],
+      riskLevel: 'low' // Mặc định là low risk cho sinh viên mới
+    };
+
+    // Kiểm tra sinh viên đã có trong lớp chưa (theo MSSV)
+    const classDetails = localStorageService.getClassDetails() || {};
+    if (classDetails[classId]) {
+      const isAlreadyInClass = classDetails[classId].students.some(
+        s => s.studentId === studentData.studentId
+      );
+      if (isAlreadyInClass) {
+        alert('⚠️ Sinh viên đã có trong lớp này!');
+        return;
+      }
+    }
+
+    // Lưu sinh viên vào localStorage
+    const success = localStorageService.addStudentToClass(classId, newStudent);
+    
+    if (!success) {
+      alert('❌ Không thể thêm sinh viên. Vui lòng thử lại!');
+      return;
+    }
+
+    // Thêm sinh viên vào danh sách chung
+    localStorageService.addStudent(newStudent);
+
+    // Cập nhật số lượng sinh viên trong lớp
+    const updatedClasses = classes.map(classItem => {
+      if (classItem.id === classId) {
+        const newCount = classItem.enrolledStudents + 1;
+        // Cập nhật localStorage
+        localStorageService.updateClassStudentCount(classId, newCount);
+        return {
+          ...classItem,
+          enrolledStudents: newCount
+        };
+      }
+      return classItem;
+    });
+
+    setClasses(updatedClasses);
+
+    // Cập nhật mockData để đồng bộ với các trang khác (trong session hiện tại)
+    if (mockClassData.classDetails[classId]) {
+      mockClassData.classDetails[classId].students.push(newStudent);
+    }
+    mockStudentTrackingData.students.push(newStudent);
+
+    console.log('✅ Đã thêm sinh viên:', studentData.name, 'vào lớp ID:', classId);
+    console.log('💾 Đã lưu vào localStorage');
+    console.log('📊 Số sinh viên hiện tại:', classDetails[classId]?.students.length + 1);
+  };
+
   if (loading) {
     return (
       <div className="space-y-6">
@@ -129,16 +253,12 @@ const ClassManagement = () => {
 
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center space-x-2">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <input
-                type="text"
-                placeholder="Tìm kiếm lớp học..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent w-64"
-              />
-            </div>
+            <SmartSearchInput
+              value={searchTerm}
+              onChange={setSearchTerm}
+              placeholder="Tìm kiếm lớp học..."
+              className="w-64"
+            />
           </div>
 
           <div className="flex items-center space-x-2">
@@ -171,13 +291,12 @@ const ClassManagement = () => {
               <span>Làm mới</span>
             </button>
 
-            <button
-              onClick={handleExport}
-              className="btn-primary flex items-center space-x-2"
-            >
-              <Download className="h-4 w-4" />
-              <span>Xuất báo cáo</span>
-            </button>
+            <ExportDropdown 
+              onExport={(format, options) => {
+                console.log('Exporting class management report:', format, options);
+                handleExport();
+              }}
+            />
           </div>
         </div>
       </div>
@@ -216,11 +335,18 @@ const ClassManagement = () => {
             {viewMode === 'grid' ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredClasses.map((classItem) => (
-                  <ClassCard key={classItem.id} classData={classItem} />
+                  <ClassCard 
+                    key={classItem.id} 
+                    classData={classItem}
+                    onAddStudent={handleAddStudent}
+                  />
                 ))}
               </div>
             ) : (
-              <ClassList classes={filteredClasses} />
+              <ClassList 
+                classes={filteredClasses}
+                onAddStudent={handleAddStudent}
+              />
             )}
           </>
         )}

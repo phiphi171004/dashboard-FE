@@ -36,7 +36,7 @@ const ClassDetailHeader = ({ classData }) => {
           <div className="mb-6">
             <div className="flex items-center space-x-2 text-gray-600">
               <Users className="h-4 w-4" />
-              <span className="text-sm">{classData.enrolledStudents} sinh viên</span>
+              <span className="text-sm">{classData.students?.length || classData.enrolledStudents || 0} sinh viên</span>
             </div>
           </div>
 

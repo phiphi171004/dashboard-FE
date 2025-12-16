@@ -1,10 +1,68 @@
-import React, { useState } from 'react';
-import { Search, Filter, Mail, Phone, TrendingUp, TrendingDown } from 'lucide-react';
+import { useState } from 'react';
+import { Filter, Mail, Phone, TrendingUp, TrendingDown, UserPlus, Trash2 } from 'lucide-react';
+import SmartSearchInput from '../../../components/SmartSearchInput';
+import AddStudentModal from '../../ClassManagement/components/AddStudentModal';
+import { mockStudentTrackingData } from '../../../data/mockData';
+import localStorageService from '../../../services/localStorageService';
 
-const StudentList = ({ students, classId }) => {
+const StudentList = ({ students = [], classId, classData, onStudentsAdded, onStudentRemoved }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('name');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  const handleAddStudents = (newStudents) => {
+    if (onStudentsAdded) {
+      onStudentsAdded(newStudents);
+    }
+    setShowAddModal(false);
+  };
+
+  const handleRemoveStudent = (student) => {
+    // Xác nhận trước khi xóa
+    const confirmed = window.confirm(
+      `Bạn có chắc chắn muốn xóa sinh viên "${student.name}" (${student.studentId}) khỏi lớp này?`
+    );
+    
+    if (!confirmed) return;
+
+    // Xóa khỏi localStorage classDetails
+    const success = localStorageService.removeStudentFromClass(classId, student.id);
+    
+    if (success) {
+      // Lấy số lượng sinh viên SAU KHI xóa
+      const classDetails = localStorageService.getClassDetails();
+      const currentStudentCount = classDetails[classId]?.students.length || 0;
+      
+      // Cập nhật số lượng sinh viên trong danh sách classes
+      localStorageService.updateClassStudentCount(classId, currentStudentCount);
+      
+      // Gọi callback để cập nhật UI
+      if (onStudentRemoved) {
+        onStudentRemoved(student.id);
+      }
+      
+      // Hiển thị thông báo
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in';
+      notification.innerHTML = `
+        <div class="flex items-center space-x-2">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+          </svg>
+          <span>🗑️ Đã xóa sinh viên ${student.name} khỏi lớp</span>
+        </div>
+      `;
+      document.body.appendChild(notification);
+      setTimeout(() => notification.remove(), 3000);
+      
+      console.log('✅ Đã xóa sinh viên:', student.name);
+      console.log('📊 Số sinh viên còn lại:', currentStudentCount);
+      console.log('💾 Đã cập nhật localStorage classes với số lượng:', currentStudentCount);
+    } else {
+      alert('❌ Không thể xóa sinh viên. Vui lòng thử lại!');
+    }
+  };
 
   const getStatusBadge = (status) => {
     const statusConfig = {
@@ -51,16 +109,20 @@ const StudentList = ({ students, classId }) => {
       <div className="card p-6">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
           <div className="flex items-center space-x-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <input
-                type="text"
-                placeholder="Tìm kiếm sinh viên..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent w-64"
-              />
-            </div>
+            <SmartSearchInput
+              value={searchTerm}
+              onChange={setSearchTerm}
+              placeholder="Tìm kiếm sinh viên..."
+              className="w-64"
+            />
+            
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="btn-primary flex items-center space-x-2"
+            >
+              <UserPlus className="h-4 w-4" />
+              <span>Thêm sinh viên</span>
+            </button>
           </div>
 
           <div className="flex items-center space-x-4">
@@ -92,22 +154,25 @@ const StudentList = ({ students, classId }) => {
       <div className="card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+            <thead className="bg-blue-600">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">
                   Sinh viên
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">
                   Trạng thái
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">
                   Tiến độ
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">
                   Bài tập
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">
                   Liên hệ
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-bold text-white uppercase tracking-wider">
+                  Thao tác
                 </th>
               </tr>
             </thead>
@@ -122,8 +187,8 @@ const StudentList = ({ students, classId }) => {
                         </span>
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{student.name}</div>
-                        <div className="text-sm text-gray-500">{student.studentId}</div>
+                        <div className="text-sm font-medium text-gray-800">{student.name}</div>
+                        <div className="text-sm text-gray-600">{student.studentId}</div>
                       </div>
                     </div>
                   </td>
@@ -136,7 +201,7 @@ const StudentList = ({ students, classId }) => {
                     <div className="flex items-center">
                       <div className="flex-1">
                         <div className="flex items-center justify-between text-sm mb-1">
-                          <span className="font-medium text-gray-900">{Math.round(student.completionRate || 0)}%</span>
+                          <span className="font-medium text-gray-700">{Math.round(student.completionRate || 0)}%</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
@@ -147,28 +212,39 @@ const StudentList = ({ students, classId }) => {
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                     <div>
                       <span className="font-medium">{student.completedAssignments}</span>
-                      <span className="text-gray-500">/{student.totalAssignments}</span>
+                      <span className="text-gray-600">/{student.totalAssignments}</span>
                     </div>
-                    <div className="text-xs text-gray-500">hoàn thành</div>
+                    <div className="text-xs text-gray-600">hoàn thành</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-2">
                       <a
                         href={`mailto:${student.email}`}
                         className="text-gray-400 hover:text-primary-600 transition-colors"
+                        title="Gửi email"
                       >
                         <Mail className="h-4 w-4" />
                       </a>
                       <a
                         href={`tel:${student.phone}`}
                         className="text-gray-400 hover:text-primary-600 transition-colors"
+                        title="Gọi điện"
                       >
                         <Phone className="h-4 w-4" />
                       </a>
                     </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right">
+                    <button
+                      onClick={() => handleRemoveStudent(student)}
+                      className="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 hover:shadow-md transition-all"
+                      title="Xóa sinh viên khỏi lớp"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -187,6 +263,15 @@ const StudentList = ({ students, classId }) => {
           </p>
         </div>
       )}
+
+      {/* Add Student Modal */}
+      <AddStudentModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        classData={classData || { name: '', course: '' }}
+        allStudents={mockStudentTrackingData.students}
+        onAddStudents={handleAddStudents}
+      />
     </div>
   );
 };

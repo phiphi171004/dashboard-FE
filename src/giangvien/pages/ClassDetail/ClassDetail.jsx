@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Users, Clock, MapPin, Calendar, Download, Settings } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import ClassDetailHeader from './components/ClassDetailHeader';
 import StudentList from './components/StudentList';
 import AssignmentProgress from './components/AssignmentProgress';
 import ClassSchedule from './components/ClassSchedule';
+import CourseMaterials from './components/CourseMaterials';
 import { mockClassData } from '../../data/mockData';
+import localStorageService from '../../services/localStorageService';
 
 const ClassDetail = () => {
   const { id } = useParams();
@@ -23,8 +25,18 @@ const ClassDetail = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 800));
       const classId = parseInt(id);
-      const foundClass = mockClassData.classes.find(c => c.id === classId);
-      const details = mockClassData.classDetails[classId];
+      
+      // Lấy dữ liệu từ localStorage trước, nếu không có thì dùng mockData
+      const storedClasses = localStorageService.getClasses();
+      const storedClassDetails = localStorageService.getClassDetails();
+      
+      const foundClass = storedClasses 
+        ? storedClasses.find(c => c.id === classId)
+        : mockClassData.classes.find(c => c.id === classId);
+        
+      const details = storedClassDetails && storedClassDetails[classId]
+        ? storedClassDetails[classId]
+        : mockClassData.classDetails[classId];
       
       if (foundClass && details) {
         // Tính toán tiến độ dựa theo lịch học
@@ -44,11 +56,16 @@ const ClassDetail = () => {
           calculatedCompletion = Math.round(totalCompletionRate / students.length);
         }
         
+        // Lấy số lượng tài liệu từ localStorage
+        const materials = localStorageService.getClassMaterials(classId) || [];
+        
         const combinedData = {
           ...foundClass,
           students: details.students,
           assignments: details.assignments,
           scheduleList: scheduleList,
+          materials: materials,
+          enrolledStudents: details.students.length, // Đồng bộ số lượng sinh viên từ students array
           completionRate: calculatedCompletion,  // Ghi đè bằng giá trị tính toán từ sinh viên
           completedSessions,
           totalSessions
@@ -104,6 +121,7 @@ const ClassDetail = () => {
   const tabs = [
     { id: 'students', label: 'Sinh viên', count: classData.students?.length || 0 },
     { id: 'assignments', label: 'Bài tập', count: classData.assignments?.length || 0 },
+    { id: 'materials', label: 'Tài liệu', count: classData.materials?.length || 0 },
     { id: 'schedule', label: 'Lịch học', count: classData.scheduleList?.length || 0 }
   ];
 
@@ -157,10 +175,35 @@ const ClassDetail = () => {
       {/* Tab Content */}
       <div className="space-y-6">
         {activeTab === 'students' && (
-          <StudentList students={classData.students} classId={classData.id} />
+          <StudentList 
+            students={classData.students} 
+            classId={classData.id}
+            classData={classData}
+            onStudentsAdded={(newStudents) => {
+              setClassData(prev => ({
+                ...prev,
+                students: [...prev.students, ...newStudents],
+                enrolledStudents: prev.enrolledStudents + newStudents.length
+              }));
+            }}
+            onStudentRemoved={(studentId) => {
+              // Cập nhật state khi xóa sinh viên
+              setClassData(prev => ({
+                ...prev,
+                students: prev.students.filter(s => s.id !== studentId),
+                enrolledStudents: prev.enrolledStudents - 1
+              }));
+              
+              // Reload lại dữ liệu để đồng bộ
+              setTimeout(() => loadClassDetail(), 500);
+            }}
+          />
         )}
         {activeTab === 'assignments' && (
           <AssignmentProgress assignments={classData.assignments} classId={classData.id} />
+        )}
+        {activeTab === 'materials' && (
+          <CourseMaterials classId={classData.id} materials={classData.materials || []} />
         )}
         {activeTab === 'schedule' && (
           <ClassSchedule schedule={classData.scheduleList} classId={classData.id} />
