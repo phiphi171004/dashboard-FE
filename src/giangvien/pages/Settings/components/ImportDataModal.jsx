@@ -125,7 +125,7 @@ const ImportDataModal = ({ isOpen, onClose }) => {
                         <FileText className="text-green-600" size={32} />
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900 mb-1">{selectedFile.name}</p>
+                        <p className="font-medium text-gray-700 mb-1">{selectedFile.name}</p>
                         <p className="text-sm text-gray-600">{formatFileSize(selectedFile.size)}</p>
                       </div>
                       <button
@@ -141,7 +141,7 @@ const ImportDataModal = ({ isOpen, onClose }) => {
                         <Upload className="text-gray-400" size={32} />
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900 mb-1">
+                        <p className="font-medium text-gray-700 mb-1">
                           Kéo thả file vào đây
                         </p>
                         <p className="text-sm text-gray-600">hoặc</p>
@@ -215,7 +215,7 @@ const ImportDataModal = ({ isOpen, onClose }) => {
                 <div className="p-4 bg-green-100 rounded-full w-20 h-20 mx-auto flex items-center justify-center mb-4">
                   <CheckCircle className="text-green-600" size={40} />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                <h3 className="text-xl font-bold text-gray-700 mb-2">
                   Nhập dữ liệu thành công!
                 </h3>
                 <div className="grid grid-cols-3 gap-4 mt-6">

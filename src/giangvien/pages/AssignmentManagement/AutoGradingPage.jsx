@@ -36,7 +36,7 @@ const AutoGradingPage = () => {
       <div className="space-y-6">
         <button
           onClick={() => setSelectedSubmission(null)}
-          className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+          className="flex items-center space-x-2 text-gray-600 hover:text-gray-700"
         >
           <ArrowLeft className="h-5 w-5" />
           <span>Quay lại danh sách</span>
@@ -55,7 +55,7 @@ const AutoGradingPage = () => {
     <div className="space-y-6">
       <Link
         to="/assignments"
-        className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+        className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-700"
       >
         <ArrowLeft className="h-5 w-5" />
         <span>Quay lại quản lý bài tập</span>
@@ -68,7 +68,7 @@ const AutoGradingPage = () => {
 
       {/* Submissions List */}
       <div className="card p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Danh sách bài nộp</h3>
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">Danh sách bài nộp</h3>
         
         <div className="space-y-3">
           {submissions.map(submission => (
@@ -80,7 +80,7 @@ const AutoGradingPage = () => {
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3">
-                    <h4 className="font-semibold text-gray-900">
+                    <h4 className="font-semibold text-gray-700">
                       {submission.studentName}
                     </h4>
                     <span className="text-sm text-gray-600">

@@ -108,7 +108,7 @@ const ExportDropdown = ({ onExport }) => {
                   <Download className="text-blue-600" size={20} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">Xuất báo cáo</h3>
+                  <h3 className="text-lg font-bold text-gray-700">Xuất báo cáo</h3>
                   <p className="text-xs text-gray-600">Tải xuất và chia sẻ báo cáo</p>
                 </div>
               </div>
@@ -149,7 +149,7 @@ const ExportDropdown = ({ onExport }) => {
                         </div>
                         
                         <div className="flex-1 text-left">
-                          <h4 className="font-semibold text-sm text-gray-900">{format.label}</h4>
+                          <h4 className="font-semibold text-sm text-gray-700">{format.label}</h4>
                           <p className="text-xs text-gray-600">{format.description}</p>
                         </div>
                         
@@ -168,7 +168,7 @@ const ExportDropdown = ({ onExport }) => {
 
               {/* Export Options */}
               <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-100">
-                <h4 className="text-sm font-semibold text-gray-900 mb-3">Tùy chọn xuất</h4>
+                <h4 className="text-sm font-semibold text-gray-700 mb-3">Tùy chọn xuất</h4>
                 
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 cursor-pointer group">
@@ -178,7 +178,7 @@ const ExportDropdown = ({ onExport }) => {
                       onChange={() => toggleOption('includeCharts')}
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
                     />
-                    <span className="text-sm text-gray-700 group-hover:text-gray-900">Bao gồm biểu đồ</span>
+                    <span className="text-sm text-gray-700 group-hover:text-gray-700">Bao gồm biểu đồ</span>
                   </label>
                   
                   <label className="flex items-center gap-2 cursor-pointer group">
@@ -188,7 +188,7 @@ const ExportDropdown = ({ onExport }) => {
                       onChange={() => toggleOption('includeStudentDetails')}
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
                     />
-                    <span className="text-sm text-gray-700 group-hover:text-gray-900">Bao gồm chi tiết sinh viên</span>
+                    <span className="text-sm text-gray-700 group-hover:text-gray-700">Bao gồm chi tiết sinh viên</span>
                   </label>
                   
                   <label className="flex items-center gap-2 cursor-pointer group">
@@ -198,7 +198,7 @@ const ExportDropdown = ({ onExport }) => {
                       onChange={() => toggleOption('summaryOnly')}
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
                     />
-                    <span className="text-sm text-gray-700 group-hover:text-gray-900">Chỉ dữ liệu tóm tắt</span>
+                    <span className="text-sm text-gray-700 group-hover:text-gray-700">Chỉ dữ liệu tóm tắt</span>
                   </label>
                 </div>
               </div>

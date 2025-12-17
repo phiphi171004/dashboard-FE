@@ -8,7 +8,7 @@ const AssignmentDetailHeader = ({ assignment }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const getStatusBadge = (status) => {
     const statusConfig = {
-      draft: { class: 'status-badge bg-gray-100 text-gray-800', text: 'Bản nháp', icon: FileText },
+      draft: { class: 'status-badge bg-gray-100 text-gray-600', text: 'Bản nháp', icon: FileText },
       active: { class: 'status-badge status-active', text: 'Đang mở', icon: Clock },
       upcoming: { class: 'status-badge status-pending', text: 'Sắp mở', icon: Calendar },
       completed: { class: 'status-badge status-completed', text: 'Đã đóng', icon: CheckCircle },
@@ -83,7 +83,7 @@ const AssignmentDetailHeader = ({ assignment }) => {
       <div className="flex items-start justify-between mb-6">
         <div className="flex-1">
           <div className="flex items-center space-x-3 mb-3">
-            <h1 className="text-2xl font-bold text-gray-900">{assignment.title}</h1>
+            <h1 className="text-2xl font-bold text-gray-700">{assignment.title}</h1>
             <span className={statusInfo.class}>
               <StatusIcon className="h-4 w-4 mr-1" />
               {statusInfo.text}
@@ -193,7 +193,7 @@ const AssignmentDetailHeader = ({ assignment }) => {
       <div className="mt-6">
         <div className="flex items-center justify-between text-sm mb-2">
           <span className="text-gray-600">Tỷ lệ nộp bài</span>
-          <span className="font-medium text-gray-900">{submissionRate}%</span>
+          <span className="font-medium text-gray-700">{submissionRate}%</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-3">
           <div 
@@ -206,7 +206,7 @@ const AssignmentDetailHeader = ({ assignment }) => {
       {/* Assignment Files */}
       {assignment.files && assignment.files.length > 0 && (
         <div className="mt-6 pt-6 border-t border-gray-200">
-          <h3 className="text-sm font-medium text-gray-900 mb-3">Tài liệu đính kèm</h3>
+          <h3 className="text-sm font-medium text-gray-700 mb-3">Tài liệu đính kèm</h3>
           <div className="flex flex-wrap gap-2">
             {assignment.files.map((file, index) => (
               <a
@@ -230,7 +230,7 @@ const AssignmentDetailHeader = ({ assignment }) => {
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900">
+                <h3 className="text-xl font-semibold text-gray-700">
                   {selectedCategory.title}
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">
@@ -259,7 +259,7 @@ const AssignmentDetailHeader = ({ assignment }) => {
                           <span className="text-primary-600 font-semibold">{index + 1}</span>
                         </div>
                         <div className="flex-1">
-                          <p className="font-medium text-gray-900">{submission.studentName}</p>
+                          <p className="font-medium text-gray-700">{submission.studentName}</p>
                           <p className="text-sm text-gray-600">{submission.studentId}</p>
                         </div>
                       </div>
@@ -267,7 +267,7 @@ const AssignmentDetailHeader = ({ assignment }) => {
                         {submission.submittedAt && (
                           <div className="text-right">
                             <p className="text-sm text-gray-600">Thời gian nộp</p>
-                            <p className="text-sm font-medium text-gray-900">
+                            <p className="text-sm font-medium text-gray-700">
                               {new Date(submission.submittedAt).toLocaleDateString('vi-VN', {
                                 day: '2-digit',
                                 month: '2-digit',
@@ -281,7 +281,7 @@ const AssignmentDetailHeader = ({ assignment }) => {
                         {submission.score !== null && submission.score !== undefined && (
                           <div className="text-right">
                             <p className="text-sm text-gray-600">Điểm</p>
-                            <p className="text-lg font-bold text-gray-900">{submission.score}</p>
+                            <p className="text-lg font-bold text-gray-700">{submission.score}</p>
                           </div>
                         )}
                         <div className="text-right">

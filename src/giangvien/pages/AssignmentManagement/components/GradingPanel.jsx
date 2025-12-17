@@ -90,7 +90,7 @@ const GradingPanel = ({ submissions, assignmentId }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Submission List */}
         <div className="card p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">
             Danh sách bài nộp ({pendingSubmissions.length})
           </h3>
           
@@ -113,7 +113,7 @@ const GradingPanel = ({ submissions, assignmentId }) => {
                       </span>
                     </div>
                     <div>
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-gray-700">
                         {submission.studentName}
                       </div>
                       <div className="text-xs text-gray-500">
@@ -167,7 +167,7 @@ const GradingPanel = ({ submissions, assignmentId }) => {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-gray-700">
                     Chấm điểm bài nộp
                   </h3>
                   <p className="text-sm text-gray-600">
@@ -185,7 +185,7 @@ const GradingPanel = ({ submissions, assignmentId }) => {
               {/* Files */}
               {selectedSubmission.files && selectedSubmission.files.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-medium text-gray-900 mb-2">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">
                     Tệp đính kèm
                   </h4>
                   <div className="space-y-2">
@@ -256,7 +256,7 @@ const GradingPanel = ({ submissions, assignmentId }) => {
           ) : (
             <div className="text-center py-12">
               <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <h3 className="text-lg font-medium text-gray-700 mb-2">
                 Chọn bài nộp để chấm điểm
               </h3>
               <p className="text-gray-500">

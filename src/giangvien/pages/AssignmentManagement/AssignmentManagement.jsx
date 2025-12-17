@@ -98,7 +98,7 @@ const AssignmentManagement = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Quản Lý Bài Tập</h1>
+          <h1 className="text-2xl font-bold text-gray-700">Quản Lý Bài Tập</h1>
           <p className="text-gray-600 mt-1">
             Tạo, chỉnh sửa và theo dõi tiến độ bài tập của sinh viên
           </p>
@@ -143,7 +143,7 @@ const AssignmentManagement = () => {
       {filteredAssignments.length === 0 && !loading && (
         <div className="text-center py-12">
           <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-gray-700 mb-2">
             Không tìm thấy bài tập nào
           </h3>
           <p className="text-gray-500 mb-4">

@@ -5,7 +5,8 @@ import {
   FileText, Video, BookOpen, Download, Calendar, Target, Plus
 } from 'lucide-react';
 import { mockDashboardData, mockStudentTrackingData } from '../../data/mockData';
-import AddMaterialModal from '../ClassDetail/components/AddMaterialModal';
+import AddDocumentModal from '../ClassDetail/components/AddDocumentModal';
+import AddVideoModal from '../ClassDetail/components/AddVideoModal';
 import localStorageService from '../../services/localStorageService';
 
 const WeekDetail = () => {
@@ -15,7 +16,8 @@ const WeekDetail = () => {
   const weekNumber = parseInt(searchParams.get('week')) || 1;
   const [weekData, setWeekData] = useState(null);
   const [moduleData, setModuleData] = useState(null);
-  const [showAddMaterialModal, setShowAddMaterialModal] = useState(false);
+  const [showAddDocumentModal, setShowAddDocumentModal] = useState(false);
+  const [showAddVideoModal, setShowAddVideoModal] = useState(false);
   const [materials, setMaterials] = useState([]);
   const [videos, setVideos] = useState([]);
 
@@ -154,7 +156,7 @@ const WeekDetail = () => {
     }
   }, [id, weekNumber]);
 
-  const handleAddMaterial = (newMaterial) => {
+  const handleAddDocument = (newMaterial) => {
     const storageKey = `week_${id}_${weekNumber}_materials`;
     const material = {
       ...newMaterial,
@@ -168,22 +170,13 @@ const WeekDetail = () => {
     localStorageService.saveClassMaterials(storageKey, storedMaterials);
 
     // Cập nhật state
-    if (material.type === 'video') {
-      setVideos(prev => [...prev, {
-        id: material.id,
-        title: material.title,
-        duration: material.duration ? `${Math.floor(material.duration / 60)}:${(material.duration % 60).toString().padStart(2, '0')}` : '0:00',
-        views: 0
-      }]);
-    } else {
-      setMaterials(prev => [...prev, {
-        id: material.id,
-        name: material.title,
-        size: material.size ? `${(material.size / (1024 * 1024)).toFixed(1)} MB` : 'N/A'
-      }]);
-    }
+    setMaterials(prev => [...prev, {
+      id: material.id,
+      name: material.title,
+      size: material.size ? `${(material.size / (1024 * 1024)).toFixed(1)} MB` : 'N/A'
+    }]);
 
-    setShowAddMaterialModal(false);
+    setShowAddDocumentModal(false);
 
     // Notification
     const notification = document.createElement('div');
@@ -193,7 +186,45 @@ const WeekDetail = () => {
         <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
         </svg>
-        <span>✅ Đã thêm ${material.type === 'video' ? 'video' : 'tài liệu'} thành công</span>
+        <span>✅ Đã thêm tài liệu thành công</span>
+      </div>
+    `;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+  };
+
+  const handleAddVideo = (newMaterial) => {
+    const storageKey = `week_${id}_${weekNumber}_materials`;
+    const material = {
+      ...newMaterial,
+      id: Date.now(),
+      uploadedAt: new Date().toISOString()
+    };
+
+    // Lưu vào localStorage
+    const storedMaterials = localStorageService.getClassMaterials(storageKey) || [];
+    storedMaterials.push(material);
+    localStorageService.saveClassMaterials(storageKey, storedMaterials);
+
+    // Cập nhật state
+    setVideos(prev => [...prev, {
+      id: material.id,
+      title: material.title,
+      duration: material.duration ? `${Math.floor(material.duration / 60)}:${(material.duration % 60).toString().padStart(2, '0')}` : '0:00',
+      views: 0
+    }]);
+
+    setShowAddVideoModal(false);
+
+    // Notification
+    const notification = document.createElement('div');
+    notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in';
+    notification.innerHTML = `
+      <div class="flex items-center space-x-2">
+        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span>✅ Đã thêm video thành công</span>
       </div>
     `;
     document.body.appendChild(notification);
@@ -240,7 +271,7 @@ const WeekDetail = () => {
       <div className="flex items-center justify-between">
         <button
           onClick={() => navigate(`/learning-path/${id}`)}
-          className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+          className="flex items-center space-x-2 text-gray-600 hover:text-gray-700 transition-colors"
         >
           <ArrowLeft className="h-5 w-5" />
           <span>Quay lại {moduleData.title}</span>
@@ -258,7 +289,7 @@ const WeekDetail = () => {
               <span className="text-6xl">{moduleData.icon}</span>
               <div>
                 <div className="flex items-center space-x-3 mb-2">
-                  <h1 className="text-3xl font-bold text-gray-900">
+                  <h1 className="text-3xl font-bold text-gray-700">
                     Tuần {weekData.week}: {weekData.title}
                   </h1>
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusBadge.bg} ${statusBadge.text}`}>
@@ -276,7 +307,7 @@ const WeekDetail = () => {
                   <Calendar className="h-4 w-4" />
                   <span className="text-sm">Thời gian</span>
                 </div>
-                <p className="text-lg font-bold text-gray-900">{weekData.startDate} - {weekData.endDate}</p>
+                <p className="text-lg font-bold text-gray-700">{weekData.startDate} - {weekData.endDate}</p>
               </div>
 
               <div className="bg-white rounded-lg p-4 shadow-sm">
@@ -284,7 +315,7 @@ const WeekDetail = () => {
                   <Users className="h-4 w-4" />
                   <span className="text-sm">Sinh viên</span>
                 </div>
-                <p className="text-lg font-bold text-gray-900">{weekData.completedStudents}/{weekData.totalStudents}</p>
+                <p className="text-lg font-bold text-gray-700">{weekData.completedStudents}/{weekData.totalStudents}</p>
               </div>
 
               <div className="bg-white rounded-lg p-4 shadow-sm">
@@ -292,7 +323,7 @@ const WeekDetail = () => {
                   <FileText className="h-4 w-4" />
                   <span className="text-sm">Tài liệu</span>
                 </div>
-                <p className="text-lg font-bold text-gray-900">{weekData.materials.length}</p>
+                <p className="text-lg font-bold text-gray-700">{weekData.materials.length}</p>
               </div>
 
               <div className="bg-white rounded-lg p-4 shadow-sm">
@@ -300,7 +331,7 @@ const WeekDetail = () => {
                   <Target className="h-4 w-4" />
                   <span className="text-sm">Hoàn thành</span>
                 </div>
-                <p className="text-lg font-bold text-gray-900">{completionRate}%</p>
+                <p className="text-lg font-bold text-gray-700">{completionRate}%</p>
               </div>
             </div>
 
@@ -308,7 +339,7 @@ const WeekDetail = () => {
             <div className="mt-6">
               <div className="flex items-center justify-between text-sm mb-2">
                 <span className="text-gray-700 font-medium">Tỷ lệ hoàn thành</span>
-                <span className="font-bold text-gray-900">{completionRate}%</span>
+                <span className="font-bold text-gray-700">{completionRate}%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                 <div
@@ -327,7 +358,7 @@ const WeekDetail = () => {
         <div className="lg:col-span-2 space-y-6">
           {/* Learning Objectives */}
           <div className="card p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+            <h3 className="text-xl font-bold text-gray-700 mb-4 flex items-center space-x-2">
               <Target className="h-6 w-6 text-blue-600" />
               <span>Mục tiêu học tập</span>
             </h3>
@@ -342,72 +373,122 @@ const WeekDetail = () => {
           </div>
 
           {/* Materials */}
-          <div className="card p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-gray-900 flex items-center space-x-2">
-                <FileText className="h-6 w-6 text-blue-600" />
-                <span>Tài liệu học tập</span>
-              </h3>
+          <div className="card p-6 hover:shadow-lg transition-shadow">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+                  <FileText className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-700">Tài liệu học tập</h3>
+                  <p className="text-sm text-gray-500">{materials.length} tài liệu</p>
+                </div>
+              </div>
               <button
-                onClick={() => setShowAddMaterialModal(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg flex items-center space-x-2"
+                onClick={() => setShowAddDocumentModal(true)}
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center space-x-2 transform hover:scale-105"
               >
                 <Plus className="h-5 w-5" />
                 <span>Thêm tài liệu</span>
               </button>
             </div>
-            <div className="space-y-3">
-              {materials.map(material => (
-                <div key={material.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                      <FileText className="h-5 w-5 text-blue-600" />
+            
+            {materials.length === 0 ? (
+              <div className="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
+                <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500 mb-4">Chưa có tài liệu nào</p>
+                <button
+                  onClick={() => setShowAddDocumentModal(true)}
+                  className="text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  Thêm tài liệu đầu tiên →
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {materials.map(material => (
+                  <div key={material.id} className="group flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl hover:from-blue-50 hover:to-blue-100 transition-all border border-gray-200 hover:border-blue-300 hover:shadow-md">
+                    <div className="flex items-center space-x-4">
+                      <div className="h-12 w-12 rounded-lg bg-blue-100 group-hover:bg-blue-200 flex items-center justify-center transition-colors">
+                        <FileText className="h-6 w-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-700 group-hover:text-blue-700">{material.name}</p>
+                        <p className="text-sm text-gray-500">{material.size}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium text-gray-900">{material.name}</p>
-                      <p className="text-sm text-gray-500">{material.size}</p>
-                    </div>
+                    <button 
+                      className="bg-white hover:bg-blue-50 text-blue-600 font-medium px-4 py-2 rounded-lg transition-all duration-300 shadow-sm hover:shadow-lg border border-blue-200 hover:border-blue-400 flex items-center space-x-2 transform hover:scale-105"
+                    >
+                      <Download className="h-4 w-4" />
+                      <span>Tải xuống</span>
+                    </button>
                   </div>
-                  <button className="btn-secondary text-sm">
-                    <Download className="h-4 w-4 mr-2" />
-                    Tải xuống
-                  </button>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Videos */}
-          <div className="card p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
-              <Video className="h-6 w-6 text-blue-600" />
-              <span>Video bài giảng</span>
-            </h3>
-            <div className="space-y-3">
-              {videos.map(video => (
-                <div key={video.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-                  <div className="flex items-center space-x-3">
-                    <div className="h-10 w-10 rounded-lg bg-red-100 flex items-center justify-center">
-                      <Play className="h-5 w-5 text-red-600" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900">{video.title}</p>
-                      <div className="flex items-center space-x-3 text-sm text-gray-500">
-                        <span className="flex items-center space-x-1">
-                          <Clock className="h-3 w-3" />
-                          <span>{video.duration}</span>
-                        </span>
-                        <span>•</span>
-                        <span>{video.views} lượt xem</span>
+          <div className="card p-6 hover:shadow-lg transition-shadow">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg">
+                  <Video className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-700">Video bài giảng</h3>
+                  <p className="text-sm text-gray-500">{videos.length} video</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowAddVideoModal(true)}
+                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center space-x-2 transform hover:scale-105"
+              >
+                <Plus className="h-5 w-5" />
+                <span>Thêm video</span>
+              </button>
+            </div>
+            
+            {videos.length === 0 ? (
+              <div className="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
+                <Video className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500 mb-4">Chưa có video nào</p>
+                <button
+                  onClick={() => setShowAddVideoModal(true)}
+                  className="text-red-600 hover:text-red-700 font-medium"
+                >
+                  Thêm video đầu tiên →
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {videos.map(video => (
+                  <div key={video.id} className="group flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-red-50 rounded-xl hover:from-red-50 hover:to-red-100 transition-all border border-gray-200 hover:border-red-300 hover:shadow-md cursor-pointer">
+                    <div className="flex items-center space-x-4">
+                      <div className="h-12 w-12 rounded-lg bg-red-100 group-hover:bg-red-200 flex items-center justify-center transition-colors">
+                        <Play className="h-6 w-6 text-red-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-700 group-hover:text-red-700">{video.title}</p>
+                        <div className="flex items-center space-x-3 text-sm text-gray-500">
+                          <span className="flex items-center space-x-1">
+                            <Clock className="h-3 w-3" />
+                            <span>{video.duration}</span>
+                          </span>
+                          <span>•</span>
+                          <span>{video.views} lượt xem</span>
+                        </div>
                       </div>
                     </div>
+                    <button className="bg-red-600 hover:bg-red-700 text-white font-medium px-5 py-2 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg flex items-center space-x-2 transform hover:scale-105">
+                      <Play className="h-4 w-4" />
+                      <span>Xem ngay</span>
+                    </button>
                   </div>
-                  <button className="btn-primary text-sm">
-                    Xem ngay
-                  </button>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -415,22 +496,22 @@ const WeekDetail = () => {
         <div className="space-y-6">
           {/* Assignments */}
           <div className="card p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+            <h3 className="text-xl font-bold text-gray-700 mb-4 flex items-center space-x-2">
               <BookOpen className="h-6 w-6 text-blue-600" />
               <span>Bài tập</span>
             </h3>
             <div className="space-y-3">
               {weekData.assignments.map(assignment => (
                 <div key={assignment.id} className="p-4 bg-gradient-to-r from-orange-50 to-amber-50 rounded-lg">
-                  <p className="font-medium text-gray-900 mb-2">{assignment.title}</p>
+                  <p className="font-medium text-gray-700 mb-2">{assignment.title}</p>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Hạn nộp:</span>
-                      <span className="font-medium text-gray-900">{assignment.dueDate}</span>
+                      <span className="font-medium text-gray-700">{assignment.dueDate}</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Đã nộp:</span>
-                      <span className="font-medium text-gray-900">{assignment.submitted}/{assignment.total}</span>
+                      <span className="font-medium text-gray-700">{assignment.submitted}/{assignment.total}</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                       <div
@@ -446,11 +527,18 @@ const WeekDetail = () => {
         </div>
       </div>
 
-      {/* Add Material Modal */}
-      <AddMaterialModal
-        isOpen={showAddMaterialModal}
-        onClose={() => setShowAddMaterialModal(false)}
-        onAdd={handleAddMaterial}
+      {/* Add Document Modal */}
+      <AddDocumentModal
+        isOpen={showAddDocumentModal}
+        onClose={() => setShowAddDocumentModal(false)}
+        onAdd={handleAddDocument}
+      />
+
+      {/* Add Video Modal */}
+      <AddVideoModal
+        isOpen={showAddVideoModal}
+        onClose={() => setShowAddVideoModal(false)}
+        onAdd={handleAddVideo}
       />
     </div>
   );

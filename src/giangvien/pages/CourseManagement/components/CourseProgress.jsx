@@ -57,7 +57,7 @@ const CourseProgress = ({ course }) => {
           <TrendingUp className="text-blue-600" size={24} />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Tiến độ học tập</h2>
+          <h2 className="text-xl font-bold text-gray-700">Tiến độ học tập</h2>
           <p className="text-sm text-gray-600">Tổng quan về tiến độ sinh viên</p>
         </div>
       </div>
@@ -77,12 +77,12 @@ const CourseProgress = ({ course }) => {
                     <Icon className={colors.text} size={20} />
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">{item.label}</div>
+                    <div className="font-medium text-gray-700">{item.label}</div>
                     <div className="text-xs text-gray-500">{item.description}</div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-lg font-bold text-gray-900">{item.value}</span>
+                  <span className="text-lg font-bold text-gray-700">{item.value}</span>
                   <span className="text-sm text-gray-600"> / {item.total} SV</span>
                   <span className="ml-2 text-sm font-medium text-gray-600">
                     ({percentage.toFixed(0)}%)
@@ -107,7 +107,7 @@ const CourseProgress = ({ course }) => {
         }`}>
           <div className="flex items-center justify-between mb-2">
             <div>
-              <div className="text-lg font-semibold text-gray-900">Tỷ lệ hoàn thành trung bình</div>
+              <div className="text-lg font-semibold text-gray-700">Tỷ lệ hoàn thành trung bình</div>
               <div className="text-xs text-gray-600 mt-1">
                 Trung bình tiến độ học tập của tất cả sinh viên trong khóa
               </div>
@@ -131,7 +131,7 @@ const CourseProgress = ({ course }) => {
             <div className="flex items-start">
               <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 mr-3 flex-shrink-0" />
               <div>
-                <h4 className="text-sm font-semibold text-red-800 mb-1">
+                <h4 className="text-sm font-semibold text-red-600 mb-1">
                   ⚠️ CẢNH BÁO: Tỷ lệ hoàn thành chưa đạt mục tiêu!
                 </h4>
                 <p className="text-sm text-red-700 mb-2">
@@ -158,7 +158,7 @@ const CourseProgress = ({ course }) => {
             <div className="flex items-start">
               <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 mr-3 flex-shrink-0" />
               <div>
-                <h4 className="text-sm font-semibold text-green-800 mb-1">
+                <h4 className="text-sm font-semibold text-green-600 mb-1">
                   ✅ XUẤT SẮC: Tỷ lệ hoàn thành cao!
                 </h4>
                 <p className="text-sm text-green-700">

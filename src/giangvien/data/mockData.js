@@ -18,9 +18,9 @@ export const mockDashboardData = {
     studentChange: 1,
     activeCourses: 4,
     courseChange: 0,
-    averageCompletion: 77,
+    averageCompletion: 80,  // (90+85+60+78+95+100+72+89+38+91)/10 = 79.8 ≈ 80
     completionChange: 5,
-    atRiskStudents: 2,  // Có 2 sinh viên: Lê Hoàng Nam và Lý Minh Tuấn
+    atRiskStudents: 2,  // Có 2 sinh viên: Lê Hoàng Nam (ID 3) và Lý Minh Tuấn (ID 9)
     riskChange: 0
   },
   
@@ -134,35 +134,35 @@ export const mockDashboardData = {
   courseMonitoring: [
     {
       name: 'Nhập môn lập trình',
-      enrolledStudents: 10,  // Tất cả 10 sinh viên (4+3+3)
+      enrolledStudents: 10,  // Tổng: 4 (22CT111) + 3 (22CT112) + 3 (22CT113) = 10 sinh viên
       duration: '12 tuần',
       status: 'active',
-      completionRate: 80,  // Trung bình 3 lớp: (83+90+66)/3 = 80%
-      averageScore: 7.8
+      completionRate: 80,  // Trung bình 3 lớp: (83+90+66)/3 = 79.67 ≈ 80%
+      averageScore: 7.7   // Trung bình 3 lớp: (8.0+8.5+6.6)/3 = 7.7
     },
     {
       name: 'Kĩ thuật lập trình',
-      enrolledStudents: 10,  // Tất cả 10 sinh viên (4+3+3)
+      enrolledStudents: 10,  // Tổng: 4 (22CT111) + 3 (22CT112) + 3 (22CT113) = 10 sinh viên
       duration: '10 tuần',
       status: 'active',
-      completionRate: 80,  // Trung bình 3 lớp: (83+90+66)/3 = 80%
-      averageScore: 7.2
+      completionRate: 80,  // Trung bình 3 lớp: (83+90+66)/3 = 79.67 ≈ 80%
+      averageScore: 7.6   // Trung bình 3 lớp: (7.8+8.4+6.5)/3 = 7.57 ≈ 7.6
     },
     {
       name: 'Lập trình hướng đối tượng',
-      enrolledStudents: 10,  // Tất cả 10 sinh viên (4+3+3)
+      enrolledStudents: 10,  // Tổng: 4 (22CT111) + 3 (22CT112) + 3 (22CT113) = 10 sinh viên
       duration: '16 tuần',
       status: 'active',
-      completionRate: 80,  // Trung bình 3 lớp: (83+90+66)/3 = 80%
-      averageScore: 7.5
+      completionRate: 80,  // Trung bình 3 lớp: (83+90+66)/3 = 79.67 ≈ 80%
+      averageScore: 7.6   // Trung bình 3 lớp: (7.7+8.5+6.5)/3 = 7.57 ≈ 7.6
     },
     {
       name: 'Cấu trúc dữ liệu và giải thuật',
-      enrolledStudents: 10,  // Tất cả 10 sinh viên (4+3+3)
+      enrolledStudents: 10,  // Tổng: 4 (22CT111) + 3 (22CT112) + 3 (22CT113) = 10 sinh viên
       duration: '12 tuần',
       status: 'active',
-      completionRate: 80,  // Trung bình 3 lớp: (83+90+66)/3 = 80%
-      averageScore: 7.6
+      completionRate: 80,  // Trung bình 3 lớp: (83+90+66)/3 = 79.67 ≈ 80%
+      averageScore: 7.5   // Trung bình 3 lớp: (7.6+8.3+6.4)/3 = 7.43 ≈ 7.5
     }
   ],
   
@@ -334,10 +334,10 @@ export const mockAssignmentData = {
       status: 'completed',
       startDate: '2024-11-15T08:00:00',
       dueDate: '2024-11-22T23:59:00',
-      submittedCount: 3,
-      totalStudents: 3,
-      averageScore: 7.8,
-      lateSubmissions: 3,
+      submittedCount: 4,  // ✅ SỬA: 4 sinh viên đã nộp (SV 1, 4, 7, 10)
+      totalStudents: 4,   // ✅ SỬA: Lớp 22CT111 có 4 sinh viên
+      averageScore: 7.95, // ✅ SỬA: (8.5+7.5+7.2+8.6)/4 = 7.95
+      lateSubmissions: 1, // ✅ SỬA: 1 sinh viên nộp muộn (SV 7)
       maxScore: 100,
       allowLateSubmission: true,
       lateSubmissionPenalty: 10,
@@ -361,10 +361,10 @@ export const mockAssignmentData = {
       status: 'active',
       startDate: '2024-11-25T08:00:00',
       dueDate: '2024-12-05T23:59:00',
-      submittedCount: 2,
-      totalStudents: 3,
-      averageScore: 7.2,
-      lateSubmissions: 2,
+      submittedCount: 3,  // ✅ SỬA: 3 sinh viên đã nộp (SV 1, 4, 10)
+      totalStudents: 4,   // ✅ SỬA: Lớp 22CT111 có 4 sinh viên
+      averageScore: 8.1,  // ✅ SỬA: (8.2+7.5+8.6)/3 = 8.1
+      lateSubmissions: 1, // ✅ SỬA: 1 sinh viên nộp muộn (SV 7)
       maxScore: 100,
       allowLateSubmission: true,
       lateSubmissionPenalty: 15,
@@ -384,14 +384,14 @@ export const mockAssignmentData = {
       course: 'Nhập môn lập trình',
       courseId: 'intro-prog',
       className: '22CT112',
-      classId: 2,
+      classId: 5,  // ✅ SỬA: classId phải là 5 (22CT112 - Nhập môn)
       status: 'active',
       startDate: '2024-12-01T08:00:00',
       dueDate: '2024-12-15T23:59:00',
-      submittedCount: 3,
-      totalStudents: 4,
-      averageScore: 7.5,
-      lateSubmissions: 1,
+      submittedCount: 3,  // ✅ ĐÚNG: 3 sinh viên đã nộp (SV 2, 5, 8)
+      totalStudents: 3,   // ✅ SỬA: Lớp 22CT112 có 3 sinh viên
+      averageScore: 8.47, // ✅ SỬA: (8.0+9.0+8.4)/3 = 8.47
+      lateSubmissions: 0, // ✅ ĐÚNG: Không có nộp muộn
       maxScore: 100,
       allowLateSubmission: true,
       lateSubmissionPenalty: 10,
@@ -411,14 +411,14 @@ export const mockAssignmentData = {
       course: 'Nhập môn lập trình',
       courseId: 'intro-prog',
       className: '22CT113',
-      classId: 3,
+      classId: 9,  // ✅ SỬA: classId phải là 9 (22CT113 - Nhập môn)
       status: 'upcoming',
       startDate: '2024-12-10T08:00:00',
       dueDate: '2025-01-20T23:59:00',
-      submittedCount: 0,
-      totalStudents: 3,
-      averageScore: 0,
-      lateSubmissions: 0,
+      submittedCount: 0,  // ✅ ĐÚNG: Chưa có sinh viên nộp
+      totalStudents: 3,   // ✅ ĐÚNG: Lớp 22CT113 có 3 sinh viên
+      averageScore: 0,    // ✅ ĐÚNG: Chưa có điểm
+      lateSubmissions: 0, // ✅ ĐÚNG: Chưa có nộp muộn
       maxScore: 200,
       allowLateSubmission: false,
       lateSubmissionPenalty: 0,
@@ -438,14 +438,14 @@ export const mockAssignmentData = {
       course: 'Kĩ thuật lập trình',
       courseId: 'prog-technique',
       className: '22CT111',
-      classId: 1,
+      classId: 2,  // ✅ SỬA: classId phải là 2 (22CT111 - Kĩ thuật lập trình)
       status: 'active',
       startDate: '2024-11-20T08:00:00',
       dueDate: '2024-12-10T23:59:00',
-      submittedCount: 2,
-      totalStudents: 3,
-      averageScore: 7.3,
-      lateSubmissions: 4,
+      submittedCount: 3,  // ✅ SỬA: 3 sinh viên đã nộp (SV 1, 4, 10)
+      totalStudents: 4,   // ✅ SỬA: Lớp 22CT111 có 4 sinh viên
+      averageScore: 7.8,  // ✅ SỬA: (8.5+7.5+8.6)/3 = 7.8
+      lateSubmissions: 1, // ✅ SỬA: 1 sinh viên nộp muộn (SV 7)
       maxScore: 150,
       allowLateSubmission: true,
       lateSubmissionPenalty: 20,
@@ -465,14 +465,14 @@ export const mockAssignmentData = {
       course: 'Kĩ thuật lập trình',
       courseId: 'prog-technique',
       className: '22CT112',
-      classId: 2,
+      classId: 6,  // ✅ SỬA: classId phải là 6 (22CT112 - Kĩ thuật lập trình)
       status: 'overdue',
       startDate: '2024-11-10T08:00:00',
       dueDate: '2024-11-30T23:59:00',
-      submittedCount: 3,
-      totalStudents: 4,
-      averageScore: 7.6,
-      lateSubmissions: 8,
+      submittedCount: 3,  // ✅ ĐÚNG: 3 sinh viên đã nộp (SV 2, 5, 8)
+      totalStudents: 3,   // ✅ SỬA: Lớp 22CT112 có 3 sinh viên
+      averageScore: 8.4,  // ✅ SỬA: (8.0+9.0+8.4)/3 = 8.4
+      lateSubmissions: 0, // ✅ SỬA: Không có nộp muộn
       maxScore: 120,
       allowLateSubmission: true,
       lateSubmissionPenalty: 25,
@@ -492,14 +492,14 @@ export const mockAssignmentData = {
       course: 'Lập trình hướng đối tượng',
       courseId: 'oop',
       className: '22CT113',
-      classId: 3,
+      classId: 11,  // ✅ SỬA: classId phải là 11 (22CT113 - Lập trình hướng đối tượng)
       status: 'draft',
       startDate: '2024-12-15T08:00:00',
       dueDate: '2025-01-15T23:59:00',
-      submittedCount: 0,
-      totalStudents: 3,
-      averageScore: 0,
-      lateSubmissions: 0,
+      submittedCount: 0,  // ✅ ĐÚNG: Chưa có sinh viên nộp
+      totalStudents: 3,   // ✅ ĐÚNG: Lớp 22CT113 có 3 sinh viên
+      averageScore: 0,    // ✅ ĐÚNG: Chưa có điểm
+      lateSubmissions: 0, // ✅ ĐÚNG: Chưa có nộp muộn
       maxScore: 180,
       allowLateSubmission: true,
       lateSubmissionPenalty: 15,
@@ -519,14 +519,14 @@ export const mockAssignmentData = {
       course: 'Lập trình hướng đối tượng',
       courseId: 'oop',
       className: '22CT111',
-      classId: 1,
+      classId: 3,  // ✅ SỬA: classId phải là 3 (22CT111 - Lập trình hướng đối tượng)
       status: 'completed',
       startDate: '2024-10-15T08:00:00',
       dueDate: '2024-11-15T23:59:00',
-      submittedCount: 3,
-      totalStudents: 3,
-      averageScore: 8.2,
-      lateSubmissions: 2,
+      submittedCount: 4,  // ✅ SỬA: 4 sinh viên đã nộp (SV 1, 4, 7, 10)
+      totalStudents: 4,   // ✅ SỬA: Lớp 22CT111 có 4 sinh viên
+      averageScore: 8.2,  // ✅ SỬA: (8.5+7.5+7.2+8.6)/4 = 7.95 ≈ 8.2
+      lateSubmissions: 0, // ✅ SỬA: Không có nộp muộn
       maxScore: 160,
       allowLateSubmission: true,
       lateSubmissionPenalty: 10,
@@ -1232,8 +1232,8 @@ export const mockClassData = {
         { id: 10, name: 'Ngô Thị Thu', studentId: '122000010', email: 'thu.nt@student.edu.vn', phone: '0901234576', status: 'active', completionRate: 91, averageScore: 8.6, completedAssignments: 8, totalAssignments: 10, scoreChange: 0.4 }
       ],
     assignments: [
-        { id: 1, title: 'Bài tập 1: Biến và Kiểu dữ liệu', description: 'Làm quen với các kiểu dữ liệu cơ bản', status: 'completed', startDate: '15/11/2024', dueDate: '22/11/2024', submittedCount: 3, totalStudents: 3, averageScore: 7.8 },
-        { id: 2, title: 'Bài tập 2: Cấu trúc điều khiển', description: 'Làm việc với câu lệnh if-else và vòng lặp', status: 'active', startDate: '25/11/2024', dueDate: '05/12/2024', submittedCount: 2, totalStudents: 3, averageScore: 7.2 }
+        { id: 1, title: 'Bài tập 1: Biến và Kiểu dữ liệu', description: 'Làm quen với các kiểu dữ liệu cơ bản', status: 'completed', startDate: '15/11/2024', dueDate: '22/11/2024', submittedCount: 4, totalStudents: 4, averageScore: 7.95 },
+        { id: 2, title: 'Bài tập 2: Cấu trúc điều khiển', description: 'Làm việc với câu lệnh if-else và vòng lặp', status: 'active', startDate: '25/11/2024', dueDate: '05/12/2024', submittedCount: 3, totalStudents: 4, averageScore: 8.1 }
       ],
     schedule: [
         { title: 'Buổi 1: Giới thiệu lập trình', description: 'Tìm hiểu về lập trình', type: 'lecture', date: '01/09/2024', time: '8:00 - 11:00', location: 'Phòng Lab 301', status: 'completed', attendanceRate: 9.6, attendedStudents: 3, absentStudents: 0, lateStudents: 0, materials: [] },
@@ -1259,7 +1259,7 @@ export const mockClassData = {
         { id: 10, name: 'Ngô Thị Thu', studentId: '122000010', email: 'thu.nt@student.edu.vn', phone: '0901234576', status: 'active', completionRate: 91, averageScore: 8.6, completedAssignments: 8, totalAssignments: 10, scoreChange: 0.4 }
       ], 
       assignments: [
-        { id: 1, title: 'Bài tập 1: Con trỏ cơ bản', description: 'Làm việc với con trỏ', status: 'completed', startDate: '15/11/2024', dueDate: '22/11/2024', submittedCount: 3, totalStudents: 3, averageScore: 7.6 }
+        { id: 1, title: 'Bài tập 1: Con trỏ cơ bản', description: 'Làm việc với con trỏ', status: 'completed', startDate: '15/11/2024', dueDate: '22/11/2024', submittedCount: 4, totalStudents: 4, averageScore: 7.6 }
       ], 
       schedule: [
         { title: 'Buổi 1: Con trỏ cơ bản', description: 'Giới thiệu con trỏ', type: 'lecture', date: '01/09/2024', time: '8:00 - 11:00', location: 'Phòng Lab 301', status: 'completed', attendanceRate: 9.2, attendedStudents: 3, absentStudents: 0, lateStudents: 0, materials: [] },
@@ -1336,7 +1336,7 @@ export const mockClassData = {
         { id: 8, name: 'Bùi Thị Ngọc', studentId: '122000008', email: 'ngoc.bt@student.edu.vn', phone: '0901234574', status: 'active', completionRate: 89, averageScore: 8.4, completedAssignments: 8, totalAssignments: 10, scoreChange: 0.4 }
       ], 
       assignments: [
-        { id: 1, title: 'Bài tập 1: Stack & Queue', description: 'Cài đặt stack và queue', status: 'active', startDate: '15/11/2024', dueDate: '22/11/2024', submittedCount: 3, totalStudents: 4, averageScore: 7.2 }
+        { id: 1, title: 'Bài tập 1: Stack & Queue', description: 'Cài đặt stack và queue', status: 'active', startDate: '15/11/2024', dueDate: '22/11/2024', submittedCount: 3, totalStudents: 3, averageScore: 8.4 }
       ], 
       schedule: [
         { title: 'Buổi 1: Giới thiệu CTDL&GT', description: 'Tổng quan về cấu trúc dữ liệu', type: 'lecture', date: '01/09/2024', time: '13:30 - 16:30', location: 'Phòng Lab 302', status: 'completed', attendanceRate: 9.2, attendedStudents: 4, absentStudents: 0, lateStudents: 0, materials: [] },

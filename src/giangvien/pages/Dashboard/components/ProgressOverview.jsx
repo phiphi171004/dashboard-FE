@@ -17,13 +17,13 @@ const ProgressOverview = ({ data, selectedClass = 'all' }) => {
       const total = payload.reduce((sum, entry) => sum + entry.value, 0);
       return (
         <div className="bg-white p-4 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-medium text-gray-900 mb-2">{label}</p>
+          <p className="font-medium text-gray-700 mb-2">{label}</p>
           {payload.map((entry, index) => (
             <p key={index} className="text-sm" style={{ color: entry.color }}>
               {entry.name}: {entry.value} sinh viên ({total > 0 ? Math.round((entry.value / total) * 100) : 0}%)
             </p>
           ))}
-          <p className="text-sm font-medium text-gray-900 mt-2 pt-2 border-t border-gray-200">
+          <p className="text-sm font-medium text-gray-700 mt-2 pt-2 border-t border-gray-200">
             Tổng: {total} sinh viên
           </p>
         </div>
@@ -36,7 +36,7 @@ const ProgressOverview = ({ data, selectedClass = 'all' }) => {
     <div className="card p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-gray-700">
             Tổng Quan Tiến Độ Học Tập
             {selectedClass !== 'all' && <span className="text-primary-600"> - {selectedClass}</span>}
           </h3>

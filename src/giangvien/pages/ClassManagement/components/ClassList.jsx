@@ -89,7 +89,7 @@ const ClassList = ({ classes, onAddStudent }) => {
               <tr key={classItem.id} className="hover:bg-gray-50 transition-colors">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div>
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-gray-700">
                       {classItem.name}
                     </div>
                     <div className="text-sm text-gray-500">{classItem.course}</div>
@@ -103,14 +103,14 @@ const ClassList = ({ classes, onAddStudent }) => {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <Users className="h-4 w-4 text-gray-400 mr-2" />
-                    <span className="text-sm text-gray-900">{classItem.enrolledStudents}</span>
+                    <span className="text-sm text-gray-700">{classItem.enrolledStudents}</span>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="flex-1">
                       <div className="flex items-center justify-between text-sm mb-1">
-                        <span className="font-medium text-gray-900">{Math.round(classItem.completionRate || 0)}%</span>
+                        <span className="font-medium text-gray-700">{Math.round(classItem.completionRate || 0)}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div 

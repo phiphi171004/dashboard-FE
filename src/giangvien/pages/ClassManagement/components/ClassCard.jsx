@@ -57,7 +57,7 @@ const ClassCard = ({ classData, onAddStudent }) => {
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-lg font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
+            <h3 className="text-lg font-semibold text-gray-700 group-hover:text-primary-600 transition-colors">
               {classData.name}
             </h3>
             <button className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-100 rounded transition-all">
@@ -90,7 +90,7 @@ const ClassCard = ({ classData, onAddStudent }) => {
         <div>
           <div className="flex items-center justify-between text-sm mb-1">
             <span className="text-gray-600">Tiến độ hoàn thành</span>
-            <span className="font-medium text-gray-900">{Math.round(classData.completionRate || 0)}%</span>
+            <span className="font-medium text-gray-700">{Math.round(classData.completionRate || 0)}%</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 

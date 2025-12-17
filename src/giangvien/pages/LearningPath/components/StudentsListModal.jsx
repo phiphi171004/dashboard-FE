@@ -89,10 +89,10 @@ const StudentsListModal = ({ isOpen, onClose, students = [], moduleName = '' }) 
 
   const getStatusBadge = (status) => {
     const statusConfig = {
-      active: { class: 'bg-green-100 text-green-800', text: 'Đang học' },
-      at_risk: { class: 'bg-red-100 text-red-800', text: 'Có nguy cơ' },
-      completed: { class: 'bg-blue-100 text-blue-800', text: 'Hoàn thành' },
-      dropped: { class: 'bg-gray-100 text-gray-800', text: 'Đã bỏ học' }
+      active: { class: 'bg-green-100 text-green-600', text: 'Đang học' },
+      at_risk: { class: 'bg-red-100 text-red-600', text: 'Có nguy cơ' },
+      completed: { class: 'bg-blue-100 text-blue-600', text: 'Hoàn thành' },
+      dropped: { class: 'bg-gray-100 text-gray-600', text: 'Đã bỏ học' }
     };
     return statusConfig[status] || statusConfig.active;
   };
@@ -177,7 +177,7 @@ const StudentsListModal = ({ isOpen, onClose, students = [], moduleName = '' }) 
           {filteredAndSortedStudents.length === 0 ? (
             <div className="text-center py-12">
               <Users className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <h3 className="text-lg font-medium text-gray-700 mb-2">
                 Không tìm thấy sinh viên
               </h3>
               <p className="text-gray-500">
@@ -197,7 +197,7 @@ const StudentsListModal = ({ isOpen, onClose, students = [], moduleName = '' }) 
                         {student.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-lg">
+                        <h3 className="font-semibold text-gray-700 text-lg">
                           {student.name}
                         </h3>
                         <p className="text-sm text-gray-600">{student.studentId}</p>

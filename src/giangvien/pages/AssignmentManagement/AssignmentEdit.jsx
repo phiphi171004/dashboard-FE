@@ -181,13 +181,13 @@ const AssignmentEdit = () => {
         <div className="flex items-center space-x-4">
           <Link 
             to={`/assignments/${id}`}
-            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="flex items-center space-x-2 text-gray-600 hover:text-gray-700 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Quay lại</span>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Chỉnh Sửa Bài Tập</h1>
+            <h1 className="text-2xl font-bold text-gray-700">Chỉnh Sửa Bài Tập</h1>
             <p className="text-gray-600 mt-1">
               Cập nhật thông tin bài tập
             </p>
@@ -216,7 +216,7 @@ const AssignmentEdit = () => {
           <div className="lg:col-span-2 space-y-6">
             {/* Basic Information */}
             <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 Thông tin cơ bản
               </h3>
               
@@ -269,7 +269,7 @@ const AssignmentEdit = () => {
 
             {/* Assignment Settings */}
             <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 Cài đặt bài tập
               </h3>
               
@@ -374,7 +374,7 @@ const AssignmentEdit = () => {
 
             {/* File Attachments */}
             <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 Tài liệu đính kèm
               </h3>
               
@@ -446,7 +446,7 @@ const AssignmentEdit = () => {
           <div className="space-y-6">
             {/* Course and Class Selection */}
             <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 Phân công
               </h3>
               
@@ -496,7 +496,7 @@ const AssignmentEdit = () => {
 
             {/* Schedule */}
             <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 Thời gian
               </h3>
               

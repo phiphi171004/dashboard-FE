@@ -137,7 +137,7 @@ const SaveReportModal = ({ isOpen, onClose }) => {
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <Bell size={16} className="text-gray-600" />
-                      <span className="font-medium text-gray-900">Gửi email tự động</span>
+                      <span className="font-medium text-gray-700">Gửi email tự động</span>
                     </div>
                     <p className="text-sm text-gray-600 mt-1">
                       Gửi báo cáo qua email theo lịch đã chọn
@@ -153,7 +153,7 @@ const SaveReportModal = ({ isOpen, onClose }) => {
                     className="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                   />
                   <div className="flex-1">
-                    <span className="font-medium text-gray-900">Bao gồm biểu đồ</span>
+                    <span className="font-medium text-gray-700">Bao gồm biểu đồ</span>
                     <p className="text-sm text-gray-600 mt-1">
                       Thêm các biểu đồ phân tích vào báo cáo
                     </p>
@@ -168,7 +168,7 @@ const SaveReportModal = ({ isOpen, onClose }) => {
                     className="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                   />
                   <div className="flex-1">
-                    <span className="font-medium text-gray-900">Bao gồm chi tiết</span>
+                    <span className="font-medium text-gray-700">Bao gồm chi tiết</span>
                     <p className="text-sm text-gray-600 mt-1">
                       Thêm dữ liệu chi tiết sinh viên và khóa học
                     </p>

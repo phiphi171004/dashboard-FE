@@ -63,7 +63,7 @@ const AssignmentDetail = () => {
     return (
       <div className="text-center py-12">
         <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
+        <h3 className="text-lg font-medium text-gray-700 mb-2">
           Không tìm thấy bài tập
         </h3>
         <p className="text-gray-500 mb-4">
@@ -91,14 +91,14 @@ const AssignmentDetail = () => {
           Quản lý bài tập
         </Link>
         <span>/</span>
-        <span className="text-gray-900 font-medium">{assignment.title}</span>
+        <span className="text-gray-700 font-medium">{assignment.title}</span>
       </div>
 
       {/* Back Button */}
       <div className="flex items-center space-x-4">
         <Link 
           to="/assignments"
-          className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+          className="flex items-center space-x-2 text-gray-600 hover:text-gray-700 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Quay lại</span>
@@ -139,7 +139,7 @@ const AssignmentDetail = () => {
         )}
         {activeTab === 'auto-grading' && (
           <div className="card p-6 text-center">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">🤖 Tự Động Chấm Bài</h3>
+            <h3 className="text-xl font-bold text-gray-700 mb-4">🤖 Tự Động Chấm Bài</h3>
             <p className="text-gray-600 mb-6">
               Hệ thống tự động chấm điểm giúp tiết kiệm 80-90% thời gian chấm bài
             </p>

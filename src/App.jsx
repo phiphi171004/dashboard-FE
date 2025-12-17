@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { DarkModeProvider } from './contexts/DarkModeContext';
+import teacherService from './giangvien/services/teacherService';
 
 // Auth imports
 import Login from './pages/auth/Login';
@@ -112,6 +113,11 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
     !isResetPasswordRoute && !!sessionStorage.getItem('user')
   );
+
+  // Khởi tạo thông tin giảng viên mặc định khi app load
+  useEffect(() => {
+    teacherService.initDefaultTeacher();
+  }, []);
 
   // Sync selectedDashboard with sessionStorage when it changes
   useEffect(() => {

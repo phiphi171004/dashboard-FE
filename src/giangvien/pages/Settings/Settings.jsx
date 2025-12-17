@@ -57,7 +57,7 @@ const Settings = () => {
               <SettingsIcon className="text-white" size={32} />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Cài đặt</h1>
+              <h1 className="text-3xl font-bold text-gray-700">Cài đặt</h1>
               <p className="text-gray-600 mt-1">
                 Quản lý tài khoản và tùy chỉnh hệ thống
               </p>
@@ -89,7 +89,7 @@ const Settings = () => {
                     >
                       <Icon size={20} className={isActive ? 'text-blue-600' : 'text-gray-400'} />
                       <div className="flex-1 min-w-0">
-                        <p className={`font-medium ${isActive ? 'text-blue-700' : 'text-gray-900'}`}>
+                        <p className={`font-medium ${isActive ? 'text-blue-700' : 'text-gray-700'}`}>
                           {tab.label}
                         </p>
                         <p className="text-xs text-gray-500 truncate">

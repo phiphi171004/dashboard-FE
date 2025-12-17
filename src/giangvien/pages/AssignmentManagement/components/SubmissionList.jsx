@@ -13,7 +13,7 @@ const SubmissionList = ({ submissions, assignmentId }) => {
       late: { class: 'status-badge status-at-risk', text: 'Nộp muộn', icon: AlertTriangle },
       graded: { class: 'status-badge status-active', text: 'Đã chấm', icon: CheckCircle },
       pending: { class: 'status-badge status-pending', text: 'Chờ chấm', icon: Clock },
-      missing: { class: 'status-badge bg-gray-100 text-gray-800', text: 'Chưa nộp', icon: FileText }
+      missing: { class: 'status-badge bg-gray-100 text-gray-600', text: 'Chưa nộp', icon: FileText }
     };
     
     return statusConfig[status] || statusConfig.pending;
@@ -140,7 +140,7 @@ const SubmissionList = ({ submissions, assignmentId }) => {
                           </span>
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-sm font-medium text-gray-700">
                             {submission.studentName}
                           </div>
                           <div className="text-sm text-gray-500">
@@ -155,7 +155,7 @@ const SubmissionList = ({ submissions, assignmentId }) => {
                         {statusInfo.text}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                       {formatDate(submission.submittedAt)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -221,7 +221,7 @@ const SubmissionList = ({ submissions, assignmentId }) => {
       {filteredAndSortedSubmissions.length === 0 && (
         <div className="text-center py-12">
           <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-gray-700 mb-2">
             Không tìm thấy bài nộp nào
           </h3>
           <p className="text-gray-500">

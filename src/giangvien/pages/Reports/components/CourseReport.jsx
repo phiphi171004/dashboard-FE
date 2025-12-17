@@ -7,7 +7,7 @@ const CourseReport = ({ courses }) => {
   if (!courses || courses.length === 0) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Báo cáo khóa học</h2>
+        <h2 className="text-xl font-bold text-gray-700 mb-4">Báo cáo khóa học</h2>
         <div className="text-center py-12">
           <p className="text-gray-500">Không có dữ liệu khóa học</p>
         </div>
@@ -40,7 +40,7 @@ const CourseReport = ({ courses }) => {
           <BookOpen className="text-blue-600" size={24} />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Báo cáo khóa học</h2>
+          <h2 className="text-xl font-bold text-gray-700">Báo cáo khóa học</h2>
           <p className="text-sm text-gray-600">So sánh hiệu suất các khóa học</p>
         </div>
       </div>
@@ -92,7 +92,7 @@ const CourseReport = ({ courses }) => {
 
       {/* Course List */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-900">Chi tiết khóa học</h3>
+        <h3 className="text-lg font-semibold text-gray-700">Chi tiết khóa học</h3>
         
         {sortedCourses.map((course, index) => {
           const completionColors = getCompletionColor(course.completionRate);
@@ -109,7 +109,7 @@ const CourseReport = ({ courses }) => {
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
-                  <h4 className="font-semibold text-gray-900 mb-1">{course.name}</h4>
+                  <h4 className="font-semibold text-gray-700 mb-1">{course.name}</h4>
                   <div className="flex items-center gap-4 text-sm text-gray-600">
                     <span className="flex items-center gap-1">
                       <Users size={14} />
@@ -172,7 +172,7 @@ const CourseReport = ({ courses }) => {
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75" onClick={() => setShowDetailModal(false)}></div>
             <div className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full p-6 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-gray-900">
+                <h3 className="text-2xl font-bold text-gray-700">
                   {selectedCourse.type === 'single' && `Chi tiết: ${selectedCourse.data.name}`}
                   {selectedCourse.type === 'all' && 'Danh sách tất cả khóa học'}
                   {selectedCourse.type === 'enrollment' && 'Phân tích ghi danh'}
@@ -187,7 +187,7 @@ const CourseReport = ({ courses }) => {
               {selectedCourse.type === 'single' && (
                 <div className="space-y-6">
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-4">{selectedCourse.data.name}</h4>
+                    <h4 className="text-lg font-semibold text-gray-700 mb-4">{selectedCourse.data.name}</h4>
                     <div className="grid grid-cols-2 gap-6">
                       <div>
                         <div className="text-sm text-gray-600 mb-1">Số sinh viên</div>
@@ -209,7 +209,7 @@ const CourseReport = ({ courses }) => {
                   </div>
 
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <h5 className="font-semibold text-gray-900 mb-3">Thông tin chi tiết</h5>
+                    <h5 className="font-semibold text-gray-700 mb-3">Thông tin chi tiết</h5>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span className="text-gray-600">Trạng thái:</span>
@@ -239,7 +239,7 @@ const CourseReport = ({ courses }) => {
                   {selectedCourse.data.map((course, idx) => (
                     <div key={idx} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-2">
-                        <div className="font-semibold text-gray-900">{course.name}</div>
+                        <div className="font-semibold text-gray-700">{course.name}</div>
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                           course.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
                         }`}>
@@ -249,7 +249,7 @@ const CourseReport = ({ courses }) => {
                       <div className="grid grid-cols-4 gap-4 text-sm">
                         <div>
                           <div className="text-gray-600">Sinh viên</div>
-                          <div className="font-bold text-gray-900">{course.enrolledStudents}</div>
+                          <div className="font-bold text-gray-700">{course.enrolledStudents}</div>
                         </div>
                         <div>
                           <div className="text-gray-600">Hoàn thành</div>
@@ -261,7 +261,7 @@ const CourseReport = ({ courses }) => {
                         </div>
                         <div>
                           <div className="text-gray-600">Thời lượng</div>
-                          <div className="font-bold text-gray-900">{course.duration}</div>
+                          <div className="font-bold text-gray-700">{course.duration}</div>
                         </div>
                       </div>
                     </div>
@@ -277,13 +277,13 @@ const CourseReport = ({ courses }) => {
                     <div className="text-gray-600">Tổng số sinh viên ghi danh</div>
                   </div>
                   <div className="space-y-3">
-                    <h4 className="font-semibold text-gray-900">Phân bố theo khóa học:</h4>
+                    <h4 className="font-semibold text-gray-700">Phân bố theo khóa học:</h4>
                     {selectedCourse.data
                       .sort((a, b) => b.enrolledStudents - a.enrolledStudents)
                       .map((course, idx) => (
                         <div key={idx} className="border border-gray-200 rounded-lg p-4">
                           <div className="flex items-center justify-between mb-2">
-                            <div className="font-medium text-gray-900">{course.name}</div>
+                            <div className="font-medium text-gray-700">{course.name}</div>
                             <div className="text-2xl font-bold text-purple-600">{course.enrolledStudents}</div>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-3">
@@ -309,7 +309,7 @@ const CourseReport = ({ courses }) => {
                     <div className="text-gray-600">Tỷ lệ hoàn thành trung bình</div>
                   </div>
                   <div className="space-y-3">
-                    <h4 className="font-semibold text-gray-900">Chi tiết theo khóa học:</h4>
+                    <h4 className="font-semibold text-gray-700">Chi tiết theo khóa học:</h4>
                     {selectedCourse.data
                       .sort((a, b) => b.completionRate - a.completionRate)
                       .map((course, idx) => {
@@ -317,7 +317,7 @@ const CourseReport = ({ courses }) => {
                         return (
                           <div key={idx} className="border border-gray-200 rounded-lg p-4">
                             <div className="flex items-center justify-between mb-2">
-                              <div className="font-medium text-gray-900">{course.name}</div>
+                              <div className="font-medium text-gray-700">{course.name}</div>
                               <div className={`text-2xl font-bold ${colors.text}`}>{course.completionRate}%</div>
                             </div>
                             <div className="w-full bg-gray-200 rounded-full h-3 mb-2">

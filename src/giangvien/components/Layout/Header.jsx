@@ -112,7 +112,7 @@ const Header = ({ onMenuClick }) => {
         <div className="flex items-center space-x-4">
           <button
             onClick={onMenuClick}
-            className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 transition-colors"
+            className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 transition-colors"
           >
             <Menu />
           </button>
@@ -133,7 +133,7 @@ const Header = ({ onMenuClick }) => {
               className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
             >
             <div className="hidden md:block text-right">
-                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{user?.full_name || 'Giảng viên'}</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-100">{user?.full_name || 'Giảng viên'}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">{user?.email || 'Email'}</p>
             </div>
             <div className="h-8 w-8 bg-primary-500 rounded-full flex items-center justify-center">
@@ -145,7 +145,7 @@ const Header = ({ onMenuClick }) => {
             {userMenuOpen && (
               <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
                 <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{user?.full_name || 'Giảng viên'}</p>
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-100">{user?.full_name || 'Giảng viên'}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">{user?.email || 'Email'}</p>
                 </div>
                 
@@ -182,7 +182,7 @@ const Header = ({ onMenuClick }) => {
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Hồ sơ của tôi</h2>
+              <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-100">Hồ sơ của tôi</h2>
               <button
                 onClick={() => setProfileModalOpen(false)}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
@@ -201,30 +201,30 @@ const Header = ({ onMenuClick }) => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Họ và tên</label>
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100">{profileData.full_name}</div>
+                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-2 text-gray-700 dark:text-gray-100">{profileData.full_name}</div>
                   </div>
 
                   {profileData.mssv && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">MSGV</label>
-                      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100">{profileData.mssv}</div>
+                      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-2 text-gray-700 dark:text-gray-100">{profileData.mssv}</div>
                     </div>
                   )}
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100">{profileData.email}</div>
+                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-2 text-gray-700 dark:text-gray-100">{profileData.email}</div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Địa chỉ</label>
-                      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100">{profileData.address || <span className="text-gray-400">Không có thông tin</span>}</div>
+                      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-2 text-gray-700 dark:text-gray-100">{profileData.address || <span className="text-gray-400">Không có thông tin</span>}</div>
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Số điện thoại</label>
-                      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100">{profileData.phone || <span className="text-gray-400">Không có thông tin</span>}</div>
+                      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-2 text-gray-700 dark:text-gray-100">{profileData.phone || <span className="text-gray-400">Không có thông tin</span>}</div>
                     </div>
                   </div>
                 </div>

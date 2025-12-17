@@ -10,7 +10,7 @@ const AssignmentAnalytics = ({ analytics, assignmentId }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-4 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-medium text-gray-900 mb-2">{label}</p>
+          <p className="font-medium text-gray-700 mb-2">{label}</p>
           {payload.map((entry, index) => (
             <p key={index} className="text-sm" style={{ color: entry.color }}>
               {entry.name}: {entry.value}
@@ -55,7 +55,7 @@ const AssignmentAnalytics = ({ analytics, assignmentId }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Score Distribution */}
         <div className="card p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">
             Phân bố điểm số
           </h3>
           <div className="h-64">
@@ -73,7 +73,7 @@ const AssignmentAnalytics = ({ analytics, assignmentId }) => {
 
         {/* Submission Status */}
         <div className="card p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">
             Trạng thái nộp bài
           </h3>
           <div className="h-64">
@@ -102,7 +102,7 @@ const AssignmentAnalytics = ({ analytics, assignmentId }) => {
 
       {/* Submission Timeline */}
       <div className="card p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">
           Thời gian nộp bài
         </h3>
         <div className="h-64">
@@ -126,7 +126,7 @@ const AssignmentAnalytics = ({ analytics, assignmentId }) => {
 
       {/* Class Performance Comparison */}
       <div className="card p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">
           So sánh hiệu suất theo lớp
         </h3>
         <div className="h-64">
@@ -145,42 +145,42 @@ const AssignmentAnalytics = ({ analytics, assignmentId }) => {
 
       {/* Detailed Statistics */}
       <div className="card p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">
           Thống kê chi tiết
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-xl font-bold text-gray-900 mb-1">
+            <div className="text-xl font-bold text-gray-700 mb-1">
               {analytics.totalSubmissions}
             </div>
             <div className="text-sm text-gray-600">Tổng bài nộp</div>
           </div>
           <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-xl font-bold text-gray-900 mb-1">
+            <div className="text-xl font-bold text-gray-700 mb-1">
               {analytics.averageSubmissionTime}
             </div>
             <div className="text-sm text-gray-600">Thời gian nộp TB</div>
           </div>
           <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-xl font-bold text-gray-900 mb-1">
+            <div className="text-xl font-bold text-gray-700 mb-1">
               {analytics.resubmissions}
             </div>
             <div className="text-sm text-gray-600">Nộp lại</div>
           </div>
           <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-xl font-bold text-gray-900 mb-1">
+            <div className="text-xl font-bold text-gray-700 mb-1">
               {analytics.plagiarismDetected}
             </div>
             <div className="text-sm text-gray-600">Phát hiện sao chép</div>
           </div>
           <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-xl font-bold text-gray-900 mb-1">
+            <div className="text-xl font-bold text-gray-700 mb-1">
               {analytics.averageGradingTime}
             </div>
             <div className="text-sm text-gray-600">Thời gian chấm TB</div>
           </div>
           <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-xl font-bold text-gray-900 mb-1">
+            <div className="text-xl font-bold text-gray-700 mb-1">
               {analytics.feedbackGiven}
             </div>
             <div className="text-sm text-gray-600">Đã nhận xét</div>

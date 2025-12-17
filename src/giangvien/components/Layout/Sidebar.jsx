@@ -33,7 +33,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             <img src={logo} alt="EduTracker Logo" className="h-10 w-10 rounded-lg object-cover" />
             <span className="text-xl font-bold text-gradient bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent">EduTracker</span>
           </div>
-          <button onClick={onClose} className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+          <button onClick={onClose} className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
             <X className="h-5 w-5" />
           </button>
         </div>

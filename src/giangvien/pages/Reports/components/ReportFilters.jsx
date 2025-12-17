@@ -44,7 +44,7 @@ const ReportFilters = ({ onFilterChange }) => {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Filter className="text-gray-600" size={20} />
-          <h3 className="text-lg font-semibold text-gray-900">Bộ lọc báo cáo</h3>
+          <h3 className="text-lg font-semibold text-gray-700">Bộ lọc báo cáo</h3>
         </div>
         
         <button

@@ -74,7 +74,7 @@ const NotificationPanel = ({ data }) => {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-2">
           <Bell className="h-5 w-5 text-gray-600" />
-          <h3 className="text-lg font-semibold text-gray-900">Thông Báo</h3>
+          <h3 className="text-lg font-semibold text-gray-700">Thông Báo</h3>
           {unreadCount > 0 && (
             <span className="bg-danger-500 text-white text-xs font-medium px-2 py-1 rounded-full">
               {unreadCount}
@@ -125,7 +125,7 @@ const NotificationPanel = ({ data }) => {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <p className={`text-sm font-medium ${
-                          notification.read ? 'text-gray-700' : 'text-gray-900'
+                          notification.read ? 'text-gray-700' : 'text-gray-700'
                         }`}>
                           {notification.title}
                         </p>
@@ -194,7 +194,7 @@ const NotificationPanel = ({ data }) => {
                   {React.createElement(getNotificationIcon(selectedNotification.type), { className: "h-6 w-6" })}
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-gray-700">
                     {selectedNotification.title}
                   </h3>
                   <p className="text-sm text-gray-600 mt-1">
@@ -228,7 +228,7 @@ const NotificationPanel = ({ data }) => {
                 if (details.type === 'at_risk_students') {
                   return (
                     <div>
-                      <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                      <h4 className="text-lg font-semibold text-gray-700 mb-4">
                         Danh sách sinh viên cần chú ý
                       </h4>
                       <div className="space-y-3">
@@ -242,7 +242,7 @@ const NotificationPanel = ({ data }) => {
                                 <span className="text-danger-600 font-semibold">{index + 1}</span>
                               </div>
                               <div className="flex-1">
-                                <p className="font-medium text-gray-900">{student.name}</p>
+                                <p className="font-medium text-gray-700">{student.name}</p>
                                 <p className="text-sm text-gray-600">{student.studentId} • {student.course}</p>
                               </div>
                             </div>

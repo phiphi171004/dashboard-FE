@@ -69,7 +69,7 @@ const StudentList = ({ students = [], classId, classData, onStudentsAdded, onStu
       active: { class: 'status-badge status-active', text: 'Đang học' },
       at_risk: { class: 'status-badge status-at-risk', text: 'Có nguy cơ' },
       completed: { class: 'status-badge status-completed', text: 'Hoàn thành' },
-      dropped: { class: 'status-badge bg-gray-100 text-gray-800', text: 'Đã bỏ học' }
+      dropped: { class: 'status-badge bg-gray-100 text-gray-600', text: 'Đã bỏ học' }
     };
 
     return statusConfig[status] || statusConfig.active;
@@ -187,7 +187,7 @@ const StudentList = ({ students = [], classId, classData, onStudentsAdded, onStu
                         </span>
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-800">{student.name}</div>
+                        <div className="text-sm font-medium text-gray-600">{student.name}</div>
                         <div className="text-sm text-gray-600">{student.studentId}</div>
                       </div>
                     </div>
@@ -255,7 +255,7 @@ const StudentList = ({ students = [], classId, classData, onStudentsAdded, onStu
 
       {filteredAndSortedStudents.length === 0 && (
         <div className="text-center py-12">
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-gray-700 mb-2">
             Không tìm thấy sinh viên nào
           </h3>
           <p className="text-gray-500">

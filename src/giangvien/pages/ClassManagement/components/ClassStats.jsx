@@ -119,7 +119,7 @@ const ClassStats = ({ data }) => {
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <p className="text-sm font-medium text-gray-600 mb-1">{stat.title}</p>
-                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                <p className="text-2xl font-bold text-gray-700">{stat.value}</p>
 
                 <div className="flex items-center mt-2">
                   {stat.changeType === 'increase' ? (
@@ -156,7 +156,7 @@ const ClassStats = ({ data }) => {
                   <selectedStat.icon className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-gray-700">
                     {selectedStat.title}
                   </h3>
                   <p className="text-sm text-gray-600 mt-1">
@@ -177,7 +177,7 @@ const ClassStats = ({ data }) => {
               <div className="mb-6 grid grid-cols-3 gap-4">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Giá trị hiện tại</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{selectedStat.value}</p>
+                  <p className="text-2xl font-bold text-gray-700 mt-1">{selectedStat.value}</p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Thay đổi</p>
@@ -196,7 +196,7 @@ const ClassStats = ({ data }) => {
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Tổng lớp học</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">
+                  <p className="text-2xl font-bold text-gray-700 mt-1">
                     {getDetailData(selectedStat.id).length}
                   </p>
                 </div>
@@ -204,7 +204,7 @@ const ClassStats = ({ data }) => {
 
               {/* Danh sách lớp học */}
               <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                <h4 className="text-lg font-semibold text-gray-700 mb-4">
                   Danh sách lớp học
                 </h4>
                 <div className="space-y-3">
@@ -222,18 +222,18 @@ const ClassStats = ({ data }) => {
                           <span className="text-primary-600 font-semibold">{index + 1}</span>
                         </div>
                         <div className="flex-1">
-                          <p className="font-medium text-gray-900">{classItem.name}</p>
+                          <p className="font-medium text-gray-700">{classItem.name}</p>
                           <p className="text-sm text-gray-600">{classItem.course}</p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-6">
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Sinh viên</p>
-                          <p className="text-lg font-bold text-gray-900">{classItem.enrolledStudents}</p>
+                          <p className="text-lg font-bold text-gray-700">{classItem.enrolledStudents}</p>
                         </div>
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Hoàn thành</p>
-                          <p className="text-lg font-bold text-gray-900">{classItem.completionRate}%</p>
+                          <p className="text-lg font-bold text-gray-700">{classItem.completionRate}%</p>
                         </div>
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Trạng thái</p>
@@ -247,7 +247,7 @@ const ClassStats = ({ data }) => {
                   ))}
                 </div>
                 <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-sm text-blue-800">
+                  <p className="text-sm text-blue-600">
                     💡 <strong>Mẹo:</strong> Click vào bất kỳ lớp học nào để xem danh sách sinh viên chi tiết
                   </p>
                 </div>
@@ -274,7 +274,7 @@ const ClassStats = ({ data }) => {
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900">
+                <h3 className="text-xl font-semibold text-gray-700">
                   {selectedClass.name} - {selectedClass.course}
                 </h3>
                 <div className="flex items-center space-x-4 text-sm text-gray-600 mt-2">
@@ -300,17 +300,17 @@ const ClassStats = ({ data }) => {
               <div className="mb-6 grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Hoàn thành</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{selectedClass.completionRate}%</p>
+                  <p className="text-2xl font-bold text-gray-700 mt-1">{selectedClass.completionRate}%</p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Bài tập đang mở</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{selectedClass.activeAssignments || 0}</p>
+                  <p className="text-2xl font-bold text-gray-700 mt-1">{selectedClass.activeAssignments || 0}</p>
                 </div>
               </div>
 
               {/* Danh sách sinh viên */}
               <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                <h4 className="text-lg font-semibold text-gray-700 mb-4">
                   Danh sách sinh viên trong lớp
                 </h4>
                 {mockClassData.classDetails[selectedClass.id]?.students ? (
@@ -325,18 +325,18 @@ const ClassStats = ({ data }) => {
                             <span className="text-primary-600 font-semibold">{index + 1}</span>
                           </div>
                           <div className="flex-1">
-                            <p className="font-medium text-gray-900">{student.name}</p>
+                            <p className="font-medium text-gray-700">{student.name}</p>
                             <p className="text-sm text-gray-600">{student.studentId} • {student.email}</p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-6">
                           <div className="text-right">
                             <p className="text-sm text-gray-600">Điểm TB</p>
-                            <p className="text-lg font-bold text-gray-900">{student.averageScore.toFixed(1)}</p>
+                            <p className="text-lg font-bold text-gray-700">{student.averageScore.toFixed(1)}</p>
                           </div>
                           <div className="text-right">
                             <p className="text-sm text-gray-600">Hoàn thành</p>
-                            <p className="text-lg font-bold text-gray-900">{student.completionRate}%</p>
+                            <p className="text-lg font-bold text-gray-700">{student.completionRate}%</p>
                           </div>
                           <div className="text-right">
                             <p className="text-sm text-gray-600">Trạng thái</p>

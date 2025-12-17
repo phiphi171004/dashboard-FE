@@ -26,7 +26,7 @@ const CourseClasses = ({ classes }) => {
         <div className="text-gray-400 mb-3">
           <Users size={48} className="mx-auto" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Chưa có lớp học</h3>
+        <h3 className="text-lg font-semibold text-gray-700 mb-2">Chưa có lớp học</h3>
         <p className="text-gray-600">Khóa học này chưa có lớp học nào</p>
       </div>
     );
@@ -36,7 +36,7 @@ const CourseClasses = ({ classes }) => {
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Danh sách lớp học</h2>
+          <h2 className="text-xl font-bold text-gray-700">Danh sách lớp học</h2>
           <p className="text-sm text-gray-600 mt-1">{classes.length} lớp đang hoạt động</p>
         </div>
       </div>
@@ -54,7 +54,7 @@ const CourseClasses = ({ classes }) => {
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                      <h3 className="text-lg font-semibold text-gray-700 group-hover:text-blue-600 transition-colors">
                         {cls.name}
                       </h3>
                       <p className="text-sm text-gray-600 mt-1">
@@ -73,7 +73,7 @@ const CourseClasses = ({ classes }) => {
                         <TrendingUp size={16} />
                         Tiến độ hoàn thành
                       </span>
-                      <span className="font-semibold text-gray-900">
+                      <span className="font-semibold text-gray-700">
                         {cls.completionRate}%
                       </span>
                     </div>

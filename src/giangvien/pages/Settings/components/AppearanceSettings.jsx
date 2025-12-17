@@ -57,7 +57,7 @@ const AppearanceSettings = () => {
             <Palette className="text-purple-600" size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Chủ đề giao diện</h3>
+            <h3 className="text-lg font-semibold text-gray-700">Chủ đề giao diện</h3>
             <p className="text-sm text-gray-600">Chọn chủ đề phù hợp với bạn</p>
           </div>
         </div>
@@ -83,7 +83,7 @@ const AppearanceSettings = () => {
                   }`}>
                     <Icon className={isSelected ? 'text-blue-600' : 'text-gray-600'} size={20} />
                   </div>
-                  <h4 className="font-semibold text-gray-900">{theme.label}</h4>
+                  <h4 className="font-semibold text-gray-700">{theme.label}</h4>
                 </div>
                 <p className="text-sm text-gray-600">{theme.description}</p>
               </button>
@@ -99,7 +99,7 @@ const AppearanceSettings = () => {
             <Globe className="text-blue-600" size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Ngôn ngữ</h3>
+            <h3 className="text-lg font-semibold text-gray-700">Ngôn ngữ</h3>
             <p className="text-sm text-gray-600">Chọn ngôn ngữ hiển thị</p>
           </div>
         </div>
@@ -116,7 +116,7 @@ const AppearanceSettings = () => {
               }`}
             >
               <span className="text-2xl">{lang.flag}</span>
-              <span className="font-medium text-gray-900">{lang.label}</span>
+              <span className="font-medium text-gray-700">{lang.label}</span>
             </button>
           ))}
         </div>
@@ -129,7 +129,7 @@ const AppearanceSettings = () => {
             <Type className="text-green-600" size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Kích thước chữ</h3>
+            <h3 className="text-lg font-semibold text-gray-700">Kích thước chữ</h3>
             <p className="text-sm text-gray-600">Điều chỉnh kích thước văn bản</p>
           </div>
         </div>
@@ -145,7 +145,7 @@ const AppearanceSettings = () => {
                   : 'border-gray-200 hover:border-gray-300'
               }`}
             >
-              <div style={{ fontSize: size.size }} className="font-medium text-gray-900 mb-1">
+              <div style={{ fontSize: size.size }} className="font-medium text-gray-700 mb-1">
                 Aa
               </div>
               <div className="text-sm text-gray-600">{size.label}</div>
@@ -161,7 +161,7 @@ const AppearanceSettings = () => {
             <Layout className="text-orange-600" size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Tùy chọn hiển thị</h3>
+            <h3 className="text-lg font-semibold text-gray-700">Tùy chọn hiển thị</h3>
             <p className="text-sm text-gray-600">Tùy chỉnh giao diện theo ý muốn</p>
           </div>
         </div>
@@ -169,7 +169,7 @@ const AppearanceSettings = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
             <div>
-              <h4 className="font-medium text-gray-900">Chế độ thu gọn</h4>
+              <h4 className="font-medium text-gray-700">Chế độ thu gọn</h4>
               <p className="text-sm text-gray-600">Giảm khoảng cách giữa các phần tử</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -185,7 +185,7 @@ const AppearanceSettings = () => {
 
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
             <div>
-              <h4 className="font-medium text-gray-900">Hiển thị ảnh đại diện</h4>
+              <h4 className="font-medium text-gray-700">Hiển thị ảnh đại diện</h4>
               <p className="text-sm text-gray-600">Hiển thị ảnh đại diện trong danh sách</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -201,7 +201,7 @@ const AppearanceSettings = () => {
 
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
             <div>
-              <h4 className="font-medium text-gray-900">Hiệu ứng chuyển động</h4>
+              <h4 className="font-medium text-gray-700">Hiệu ứng chuyển động</h4>
               <p className="text-sm text-gray-600">Bật/tắt animation và transitions</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">

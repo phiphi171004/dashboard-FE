@@ -85,7 +85,7 @@ const SecuritySettings = () => {
             <Lock className="text-blue-600" size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Đổi mật khẩu</h3>
+            <h3 className="text-lg font-semibold text-gray-700">Đổi mật khẩu</h3>
             <p className="text-sm text-gray-600">Cập nhật mật khẩu của bạn</p>
           </div>
         </div>
@@ -177,14 +177,14 @@ const SecuritySettings = () => {
             <Smartphone className="text-green-600" size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Xác thực hai yếu tố (2FA)</h3>
+            <h3 className="text-lg font-semibold text-gray-700">Xác thực hai yếu tố (2FA)</h3>
             <p className="text-sm text-gray-600">Tăng cường bảo mật tài khoản</p>
           </div>
         </div>
 
         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
           <div className="flex-1">
-            <h4 className="font-medium text-gray-900 mb-1">Trạng thái 2FA</h4>
+            <h4 className="font-medium text-gray-700 mb-1">Trạng thái 2FA</h4>
             <p className="text-sm text-gray-600">
               {twoFactorEnabled 
                 ? 'Đã bật - Tài khoản của bạn được bảo vệ tốt hơn'
@@ -207,7 +207,7 @@ const SecuritySettings = () => {
             <div className="flex items-start gap-3">
               <CheckCircle className="text-blue-600 mt-0.5" size={20} />
               <div>
-                <p className="text-sm font-medium text-blue-900">2FA đã được kích hoạt</p>
+                <p className="text-sm font-medium text-blue-700">2FA đã được kích hoạt</p>
                 <p className="text-sm text-blue-700 mt-1">
                   Mã xác thực sẽ được gửi qua ứng dụng Authenticator mỗi khi đăng nhập
                 </p>
@@ -224,7 +224,7 @@ const SecuritySettings = () => {
             <Shield className="text-purple-600" size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Tùy chọn bảo mật</h3>
+            <h3 className="text-lg font-semibold text-gray-700">Tùy chọn bảo mật</h3>
             <p className="text-sm text-gray-600">Cấu hình các tùy chọn bảo mật</p>
           </div>
         </div>
@@ -232,7 +232,7 @@ const SecuritySettings = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
             <div>
-              <h4 className="font-medium text-gray-900">Cảnh báo đăng nhập</h4>
+              <h4 className="font-medium text-gray-700">Cảnh báo đăng nhập</h4>
               <p className="text-sm text-gray-600">Nhận thông báo khi có đăng nhập mới</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -247,7 +247,7 @@ const SecuritySettings = () => {
           </div>
 
           <div className="p-4 bg-gray-50 rounded-lg">
-            <label className="block font-medium text-gray-900 mb-2">
+            <label className="block font-medium text-gray-700 mb-2">
               Thời gian tự động đăng xuất
             </label>
             <select
@@ -267,7 +267,7 @@ const SecuritySettings = () => {
 
       {/* Active Sessions */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Phiên đăng nhập đang hoạt động</h3>
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">Phiên đăng nhập đang hoạt động</h3>
         
         <div className="space-y-3">
           {activeSessions.map((session, index) => (
@@ -275,7 +275,7 @@ const SecuritySettings = () => {
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <h4 className="font-medium text-gray-900">{session.device}</h4>
+                    <h4 className="font-medium text-gray-700">{session.device}</h4>
                     {session.current && (
                       <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full">
                         Hiện tại
@@ -298,7 +298,7 @@ const SecuritySettings = () => {
 
       {/* Login History */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Lịch sử đăng nhập</h3>
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">Lịch sử đăng nhập</h3>
         
         <div className="space-y-2">
           {loginHistory.map((log, index) => (
@@ -310,7 +310,7 @@ const SecuritySettings = () => {
                   <AlertTriangle className="text-red-600" size={18} />
                 )}
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{log.device}</p>
+                  <p className="text-sm font-medium text-gray-700">{log.device}</p>
                   <p className="text-xs text-gray-600">{log.location} • {log.date}</p>
                 </div>
               </div>

@@ -131,7 +131,7 @@ const AssignmentStats = ({ data }) => {
               </div>
 
               <div>
-                <div className="text-2xl font-bold text-gray-900 mb-1">
+                <div className="text-2xl font-bold text-gray-700 mb-1">
                   {stat.value}
                 </div>
                 <div className="text-sm text-gray-600">
@@ -154,7 +154,7 @@ const AssignmentStats = ({ data }) => {
                   <selectedStat.icon className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-gray-700">
                     {selectedStat.title}
                   </h3>
                   <p className="text-sm text-gray-600 mt-1">
@@ -175,7 +175,7 @@ const AssignmentStats = ({ data }) => {
               <div className="mb-6 grid grid-cols-3 gap-4">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Giá trị hiện tại</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{selectedStat.value}</p>
+                  <p className="text-2xl font-bold text-gray-700 mt-1">{selectedStat.value}</p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Thay đổi</p>
@@ -194,7 +194,7 @@ const AssignmentStats = ({ data }) => {
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Tổng bài tập</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">
+                  <p className="text-2xl font-bold text-gray-700 mt-1">
                     {getDetailData(selectedStat.id).length}
                   </p>
                 </div>
@@ -202,7 +202,7 @@ const AssignmentStats = ({ data }) => {
 
               {/* Danh sách bài tập */}
               <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                <h4 className="text-lg font-semibold text-gray-700 mb-4">
                   Danh sách bài tập
                 </h4>
                 <div className="space-y-3">
@@ -220,20 +220,20 @@ const AssignmentStats = ({ data }) => {
                           <span className="text-primary-600 font-semibold">{index + 1}</span>
                         </div>
                         <div className="flex-1">
-                          <p className="font-medium text-gray-900">{assignment.title}</p>
+                          <p className="font-medium text-gray-700">{assignment.title}</p>
                           <p className="text-sm text-gray-600">{assignment.course} • {assignment.className}</p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-6">
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Đã nộp</p>
-                          <p className="text-lg font-bold text-gray-900">
+                          <p className="text-lg font-bold text-gray-700">
                             {assignment.submittedCount}/{assignment.totalStudents}
                           </p>
                         </div>
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Điểm TB</p>
-                          <p className="text-lg font-bold text-gray-900">
+                          <p className="text-lg font-bold text-gray-700">
                             {assignment.averageScore > 0 ? assignment.averageScore.toFixed(1) : '-'}
                           </p>
                         </div>
@@ -249,7 +249,7 @@ const AssignmentStats = ({ data }) => {
                   ))}
                 </div>
                 <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-sm text-blue-800">
+                  <p className="text-sm text-blue-600">
                     💡 <strong>Mẹo:</strong> Click vào bất kỳ bài tập nào để xem chi tiết sinh viên đã nộp/chưa nộp
                   </p>
                 </div>
@@ -276,7 +276,7 @@ const AssignmentStats = ({ data }) => {
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900">
+                <h3 className="text-xl font-semibold text-gray-700">
                   {selectedAssignment.title}
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">
@@ -346,7 +346,7 @@ const AssignmentStats = ({ data }) => {
               {/* Danh sách sinh viên đã nộp */}
               {actualSubmitted.length > 0 && (
                 <div className="mb-6">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                  <h4 className="text-lg font-semibold text-gray-700 mb-3">
                     Sinh viên đã nộp ({actualSubmitted.length})
                   </h4>
                   <div className="space-y-2">
@@ -358,14 +358,14 @@ const AssignmentStats = ({ data }) => {
                           <div className="flex items-center space-x-3 flex-1">
                             <span className="text-success-600 font-semibold">{index + 1}</span>
                             <div>
-                              <p className="font-medium text-gray-900">{submission.studentName}</p>
+                              <p className="font-medium text-gray-700">{submission.studentName}</p>
                               <p className="text-xs text-gray-600">{submission.studentId}</p>
                             </div>
                           </div>
                           <div className="flex items-center space-x-4">
                             <div className="text-right">
                               <p className="text-xs text-gray-600">Điểm</p>
-                              <p className="text-sm font-bold text-gray-900">
+                              <p className="text-sm font-bold text-gray-700">
                                 {submission.score !== null ? submission.score : 'Chưa chấm'}
                               </p>
                             </div>
@@ -384,7 +384,7 @@ const AssignmentStats = ({ data }) => {
               {/* Danh sách sinh viên nộp muộn */}
               {actualLate.length > 0 && (
                 <div className="mb-6">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                  <h4 className="text-lg font-semibold text-gray-700 mb-3">
                     Sinh viên nộp muộn ({actualLate.length})
                   </h4>
                   <div className="space-y-2">
@@ -396,14 +396,14 @@ const AssignmentStats = ({ data }) => {
                           <div className="flex items-center space-x-3 flex-1">
                             <span className="text-danger-600 font-semibold">{index + 1}</span>
                             <div>
-                              <p className="font-medium text-gray-900">{submission.studentName}</p>
+                              <p className="font-medium text-gray-700">{submission.studentName}</p>
                               <p className="text-xs text-gray-600">{submission.studentId}</p>
                             </div>
                           </div>
                           <div className="flex items-center space-x-4">
                             <div className="text-right">
                               <p className="text-xs text-gray-600">Điểm</p>
-                              <p className="text-sm font-bold text-gray-900">
+                              <p className="text-sm font-bold text-gray-700">
                                 {submission.score !== null ? submission.score : 'Chưa chấm'}
                               </p>
                             </div>
@@ -420,7 +420,7 @@ const AssignmentStats = ({ data }) => {
               {/* Danh sách sinh viên chưa nộp */}
               {actualNotSubmitted > 0 && (
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                  <h4 className="text-lg font-semibold text-gray-700 mb-3">
                     Sinh viên chưa nộp ({actualNotSubmitted})
                   </h4>
                   <div className="space-y-2">
@@ -434,7 +434,7 @@ const AssignmentStats = ({ data }) => {
                           <div className="flex items-center space-x-3 flex-1">
                             <span className="text-warning-600 font-semibold">{index + 1}</span>
                             <div>
-                              <p className="font-medium text-gray-900">{submission?.studentName || `Sinh viên ${index + 1}`}</p>
+                              <p className="font-medium text-gray-700">{submission?.studentName || `Sinh viên ${index + 1}`}</p>
                               <p className="text-xs text-gray-600">{submission?.studentId || `SV${String(index + 100).padStart(3, '0')}`}</p>
                             </div>
                           </div>

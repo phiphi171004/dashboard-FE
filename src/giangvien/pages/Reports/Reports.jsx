@@ -109,7 +109,7 @@ const Reports = () => {
                 <BarChart3 className="text-white" size={32} />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Báo cáo & Phân tích</h1>
+                <h1 className="text-3xl font-bold text-gray-700">Báo cáo & Phân tích</h1>
                 <p className="text-gray-600 mt-1">
                   Tổng quan và phân tích chi tiết về hoạt động học tập
                 </p>
@@ -168,7 +168,7 @@ const Reports = () => {
               <BarChart3 className="text-blue-600" size={24} />
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-bold text-gray-900 mb-2">
+              <h3 className="text-lg font-bold text-gray-700 mb-2">
                 Thông tin chi tiết
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">

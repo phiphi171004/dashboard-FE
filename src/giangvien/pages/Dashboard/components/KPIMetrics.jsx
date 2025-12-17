@@ -159,7 +159,7 @@ const KPIMetrics = ({ data }) => {
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <p className="text-sm font-medium text-gray-600 mb-1">{metric.title}</p>
-                <p className="text-2xl font-bold text-gray-900">{metric.value}</p>
+                <p className="text-2xl font-bold text-gray-700">{metric.value}</p>
                 
                 <div 
                   className="flex items-center mt-2 px-2 py-1 bg-gray-50 rounded"
@@ -201,7 +201,7 @@ const KPIMetrics = ({ data }) => {
                   <selectedMetric.icon className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-gray-700">
                     {selectedMetric.title}
                   </h3>
                   <p className="text-sm text-gray-600 mt-1">
@@ -222,7 +222,7 @@ const KPIMetrics = ({ data }) => {
               <div className="mb-6 grid grid-cols-3 gap-4">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Giá trị hiện tại</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{selectedMetric.value}</p>
+                  <p className="text-2xl font-bold text-gray-700 mt-1">{selectedMetric.value}</p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600 mb-2">Thay đổi so với tháng trước</p>
@@ -237,7 +237,7 @@ const KPIMetrics = ({ data }) => {
                     <div>
                       <span className={`text-2xl font-bold ${
                         selectedMetric.changeType === 'increase' ? 'text-success-600' : 
-                        selectedMetric.change === 0 ? 'text-gray-900' : 'text-danger-600'
+                        selectedMetric.change === 0 ? 'text-gray-700' : 'text-danger-600'
                       }`}>
                         {selectedMetric.change === 0 ? '0' : `${selectedMetric.change > 0 ? '+' : ''}${selectedMetric.change}`}%
                       </span>
@@ -251,7 +251,7 @@ const KPIMetrics = ({ data }) => {
                   <p className="text-sm text-gray-600">
                     {selectedMetric.id === 'activeCourses' ? 'Tổng sinh viên' : 'Số lượng'}
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">
+                  <p className="text-2xl font-bold text-gray-700 mt-1">
                     {selectedMetric.id === 'activeCourses' 
                       ? data?.totalStudents || 10  // Hiển thị tổng sinh viên thực tế
                       : getDetailData(selectedMetric.id).length
@@ -273,7 +273,7 @@ const KPIMetrics = ({ data }) => {
                     // Hiển thị chi tiết các lớp của khóa học
                     <>
                       <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-lg font-semibold text-gray-900">
+                        <h4 className="text-lg font-semibold text-gray-700">
                           Chi tiết các lớp - {selectedCourse.name}
                         </h4>
                         <button
@@ -295,22 +295,22 @@ const KPIMetrics = ({ data }) => {
                                   <span className="text-primary-600 font-semibold">{index + 1}</span>
                                 </div>
                                 <div className="flex-1">
-                                  <p className="font-medium text-gray-900">Lớp {classInfo.className}</p>
+                                  <p className="font-medium text-gray-700">Lớp {classInfo.className}</p>
                                   <p className="text-sm text-gray-600">{selectedCourse.name}</p>
                                 </div>
                               </div>
                               <div className="flex items-center space-x-6">
                                 <div className="text-right">
                                   <p className="text-sm text-gray-600">Sinh viên</p>
-                                  <p className="text-lg font-bold text-gray-900">{classInfo.studentCount}</p>
+                                  <p className="text-lg font-bold text-gray-700">{classInfo.studentCount}</p>
                                 </div>
                                 <div className="text-right">
                                   <p className="text-sm text-gray-600">Tiến độ TB</p>
-                                  <p className="text-lg font-bold text-gray-900">{classInfo.avgProgress}%</p>
+                                  <p className="text-lg font-bold text-gray-700">{classInfo.avgProgress}%</p>
                                 </div>
                                 <div className="text-right">
                                   <p className="text-sm text-gray-600">Điểm TB</p>
-                                  <p className="text-lg font-bold text-gray-900">{classInfo.avgScore}</p>
+                                  <p className="text-lg font-bold text-gray-700">{classInfo.avgScore}</p>
                                 </div>
                               </div>
                             </div>
@@ -321,7 +321,7 @@ const KPIMetrics = ({ data }) => {
                   ) : (
                     // Hiển thị danh sách khóa học
                     <>
-                      <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                      <h4 className="text-lg font-semibold text-gray-700 mb-4">
                         Danh sách khóa học đang diễn ra
                       </h4>
                       <div className="space-y-3">
@@ -337,22 +337,22 @@ const KPIMetrics = ({ data }) => {
                                   <BookOpen className="h-5 w-5 text-success-600" />
                                 </div>
                                 <div className="flex-1">
-                                  <p className="font-medium text-gray-900">{course.name}</p>
+                                  <p className="font-medium text-gray-700">{course.name}</p>
                                   <p className="text-sm text-gray-600">{course.classes.length} lớp học</p>
                                 </div>
                               </div>
                               <div className="flex items-center space-x-6">
                                 <div className="text-right">
                                   <p className="text-sm text-gray-600">Sinh viên</p>
-                                  <p className="text-lg font-bold text-gray-900">{course.studentCount}</p>
+                                  <p className="text-lg font-bold text-gray-700">{course.studentCount}</p>
                                 </div>
                                 <div className="text-right">
                                   <p className="text-sm text-gray-600">Tiến độ TB</p>
-                                  <p className="text-lg font-bold text-gray-900">{course.avgProgress}%</p>
+                                  <p className="text-lg font-bold text-gray-700">{course.avgProgress}%</p>
                                 </div>
                                 <div className="text-right">
                                   <p className="text-sm text-gray-600">Điểm TB</p>
-                                  <p className="text-lg font-bold text-gray-900">{course.avgScore}</p>
+                                  <p className="text-lg font-bold text-gray-700">{course.avgScore}</p>
                                 </div>
                                 <ChevronRight className="h-5 w-5 text-gray-400" />
                               </div>
@@ -365,7 +365,7 @@ const KPIMetrics = ({ data }) => {
                 ) : (
                   // Hiển thị danh sách sinh viên cho các metric khác
                   <>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                    <h4 className="text-lg font-semibold text-gray-700 mb-4">
                       Danh sách sinh viên
                     </h4>
                     <div className="space-y-4">
@@ -387,18 +387,18 @@ const KPIMetrics = ({ data }) => {
                                   <span className="text-primary-600 font-semibold">{index + 1}</span>
                                 </div>
                                 <div className="flex-1">
-                                  <p className="font-medium text-gray-900">{student.name}</p>
+                                  <p className="font-medium text-gray-700">{student.name}</p>
                                   <p className="text-sm text-gray-600">{student.studentId} • {student.email}</p>
                                 </div>
                               </div>
                               <div className="flex items-center space-x-6">
                                 <div className="text-right">
                                   <p className="text-sm text-gray-600">Điểm TB</p>
-                                  <p className="text-lg font-bold text-gray-900">{student.averageScore.toFixed(1)}</p>
+                                  <p className="text-lg font-bold text-gray-700">{student.averageScore.toFixed(1)}</p>
                                 </div>
                                 <div className="text-right">
                                   <p className="text-sm text-gray-600">Hoàn thành</p>
-                                  <p className="text-lg font-bold text-gray-900">{student.completionRate}%</p>
+                                  <p className="text-lg font-bold text-gray-700">{student.completionRate}%</p>
                                 </div>
                                 <div className="text-right">
                                   <p className="text-sm text-gray-600">Trạng thái</p>
@@ -428,7 +428,7 @@ const KPIMetrics = ({ data }) => {
                                       className="flex items-center justify-between p-3 bg-danger-50 rounded-lg"
                                     >
                                       <div className="flex-1">
-                                        <p className="text-sm font-medium text-gray-900">{course.name}</p>
+                                        <p className="text-sm font-medium text-gray-700">{course.name}</p>
                                         <p className="text-xs text-gray-600">{course.className}</p>
                                       </div>
                                       <div className="flex items-center space-x-4">

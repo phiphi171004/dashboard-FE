@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Filter, RefreshCw } from 'lucide-react';
 import ExportDropdown from '../../../components/ExportDropdown';
+import teacherService from '../../../services/teacherService';
 
 const DashboardHeader = ({ filters, onFilterChange }) => {
+  const [teacherName, setTeacherName] = useState('');
+
+  useEffect(() => {
+    const teacher = teacherService.getCurrentTeacher();
+    setTeacherName(teacher.fullName);
+  }, []);
   const courseOptions = [
     { value: 'all', label: 'Tất cả khóa học' },
     { value: 'intro-prog', label: 'Nhập môn lập trình' },
@@ -36,8 +43,10 @@ const DashboardHeader = ({ filters, onFilterChange }) => {
   return (
     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard Quản Lý Tiến Độ</h1>
-        <p className="text-gray-600 mt-1">Theo dõi và quản lý tiến độ học lập trình của sinh viên</p>
+        <h1 className="text-3xl font-bold text-gray-700">Dashboard Quản Lý Tiến Độ</h1>
+        <p className="text-gray-600 mt-1">
+          Giảng viên: <span className="font-semibold text-primary-600">{teacherName}</span> • Theo dõi và quản lý tiến độ học lập trình của sinh viên
+        </p>
       </div>
 
       <div className="flex flex-wrap items-center gap-4">

@@ -67,7 +67,7 @@ const StudentPerformanceDistribution = ({ classDetails }) => {
 
     return (
         <div className="card p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Phân Bố Học Lực Sinh Viên</h3>
+            <h3 className="text-lg font-bold text-gray-700 mb-4">Phân Bố Học Lực Sinh Viên</h3>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
                 {/* Chart */}
@@ -117,7 +117,7 @@ const StudentPerformanceDistribution = ({ classDetails }) => {
                                             }}
                                         ></div>
                                     </div>
-                                    <span className="text-sm font-medium text-gray-900 w-12 text-right">
+                                    <span className="text-sm font-medium text-gray-700 w-12 text-right">
                                         {item.percentage}%
                                     </span>
                                     <button
@@ -141,7 +141,7 @@ const StudentPerformanceDistribution = ({ classDetails }) => {
 
                     <div className="pt-4 mt-4 border-t border-gray-100 flex justify-between text-sm text-gray-500">
                         <span>Tổng số sinh viên</span>
-                        <span className="font-medium text-gray-900">{stats.totalStudents}</span>
+                        <span className="font-medium text-gray-700">{stats.totalStudents}</span>
                     </div>
                 </div>
             </div>
@@ -158,7 +158,7 @@ const StudentPerformanceDistribution = ({ classDetails }) => {
                                     style={{ backgroundColor: selectedGrade.color }}
                                 ></div>
                                 <div>
-                                    <h3 className="text-xl font-semibold text-gray-900">
+                                    <h3 className="text-xl font-semibold text-gray-700">
                                         {selectedGrade.label}
                                     </h3>
                                     <p className="text-sm text-gray-600">
@@ -195,7 +195,7 @@ const StudentPerformanceDistribution = ({ classDetails }) => {
                                                         <span className="text-primary-600 font-semibold">{index + 1}</span>
                                                     </div>
                                                     <div className="flex-1">
-                                                        <p className="font-medium text-gray-900">{student.name}</p>
+                                                        <p className="font-medium text-gray-700">{student.name}</p>
                                                         <p className="text-sm text-gray-600">{student.studentId} • {student.email}</p>
                                                     </div>
                                                 </div>
@@ -203,7 +203,7 @@ const StudentPerformanceDistribution = ({ classDetails }) => {
                                                     <div className="text-right">
                                                         <p className="text-sm text-gray-600">Điểm trung bình</p>
                                                         <div className="flex items-center space-x-2">
-                                                            <p className="text-xl font-bold text-gray-900">
+                                                            <p className="text-xl font-bold text-gray-700">
                                                                 {student.averageScore.toFixed(1)}
                                                             </p>
                                                             {getTrendIcon(student.scoreChange)}
@@ -211,7 +211,7 @@ const StudentPerformanceDistribution = ({ classDetails }) => {
                                                     </div>
                                                     <div className="text-right">
                                                         <p className="text-sm text-gray-600">Tỷ lệ hoàn thành</p>
-                                                        <p className="text-xl font-bold text-gray-900">{student.completionRate}%</p>
+                                                        <p className="text-xl font-bold text-gray-700">{student.completionRate}%</p>
                                                     </div>
                                                     <div className="text-right">
                                                         <p className="text-sm text-gray-600">Trạng thái</p>

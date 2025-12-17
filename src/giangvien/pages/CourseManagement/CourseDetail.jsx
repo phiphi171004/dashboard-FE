@@ -98,7 +98,7 @@ const CourseDetail = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Không tìm thấy khóa học</h2>
+          <h2 className="text-2xl font-bold text-gray-700 mb-2">Không tìm thấy khóa học</h2>
           <p className="text-gray-600 mb-4">Khóa học bạn đang tìm kiếm không tồn tại</p>
           <a
             href="#/courses"

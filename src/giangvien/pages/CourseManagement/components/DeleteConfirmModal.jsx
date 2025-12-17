@@ -52,7 +52,7 @@ const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, courseName }) => {
               <p className="text-gray-700 mb-3">
                 Bạn có chắc chắn muốn xóa khóa học:
               </p>
-              <p className="text-lg font-semibold text-gray-900 bg-gray-50 p-3 rounded-lg border-l-4 border-red-500">
+              <p className="text-lg font-semibold text-gray-700 bg-gray-50 p-3 rounded-lg border-l-4 border-red-500">
                 {courseName}
               </p>
             </div>
@@ -61,7 +61,7 @@ const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, courseName }) => {
               <div className="flex items-start gap-3">
                 <AlertTriangle className="text-red-600 mt-0.5 flex-shrink-0" size={20} />
                 <div>
-                  <p className="text-sm font-medium text-red-900 mb-1">
+                  <p className="text-sm font-medium text-red-700 mb-1">
                     Cảnh báo: Hành động này không thể hoàn tác!
                   </p>
                   <p className="text-sm text-red-700">

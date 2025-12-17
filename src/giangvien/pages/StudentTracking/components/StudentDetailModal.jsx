@@ -124,7 +124,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
       active: { class: 'status-badge status-active', text: 'Đang học' },
       at_risk: { class: 'status-badge status-at-risk', text: 'Có nguy cơ' },
       completed: { class: 'status-badge status-completed', text: 'Hoàn thành' },
-      dropped: { class: 'status-badge bg-gray-100 text-gray-800', text: 'Đã bỏ học' }
+      dropped: { class: 'status-badge bg-gray-100 text-gray-600', text: 'Đã bỏ học' }
     };
     return statusConfig[status] || statusConfig.active;
   };
@@ -160,7 +160,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                 </span>
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">{student.name}</h2>
+                <h2 className="text-2xl font-bold text-gray-700">{student.name}</h2>
                 <p className="text-gray-600">{student.studentId} • {student.email}</p>
                 <div className="flex items-center space-x-3 mt-2">
                   <span className={getStatusBadge(student.status).class}>
@@ -273,20 +273,20 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
 
                 {/* Contact Information */}
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-semibold text-gray-900 mb-3">Thông tin liên hệ</h3>
+                  <h3 className="font-semibold text-gray-700 mb-3">Thông tin liên hệ</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-center space-x-3">
                       <Mail className="h-5 w-5 text-gray-400" />
                       <div>
                         <div className="text-sm text-gray-600">Email</div>
-                        <div className="font-medium text-gray-900">{student.email}</div>
+                        <div className="font-medium text-gray-700">{student.email}</div>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
                       <Phone className="h-5 w-5 text-gray-400" />
                       <div>
                         <div className="text-sm text-gray-600">Điện thoại</div>
-                        <div className="font-medium text-gray-900">{student.phone}</div>
+                        <div className="font-medium text-gray-700">{student.phone}</div>
                       </div>
                     </div>
                   </div>
@@ -316,11 +316,11 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
 
             {activeTab === 'courses' && (
               <div className="space-y-4">
-                <h3 className="font-semibold text-gray-900">Khóa học đang tham gia</h3>
+                <h3 className="font-semibold text-gray-700">Khóa học đang tham gia</h3>
                 {student.courses?.map((course, index) => (
                   <div key={index} className="border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-medium text-gray-900">{course.name}</h4>
+                      <h4 className="font-medium text-gray-700">{course.name}</h4>
                       <span className="text-sm text-gray-600">{course.progress}% hoàn thành</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
@@ -340,11 +340,11 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
 
             {activeTab === 'assignments' && (
               <div className="space-y-4">
-                <h3 className="font-semibold text-gray-900">Bài tập gần đây</h3>
+                <h3 className="font-semibold text-gray-700">Bài tập gần đây</h3>
                 {student.recentAssignments?.map((assignment, index) => (
                   <div key={index} className="border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-medium text-gray-900">{assignment.title}</h4>
+                      <h4 className="font-medium text-gray-700">{assignment.title}</h4>
                       <span className={`text-sm font-medium ${
                         assignment.score >= 8.0 ? 'text-success-600' : 
                         assignment.score >= 6.5 ? 'text-primary-600' :
@@ -374,14 +374,14 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
             {activeTab === 'notes' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-gray-900">Ghi chú của giảng viên</h3>
+                  <h3 className="font-semibold text-gray-700">Ghi chú của giảng viên</h3>
                   <button className="btn-primary text-sm">Thêm ghi chú</button>
                 </div>
                 <div className="space-y-3">
                   {student.notes?.map((note, index) => (
                     <div key={index} className="bg-gray-50 p-4 rounded-lg">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium text-gray-900">{note.author}</span>
+                        <span className="text-sm font-medium text-gray-700">{note.author}</span>
                         <span className="text-xs text-gray-500">{note.date}</span>
                       </div>
                       <p className="text-sm text-gray-700">{note.content}</p>
@@ -419,7 +419,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75" onClick={() => setShowScoreDetail(false)}></div>
             <div className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-gray-900">Chi tiết điểm số - {student.name}</h3>
+                <h3 className="text-xl font-bold text-gray-700">Chi tiết điểm số - {student.name}</h3>
                 <button onClick={() => setShowScoreDetail(false)} className="text-gray-400 hover:text-gray-600">
                   <X className="h-6 w-6" />
                 </button>
@@ -434,12 +434,12 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-900">Điểm từng môn học</h4>
+                  <h4 className="font-semibold text-gray-700">Điểm từng môn học</h4>
                   {student.courses?.map((course, index) => (
                     <div key={index} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
-                          <div className="font-medium text-gray-900">{course.name}</div>
+                          <div className="font-medium text-gray-700">{course.name}</div>
                           <div className="text-sm text-gray-600 mt-1">Lớp: {course.className}</div>
                         </div>
                         <div className="text-right">
@@ -478,7 +478,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                 </div>
 
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 mb-3">Phân tích điểm số</h4>
+                  <h4 className="font-semibold text-gray-700 mb-3">Phân tích điểm số</h4>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <div className="text-gray-600">Môn cao nhất</div>
@@ -501,7 +501,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                     </div>
                     <div>
                       <div className="text-gray-600">Số môn học</div>
-                      <div className="font-medium text-gray-900">{student.courses?.length || 0} môn</div>
+                      <div className="font-medium text-gray-700">{student.courses?.length || 0} môn</div>
                     </div>
                   </div>
                 </div>
@@ -518,7 +518,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75" onClick={() => setShowCompletionDetail(false)}></div>
             <div className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-gray-900">Chi tiết tiến độ hoàn thành - {student.name}</h3>
+                <h3 className="text-xl font-bold text-gray-700">Chi tiết tiến độ hoàn thành - {student.name}</h3>
                 <button onClick={() => setShowCompletionDetail(false)} className="text-gray-400 hover:text-gray-600">
                   <X className="h-6 w-6" />
                 </button>
@@ -533,12 +533,12 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-900">Tiến độ từng môn học</h4>
+                  <h4 className="font-semibold text-gray-700">Tiến độ từng môn học</h4>
                   {student.courses?.map((course, index) => (
                     <div key={index} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex-1">
-                          <div className="font-medium text-gray-900">{course.name}</div>
+                          <div className="font-medium text-gray-700">{course.name}</div>
                           <div className="text-sm text-gray-600">Lớp: {course.className}</div>
                         </div>
                         <div className={`text-2xl font-bold ${
@@ -567,7 +567,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                 </div>
 
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 mb-3">Thống kê bài tập</h4>
+                  <h4 className="font-semibold text-gray-700 mb-3">Thống kê bài tập</h4>
                   <div className="grid grid-cols-3 gap-4">
                     <button
                       onClick={() => {
@@ -618,7 +618,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75" onClick={() => setShowHoursDetail(false)}></div>
             <div className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-gray-900">Chi tiết thời gian học - {student.name}</h3>
+                <h3 className="text-xl font-bold text-gray-700">Chi tiết thời gian học - {student.name}</h3>
                 <button onClick={() => setShowHoursDetail(false)} className="text-gray-400 hover:text-gray-600">
                   <X className="h-6 w-6" />
                 </button>
@@ -633,7 +633,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-900">Thời gian học từng môn</h4>
+                  <h4 className="font-semibold text-gray-700">Thời gian học từng môn</h4>
                   {student.courses?.map((course, index) => {
                     // Calculate hours per course based on progress
                     const courseHours = Math.round((student.totalHours / student.courses.length) * (course.progress / 100));
@@ -643,7 +643,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                       <div key={index} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex-1">
-                            <div className="font-medium text-gray-900">{course.name}</div>
+                            <div className="font-medium text-gray-700">{course.name}</div>
                             <div className="text-sm text-gray-600">Lớp: {course.className}</div>
                           </div>
                           <div className="text-right">
@@ -667,17 +667,17 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                 </div>
 
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 mb-3">Phân tích thời gian</h4>
+                  <h4 className="font-semibold text-gray-700 mb-3">Phân tích thời gian</h4>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <div className="text-gray-600">Trung bình/môn</div>
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium text-gray-700">
                         {Math.round(student.totalHours / (student.courses?.length || 1))}h
                       </div>
                     </div>
                     <div>
                       <div className="text-gray-600">Trung bình/tuần</div>
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium text-gray-700">
                         {Math.round(student.totalHours / 12)}h
                       </div>
                     </div>
@@ -695,7 +695,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                     </div>
                     <div>
                       <div className="text-gray-600">Tổng số môn</div>
-                      <div className="font-medium text-gray-900">{student.courses?.length || 0} môn</div>
+                      <div className="font-medium text-gray-700">{student.courses?.length || 0} môn</div>
                     </div>
                   </div>
                 </div>
@@ -712,7 +712,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75" onClick={() => setShowAssignmentDetail(false)}></div>
             <div className="relative bg-white rounded-lg shadow-xl max-w-3xl w-full p-6 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-gray-900">Chi tiết bài tập - {student.name}</h3>
+                <h3 className="text-xl font-bold text-gray-700">Chi tiết bài tập - {student.name}</h3>
                 <button onClick={() => setShowAssignmentDetail(false)} className="text-gray-400 hover:text-gray-600">
                   <X className="h-6 w-6" />
                 </button>
@@ -784,7 +784,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-semibold text-gray-900">
+                    <h4 className="font-semibold text-gray-700">
                       {assignmentFilter === 'all' ? 'Danh sách bài tập gần đây' :
                        assignmentFilter === 'completed' ? 'Bài tập đã nộp' :
                        assignmentFilter === 'missing' ? 'Bài tập chưa nộp' :
@@ -815,7 +815,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                                   Lớp: {assignment.className}
                                 </span>
                               </div>
-                              <div className="font-semibold text-gray-900 text-lg">{assignment.title}</div>
+                              <div className="font-semibold text-gray-700 text-lg">{assignment.title}</div>
                             </div>
                             <div className="text-right ml-4">
                               <div className={`text-3xl font-bold ${
@@ -848,7 +848,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                                 <Calendar className="h-3 w-3" />
                                 <span>Thời gian nộp</span>
                               </div>
-                              <div className="text-sm font-medium text-gray-900">
+                              <div className="text-sm font-medium text-gray-700">
                                 {assignment.submittedDate || 'Chưa nộp'}
                               </div>
                             </div>
@@ -883,7 +883,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-900">Bài tập chưa nộp theo môn</h4>
+                  <h4 className="font-semibold text-gray-700">Bài tập chưa nộp theo môn</h4>
                   {student.courses?.map((course, index) => {
                     const totalAssignmentsPerCourse = 10; // Mỗi môn 10 bài
                     const courseAssignments = fullAssignmentList.filter(a => a.courseName === course.name);
@@ -894,11 +894,11 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                       <div key={index} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
                         <div className="flex items-center justify-between mb-2">
                           <div>
-                            <div className="font-medium text-gray-900">{course.name}</div>
+                            <div className="font-medium text-gray-700">{course.name}</div>
                             <div className="text-sm text-gray-600">Lớp: {course.className}</div>
                           </div>
                           <div className="text-right">
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-medium text-gray-700">
                               {completedPerCourse}/{totalAssignmentsPerCourse} bài
                             </div>
                             {missingPerCourse > 0 && (
@@ -924,7 +924,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                 </div>
 
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 mb-3">Thống kê nộp bài</h4>
+                  <h4 className="font-semibold text-gray-700 mb-3">Thống kê nộp bài</h4>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <div className="text-gray-600">Tỷ lệ nộp đúng hạn</div>
@@ -940,7 +940,7 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                     </div>
                     <div>
                       <div className="text-gray-600">Điểm trung bình bài tập</div>
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium text-gray-700">
                         {(student.recentAssignments?.reduce((sum, a) => sum + a.score, 0) / student.recentAssignments?.filter(a => a.score > 0).length).toFixed(1)}
                       </div>
                     </div>

@@ -47,7 +47,7 @@ const NotificationSettings = () => {
     <div className="space-y-6">
       {/* Notification Channels */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Kênh thông báo</h3>
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">Kênh thông báo</h3>
         
         <div className="space-y-4">
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -56,7 +56,7 @@ const NotificationSettings = () => {
                 <Mail className="text-blue-600" size={20} />
               </div>
               <div>
-                <h4 className="font-medium text-gray-900">Email</h4>
+                <h4 className="font-medium text-gray-700">Email</h4>
                 <p className="text-sm text-gray-600">Nhận thông báo qua email</p>
               </div>
             </div>
@@ -77,7 +77,7 @@ const NotificationSettings = () => {
                 <Bell className="text-purple-600" size={20} />
               </div>
               <div>
-                <h4 className="font-medium text-gray-900">Push Notifications</h4>
+                <h4 className="font-medium text-gray-700">Push Notifications</h4>
                 <p className="text-sm text-gray-600">Thông báo trên trình duyệt</p>
               </div>
             </div>
@@ -98,7 +98,7 @@ const NotificationSettings = () => {
                 <MessageSquare className="text-green-600" size={20} />
               </div>
               <div>
-                <h4 className="font-medium text-gray-900">SMS</h4>
+                <h4 className="font-medium text-gray-700">SMS</h4>
                 <p className="text-sm text-gray-600">Nhận tin nhắn SMS (chỉ cảnh báo quan trọng)</p>
               </div>
             </div>
@@ -117,7 +117,7 @@ const NotificationSettings = () => {
 
       {/* Email Notifications */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Thông báo Email</h3>
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">Thông báo Email</h3>
         
         <div className="space-y-3">
           {[
@@ -133,7 +133,7 @@ const NotificationSettings = () => {
               <div key={item.key} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
                 <div className="flex items-center gap-3">
                   <Icon className={`text-${item.color}-600`} size={18} />
-                  <span className="text-gray-900">{item.label}</span>
+                  <span className="text-gray-700">{item.label}</span>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -169,7 +169,7 @@ const NotificationSettings = () => {
 
       {/* Push Notifications */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Push Notifications</h3>
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">Push Notifications</h3>
         
         <div className="space-y-3">
           {[
@@ -178,7 +178,7 @@ const NotificationSettings = () => {
             { key: 'pushGrade', label: 'Điểm mới' }
           ].map((item) => (
             <div key={item.key} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
-              <span className="text-gray-900">{item.label}</span>
+              <span className="text-gray-700">{item.label}</span>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"

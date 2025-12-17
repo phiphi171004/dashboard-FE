@@ -16,7 +16,7 @@ const AutoGradingResult = ({ submission, onApprove, onReject }) => {
       <div className="card p-6 bg-gradient-to-r from-blue-50 to-indigo-50">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-gray-700">
               {submission.studentName}
             </h2>
             <p className="text-gray-600">{submission.studentId}</p>
@@ -32,7 +32,7 @@ const AutoGradingResult = ({ submission, onApprove, onReject }) => {
       <div className="card p-6">
         <div className="flex items-center space-x-3 mb-4">
           <CheckCircle className="h-6 w-6 text-green-600" />
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-gray-700">
             Test Cases ({testCases.filter(t => t.passed).length}/{testCases.length} passed)
           </h3>
         </div>
@@ -66,11 +66,11 @@ const AutoGradingResult = ({ submission, onApprove, onReject }) => {
               <div className="grid grid-cols-3 gap-4 text-sm mt-3">
                 <div>
                   <p className="text-gray-600">Input:</p>
-                  <code className="text-gray-900">{test.input}</code>
+                  <code className="text-gray-700">{test.input}</code>
                 </div>
                 <div>
                   <p className="text-gray-600">Expected:</p>
-                  <code className="text-gray-900">{test.expected}</code>
+                  <code className="text-gray-700">{test.expected}</code>
                 </div>
                 <div>
                   <p className="text-gray-600">Got:</p>
@@ -95,7 +95,7 @@ const AutoGradingResult = ({ submission, onApprove, onReject }) => {
       <div className="card p-6">
         <div className="flex items-center space-x-3 mb-4">
           <Code className="h-6 w-6 text-blue-600" />
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-gray-700">
             Code Quality ({codeQuality.score || 0}/10 điểm)
           </h3>
         </div>
@@ -143,7 +143,7 @@ const AutoGradingResult = ({ submission, onApprove, onReject }) => {
       <div className="card p-6">
         <div className="flex items-center space-x-3 mb-4">
           <Zap className="h-6 w-6 text-yellow-600" />
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-gray-700">
             Performance ({performance.score || 0}/10 điểm)
           </h3>
         </div>
@@ -180,7 +180,7 @@ const AutoGradingResult = ({ submission, onApprove, onReject }) => {
       <div className="card p-6">
         <div className="flex items-center space-x-3 mb-4">
           <FileText className="h-6 w-6 text-gray-600" />
-          <h3 className="text-lg font-semibold text-gray-900">Code Submitted</h3>
+          <h3 className="text-lg font-semibold text-gray-700">Code Submitted</h3>
         </div>
         <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
           <code>{submission.code || '// Code here...'}</code>
@@ -191,14 +191,14 @@ const AutoGradingResult = ({ submission, onApprove, onReject }) => {
       <div className="card p-6 bg-blue-50">
         <div className="flex items-center space-x-3 mb-4">
           <MessageSquare className="h-6 w-6 text-blue-600" />
-          <h3 className="text-lg font-semibold text-gray-900">Feedback Tự Động</h3>
+          <h3 className="text-lg font-semibold text-gray-700">Feedback Tự Động</h3>
         </div>
         <p className="text-gray-700">{result.feedback || 'Tốt lắm! Code của bạn hoạt động đúng.'}</p>
       </div>
 
       {/* Teacher Review */}
       <div className="card p-6 bg-gradient-to-r from-purple-50 to-pink-50">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">👨‍🏫 Giảng Viên Review</h3>
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">👨‍🏫 Giảng Viên Review</h3>
         
         <div className="space-y-4">
           <div>

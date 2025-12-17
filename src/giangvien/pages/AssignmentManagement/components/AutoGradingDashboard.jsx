@@ -15,7 +15,7 @@ const AutoGradingDashboard = ({ assignment, submissions }) => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">🤖 Tự Động Chấm Bài</h2>
+        <h2 className="text-2xl font-bold text-gray-700">🤖 Tự Động Chấm Bài</h2>
         <p className="text-gray-600 mt-1">
           {assignment.title} - {submissions.length} bài nộp
         </p>
@@ -73,7 +73,7 @@ const AutoGradingDashboard = ({ assignment, submissions }) => {
       {/* Progress Bar */}
       <div className="card p-6">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="font-semibold text-gray-900">Tiến độ chấm bài</h3>
+          <h3 className="font-semibold text-gray-700">Tiến độ chấm bài</h3>
           <span className="text-sm text-gray-600">
             {autoGraded.length}/{submissions.length} bài
           </span>
@@ -91,7 +91,7 @@ const AutoGradingDashboard = ({ assignment, submissions }) => {
         <div className="card p-6">
           <div className="flex items-center space-x-3 mb-4">
             <TrendingUp className="h-6 w-6 text-blue-600" />
-            <h3 className="font-semibold text-gray-900">Điểm trung bình</h3>
+            <h3 className="font-semibold text-gray-700">Điểm trung bình</h3>
           </div>
           <p className="text-4xl font-bold text-blue-600">{avgScore}/10</p>
         </div>
@@ -99,7 +99,7 @@ const AutoGradingDashboard = ({ assignment, submissions }) => {
         <div className="card p-6">
           <div className="flex items-center space-x-3 mb-4">
             <Award className="h-6 w-6 text-green-600" />
-            <h3 className="font-semibold text-gray-900">Điểm cao nhất</h3>
+            <h3 className="font-semibold text-gray-700">Điểm cao nhất</h3>
           </div>
           <p className="text-4xl font-bold text-green-600">
             {Math.max(...autoGraded.map(s => s.score || 0), 0)}/10
@@ -109,7 +109,7 @@ const AutoGradingDashboard = ({ assignment, submissions }) => {
         <div className="card p-6">
           <div className="flex items-center space-x-3 mb-4">
             <AlertTriangle className="h-6 w-6 text-orange-600" />
-            <h3 className="font-semibold text-gray-900">Điểm thấp nhất</h3>
+            <h3 className="font-semibold text-gray-700">Điểm thấp nhất</h3>
           </div>
           <p className="text-4xl font-bold text-orange-600">
             {autoGraded.length > 0 ? Math.min(...autoGraded.map(s => s.score || 0)) : 0}/10

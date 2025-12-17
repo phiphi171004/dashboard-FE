@@ -132,13 +132,13 @@ const AssignmentCreate = () => {
         <div className="flex items-center space-x-4">
           <Link 
             to="/assignments"
-            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="flex items-center space-x-2 text-gray-600 hover:text-gray-700 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Quay lại</span>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Tạo Bài Tập Mới</h1>
+            <h1 className="text-2xl font-bold text-gray-700">Tạo Bài Tập Mới</h1>
             <p className="text-gray-600 mt-1">
               Tạo bài tập mới cho sinh viên
             </p>
@@ -167,7 +167,7 @@ const AssignmentCreate = () => {
           <div className="lg:col-span-2 space-y-6">
             {/* Basic Information */}
             <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 Thông tin cơ bản
               </h3>
               
@@ -220,7 +220,7 @@ const AssignmentCreate = () => {
 
             {/* Assignment Settings */}
             <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 Cài đặt bài tập
               </h3>
               
@@ -330,7 +330,7 @@ const AssignmentCreate = () => {
                   <span className="text-2xl">🤖</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Cấu Hình Tự Động Chấm</h3>
+                  <h3 className="text-lg font-semibold text-gray-700">Cấu Hình Tự Động Chấm</h3>
                   <p className="text-sm text-gray-600">Tiết kiệm 80-90% thời gian chấm bài</p>
                 </div>
               </div>
@@ -344,7 +344,7 @@ const AssignmentCreate = () => {
                     onChange={handleInputChange}
                     className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="ml-3 text-sm font-medium text-gray-900">
+                  <span className="ml-3 text-sm font-medium text-gray-700">
                     ✅ Bật tự động chấm điểm
                   </span>
                 </label>
@@ -425,7 +425,7 @@ const AssignmentCreate = () => {
                   {formData.assignmentType === 'code' && (
                     <div className="mt-6 p-4 bg-white rounded-lg border border-blue-200">
                       <div className="flex items-center justify-between mb-4">
-                        <h4 className="font-semibold text-gray-900">📋 Test Cases</h4>
+                        <h4 className="font-semibold text-gray-700">📋 Test Cases</h4>
                         <button
                           type="button"
                           onClick={() => setTestCases([...testCases, { input: '', output: '', score: 10 }])}
@@ -494,7 +494,7 @@ const AssignmentCreate = () => {
 
                   {/* Grading Criteria */}
                   <div className="mt-4 p-4 bg-white rounded-lg border border-blue-200">
-                    <h4 className="font-semibold text-gray-900 mb-3">🎯 Tiêu Chí Chấm Điểm</h4>
+                    <h4 className="font-semibold text-gray-700 mb-3">🎯 Tiêu Chí Chấm Điểm</h4>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-700">Test cases passed</span>
@@ -538,7 +538,7 @@ const AssignmentCreate = () => {
                       </div>
                       <div className="pt-2 border-t border-gray-200">
                         <div className="flex items-center justify-between font-semibold">
-                          <span className="text-sm text-gray-900">Tổng</span>
+                          <span className="text-sm text-gray-700">Tổng</span>
                           <span className="text-lg text-blue-600">
                             {Object.values(gradingCriteria).reduce((a, b) => a + b, 0)} điểm
                           </span>
@@ -552,7 +552,7 @@ const AssignmentCreate = () => {
 
             {/* File Attachments */}
             <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 Tài liệu đính kèm
               </h3>
               
@@ -620,7 +620,7 @@ const AssignmentCreate = () => {
           <div className="space-y-6">
             {/* Course and Class Selection */}
             <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 Phân công
               </h3>
               
@@ -670,7 +670,7 @@ const AssignmentCreate = () => {
 
             {/* Schedule */}
             <div className="card p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 Thời gian
               </h3>
               

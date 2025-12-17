@@ -31,7 +31,7 @@ const ClassFilters = ({ filters, onFilterChange, totalClasses }) => {
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
         <div className="flex items-center space-x-2">
           <Filter className="h-5 w-5 text-gray-500" />
-          <h3 className="text-lg font-medium text-gray-900">Bộ lọc</h3>
+          <h3 className="text-lg font-medium text-gray-700">Bộ lọc</h3>
           <span className="text-sm text-gray-500">
             ({totalClasses} lớp học)
           </span>

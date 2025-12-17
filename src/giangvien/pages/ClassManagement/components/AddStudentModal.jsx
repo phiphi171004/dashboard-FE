@@ -134,7 +134,7 @@ const AddStudentModal = ({ isOpen, onClose, classData, allStudents, onAddStudent
                             {/* Info */}
                             <div className="flex-1">
                               <div className="flex items-center space-x-2">
-                                <h4 className="text-sm font-medium text-gray-900">
+                                <h4 className="text-sm font-medium text-gray-700">
                                   {student.name}
                                 </h4>
                                 <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-700">

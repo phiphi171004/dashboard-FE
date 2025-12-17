@@ -25,7 +25,7 @@ const ClassDetailHeader = ({ classData }) => {
       <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between space-y-4 lg:space-y-0">
         <div className="flex-1">
           <div className="flex items-center space-x-3 mb-2">
-            <h1 className="text-2xl font-bold text-gray-900">{classData.name}</h1>
+            <h1 className="text-2xl font-bold text-gray-700">{classData.name}</h1>
             <span className={getStatusBadge(classData.status).class}>
               {getStatusBadge(classData.status).text}
             </span>
@@ -44,7 +44,7 @@ const ClassDetailHeader = ({ classData }) => {
             <div>
               <div className="flex items-center justify-between text-sm mb-1">
                 <span className="text-gray-600">Tiến độ hoàn thành lớp học</span>
-                <span className="font-medium text-gray-900">{Math.round(classData.completionRate || 0)}%</span>
+                <span className="font-medium text-gray-700">{Math.round(classData.completionRate || 0)}%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-3">
                 <div

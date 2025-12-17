@@ -47,7 +47,7 @@ const ProfileSettings = () => {
     <div className="space-y-6">
       {/* Profile Photo */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Ảnh đại diện</h3>
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">Ảnh đại diện</h3>
         
         <div className="flex items-center gap-6">
           <div className="relative">
@@ -60,7 +60,7 @@ const ProfileSettings = () => {
           </div>
           
           <div className="flex-1">
-            <h4 className="font-medium text-gray-900 mb-1">{profile.fullName}</h4>
+            <h4 className="font-medium text-gray-700 mb-1">{profile.fullName}</h4>
             <p className="text-sm text-gray-600 mb-3">{profile.position} - {profile.department}</p>
             
             <div className="flex gap-3">
@@ -78,7 +78,7 @@ const ProfileSettings = () => {
       {/* Personal Information */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-gray-900">Thông tin cá nhân</h3>
+          <h3 className="text-lg font-semibold text-gray-700">Thông tin cá nhân</h3>
           
           {!isEditing ? (
             <button
@@ -121,7 +121,7 @@ const ProfileSettings = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             ) : (
-              <p className="text-gray-900">{profile.fullName}</p>
+              <p className="text-gray-700">{profile.fullName}</p>
             )}
           </div>
 
@@ -139,7 +139,7 @@ const ProfileSettings = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             ) : (
-              <p className="text-gray-900">{profile.email}</p>
+              <p className="text-gray-700">{profile.email}</p>
             )}
           </div>
 
@@ -157,7 +157,7 @@ const ProfileSettings = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             ) : (
-              <p className="text-gray-900">{profile.phone}</p>
+              <p className="text-gray-700">{profile.phone}</p>
             )}
           </div>
 
@@ -175,7 +175,7 @@ const ProfileSettings = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             ) : (
-              <p className="text-gray-900">{profile.location}</p>
+              <p className="text-gray-700">{profile.location}</p>
             )}
           </div>
 
@@ -193,7 +193,7 @@ const ProfileSettings = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             ) : (
-              <p className="text-gray-900">{profile.position}</p>
+              <p className="text-gray-700">{profile.position}</p>
             )}
           </div>
 
@@ -211,7 +211,7 @@ const ProfileSettings = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             ) : (
-              <p className="text-gray-900">{profile.department}</p>
+              <p className="text-gray-700">{profile.department}</p>
             )}
           </div>
         </div>
@@ -229,7 +229,7 @@ const ProfileSettings = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           ) : (
-            <p className="text-gray-900">{profile.bio}</p>
+            <p className="text-gray-700">{profile.bio}</p>
           )}
         </div>
 
@@ -237,7 +237,7 @@ const ProfileSettings = () => {
         <div className="mt-6 pt-6 border-t border-gray-100">
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <Calendar size={16} />
-            <span>Tham gia từ: <strong className="text-gray-900">{profile.joinDate}</strong></span>
+            <span>Tham gia từ: <strong className="text-gray-700">{profile.joinDate}</strong></span>
           </div>
         </div>
       </div>

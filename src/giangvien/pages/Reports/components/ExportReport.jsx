@@ -46,7 +46,7 @@ const ExportReport = () => {
           <Download className="text-green-600" size={24} />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Xuất báo cáo</h2>
+          <h2 className="text-xl font-bold text-gray-700">Xuất báo cáo</h2>
           <p className="text-sm text-gray-600">Tải xuất và chia sẻ báo cáo</p>
         </div>
       </div>
@@ -78,7 +78,7 @@ const ExportReport = () => {
               </div>
               
               <div className="flex-1 text-left">
-                <h4 className="font-semibold text-gray-900">{format.label}</h4>
+                <h4 className="font-semibold text-gray-700">{format.label}</h4>
                 <p className="text-sm text-gray-600">{format.description}</p>
               </div>
               
@@ -96,7 +96,7 @@ const ExportReport = () => {
 
       {/* Export Options */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-        <h4 className="text-sm font-semibold text-gray-900 mb-3">Tùy chọn xuất</h4>
+        <h4 className="text-sm font-semibold text-gray-700 mb-3">Tùy chọn xuất</h4>
         
         <div className="space-y-2">
           <label className="flex items-center gap-2 cursor-pointer">

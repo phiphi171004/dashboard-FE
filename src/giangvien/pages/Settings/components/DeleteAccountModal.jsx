@@ -65,13 +65,13 @@ const DeleteAccountModal = ({ isOpen, onClose }) => {
               <div className="flex items-start gap-3">
                 <AlertTriangle className="text-red-600 mt-0.5 flex-shrink-0" size={24} />
                 <div>
-                  <p className="text-sm font-bold text-red-900 mb-2">
+                  <p className="text-sm font-bold text-red-700 mb-2">
                     ⚠️ CẢNH BÁO NGHIÊM TRỌNG
                   </p>
                   <p className="text-sm text-red-700 mb-3">
                     Hành động này sẽ <strong>XÓA VĨNH VIỄN</strong> tài khoản của bạn và KHÔNG THỂ HOÀN TÁC.
                   </p>
-                  <p className="text-sm font-medium text-red-900 mb-2">
+                  <p className="text-sm font-medium text-red-700 mb-2">
                     Dữ liệu sẽ bị xóa bao gồm:
                   </p>
                   <ul className="text-sm text-red-700 space-y-1 ml-4">
@@ -96,7 +96,7 @@ const DeleteAccountModal = ({ isOpen, onClose }) => {
                   className="w-5 h-5 text-red-600 border-gray-300 rounded focus:ring-red-500 mt-0.5"
                 />
                 <div>
-                  <p className="font-medium text-gray-900 mb-1">
+                  <p className="font-medium text-gray-700 mb-1">
                     Tôi hiểu hậu quả
                   </p>
                   <p className="text-sm text-gray-600">

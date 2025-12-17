@@ -153,7 +153,7 @@ const ReportStats = ({ stats }) => {
               </div>
               <h3 className="text-gray-600 text-sm font-medium mb-1">{stat.title}</h3>
               <div className="flex items-baseline gap-1 mb-2">
-                <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+                <p className="text-3xl font-bold text-gray-700">{stat.value}</p>
                 {stat.suffix && (
                   <span className="text-lg text-gray-500">{stat.suffix}</span>
                 )}
@@ -175,7 +175,7 @@ const ReportStats = ({ stats }) => {
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75" onClick={() => setShowDetailModal(false)}></div>
             <div className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full p-6 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-gray-900">{modalContent.title}</h3>
+                <h3 className="text-2xl font-bold text-gray-700">{modalContent.title}</h3>
                 <button onClick={() => setShowDetailModal(false)} className="text-gray-400 hover:text-gray-600">
                   <X className="h-6 w-6" />
                 </button>
@@ -192,12 +192,12 @@ const ReportStats = ({ stats }) => {
                             <span className="text-lg font-bold text-primary-600">{student.name.charAt(0)}</span>
                           </div>
                           <div>
-                            <div className="font-medium text-gray-900">{student.name}</div>
+                            <div className="font-medium text-gray-700">{student.name}</div>
                             <div className="text-sm text-gray-600">{student.studentId} • {student.email}</div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-lg font-bold text-gray-900">{student.averageScore.toFixed(1)}</div>
+                          <div className="text-lg font-bold text-gray-700">{student.averageScore.toFixed(1)}</div>
                           <div className="text-xs text-gray-500">Điểm TB</div>
                         </div>
                       </div>
@@ -213,7 +213,7 @@ const ReportStats = ({ stats }) => {
                     <div key={index} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
                         <div>
-                          <div className="font-semibold text-gray-900">{course.name}</div>
+                          <div className="font-semibold text-gray-700">{course.name}</div>
                           <div className="text-sm text-gray-600 mt-1">
                             {course.enrolledStudents} sinh viên • {course.duration}
                           </div>
@@ -229,12 +229,12 @@ const ReportStats = ({ stats }) => {
                             <div className="flex-1 bg-gray-200 rounded-full h-2 mr-2">
                               <div className="bg-primary-600 h-2 rounded-full" style={{ width: `${course.completionRate}%` }}></div>
                             </div>
-                            <span className="text-sm font-medium text-gray-900">{course.completionRate}%</span>
+                            <span className="text-sm font-medium text-gray-700">{course.completionRate}%</span>
                           </div>
                         </div>
                         <div>
                           <div className="text-sm text-gray-600">Điểm trung bình</div>
-                          <div className="text-lg font-bold text-gray-900 mt-1">{course.averageScore.toFixed(1)}</div>
+                          <div className="text-lg font-bold text-gray-700 mt-1">{course.averageScore.toFixed(1)}</div>
                         </div>
                       </div>
                     </div>
@@ -256,7 +256,7 @@ const ReportStats = ({ stats }) => {
                   {modalContent.data.map((course, index) => (
                     <div key={index} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
-                        <div className="font-medium text-gray-900">{course.name}</div>
+                        <div className="font-medium text-gray-700">{course.name}</div>
                         <div className={`text-2xl font-bold ${
                           course.completionRate >= 80 ? 'text-success-600' :
                           course.completionRate >= 60 ? 'text-warning-600' :
@@ -294,7 +294,7 @@ const ReportStats = ({ stats }) => {
                             <span className="text-lg font-bold text-danger-600">{student.name.charAt(0)}</span>
                           </div>
                           <div>
-                            <div className="font-semibold text-gray-900">{student.name}</div>
+                            <div className="font-semibold text-gray-700">{student.name}</div>
                             <div className="text-sm text-gray-600">{student.studentId}</div>
                           </div>
                         </div>
@@ -319,7 +319,7 @@ const ReportStats = ({ stats }) => {
                         </div>
                       </div>
                       <div className="mt-3 space-y-2">
-                        <div className="text-sm font-medium text-gray-900">Môn học có vấn đề:</div>
+                        <div className="text-sm font-medium text-gray-700">Môn học có vấn đề:</div>
                         {(() => {
                           // Logic lọc môn học dựa trên mức độ rủi ro
                           const threshold = student.riskLevel === 'high' 
@@ -373,7 +373,7 @@ const ReportStats = ({ stats }) => {
                     <div key={index} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1">
-                          <div className="font-medium text-gray-900">{assignment.title}</div>
+                          <div className="font-medium text-gray-700">{assignment.title}</div>
                           <div className="text-sm text-gray-600 mt-1">{assignment.course} • {assignment.className}</div>
                         </div>
                         <span className="px-3 py-1 bg-warning-100 text-warning-800 rounded-full text-sm font-medium">
@@ -383,11 +383,11 @@ const ReportStats = ({ stats }) => {
                       <div className="grid grid-cols-3 gap-4 mt-3 text-sm">
                         <div>
                           <div className="text-gray-600">Đã nộp</div>
-                          <div className="font-medium text-gray-900">{assignment.submittedCount}/{assignment.totalStudents}</div>
+                          <div className="font-medium text-gray-700">{assignment.submittedCount}/{assignment.totalStudents}</div>
                         </div>
                         <div>
                           <div className="text-gray-600">Hạn nộp</div>
-                          <div className="font-medium text-gray-900">
+                          <div className="font-medium text-gray-700">
                             {new Date(assignment.dueDate).toLocaleDateString('vi-VN')}
                           </div>
                         </div>

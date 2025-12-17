@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Clock, Users, MoreVertical, X, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { mockStudentTrackingData } from '../../../data/mockData';
+import teacherService from '../../../services/teacherService';
 
 const CourseMonitoring = ({ data }) => {
     const [showModal, setShowModal] = useState(false);
@@ -8,12 +9,8 @@ const CourseMonitoring = ({ data }) => {
     const [teacherName, setTeacherName] = useState('');
 
     useEffect(() => {
-        // Lấy tên giảng viên từ sessionStorage (đã lưu khi đăng nhập)
-        const userData = sessionStorage.getItem('user');
-        if (userData) {
-            const user = JSON.parse(userData);
-            setTeacherName(user?.full_name || 'Giảng viên');
-        }
+        const teacher = teacherService.getCurrentTeacher();
+        setTeacherName(teacher.fullName);
     }, []);
 
     if (!data) return null;
@@ -50,7 +47,7 @@ const CourseMonitoring = ({ data }) => {
         <div className="card p-6">
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Theo Dõi Khóa Học</h3>
+                    <h3 className="text-lg font-semibold text-gray-700">Theo Dõi Khóa Học</h3>
                     <p className="text-sm text-gray-600">Trạng thái và hiệu suất các khóa học</p>
                 </div>
                 <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
@@ -67,7 +64,7 @@ const CourseMonitoring = ({ data }) => {
                     >
                         <div className="flex items-start justify-between mb-3">
                             <div className="flex-1">
-                                <h4 className="font-medium text-gray-900 mb-1">{course.name}</h4>
+                                <h4 className="font-medium text-gray-700 mb-1">{course.name}</h4>
                                 <p className="text-sm text-gray-600 mb-2">Giảng viên: {teacherName}</p>
                                 <div className="flex items-center space-x-4 text-sm text-gray-600">
                                     <div className="flex items-center space-x-1">
@@ -88,7 +85,7 @@ const CourseMonitoring = ({ data }) => {
                         <div>
                             <div className="flex items-center justify-between text-sm mb-1">
                                 <span className="text-gray-600">Tiến độ hoàn thành</span>
-                                <span className="font-medium text-gray-900">{course.completionRate}%</span>
+                                <span className="font-medium text-gray-700">{course.completionRate}%</span>
                             </div>
                             <div className="w-full bg-gray-200 rounded-full h-2">
                                 <div
@@ -114,7 +111,7 @@ const CourseMonitoring = ({ data }) => {
                         {/* Header */}
                         <div className="flex items-center justify-between p-6 border-b border-gray-200">
                             <div>
-                                <h3 className="text-xl font-semibold text-gray-900">
+                                <h3 className="text-xl font-semibold text-gray-700">
                                     {selectedCourse.name}
                                 </h3>
                                 <div className="flex items-center space-x-4 text-sm text-gray-600 mt-2">
@@ -143,12 +140,12 @@ const CourseMonitoring = ({ data }) => {
                         <div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
                             {/* Thống kê tổng quan */}
                             <div className="mb-6">
-                                <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Thông tin khóa học</h4>
+                                <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-100 mb-4">Thông tin khóa học</h4>
                                 <div className="grid grid-cols-3 gap-4">
                                     <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-4 rounded-lg">
                                         <div className="flex items-center space-x-2 mb-2">
                                             <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                                            <p className="text-sm font-medium text-blue-900 dark:text-blue-300">Tổng sinh viên</p>
+                                            <p className="text-sm font-medium text-blue-700 dark:text-blue-300">Tổng sinh viên</p>
                                         </div>
                                         <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                                             {selectedCourse.enrolledStudents}
@@ -157,14 +154,14 @@ const CourseMonitoring = ({ data }) => {
                                     <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-4 rounded-lg">
                                         <div className="flex items-center space-x-2 mb-2">
                                             <TrendingUp className="h-5 w-5 text-green-600 dark:text-green-400" />
-                                            <p className="text-sm font-medium text-green-900 dark:text-green-300">Tiến độ TB</p>
+                                            <p className="text-sm font-medium text-green-700 dark:text-green-300">Tiến độ TB</p>
                                         </div>
                                         <p className="text-3xl font-bold text-green-600 dark:text-green-400">{selectedCourse.completionRate}%</p>
                                     </div>
                                     <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 p-4 rounded-lg">
                                         <div className="flex items-center space-x-2 mb-2">
                                             <Clock className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                                            <p className="text-sm font-medium text-purple-900 dark:text-purple-300">Thời lượng</p>
+                                            <p className="text-sm font-medium text-purple-700 dark:text-purple-300">Thời lượng</p>
                                         </div>
                                         <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{selectedCourse.duration}</p>
                                     </div>
@@ -173,11 +170,11 @@ const CourseMonitoring = ({ data }) => {
 
                             {/* Phân tích hiệu suất */}
                             <div className="mb-6">
-                                <h4 className="text-lg font-semibold text-gray-900 mb-4">Phân tích hiệu suất</h4>
+                                <h4 className="text-lg font-semibold text-gray-700 mb-4">Phân tích hiệu suất</h4>
                                 <div className="grid grid-cols-2 gap-4">
                                     {/* Phân bố điểm */}
                                     <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                                        <h5 className="font-medium text-gray-900 mb-3">Phân bố điểm số</h5>
+                                        <h5 className="font-medium text-gray-700 mb-3">Phân bố điểm số</h5>
                                         <div className="space-y-2">
                                             {(() => {
                                                 const students = getStudentsInCourse(selectedCourse.name);
@@ -224,7 +221,7 @@ const CourseMonitoring = ({ data }) => {
 
                                     {/* Phân bố tiến độ */}
                                     <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                                        <h5 className="font-medium text-gray-900 mb-3">Phân bố tiến độ</h5>
+                                        <h5 className="font-medium text-gray-700 mb-3">Phân bố tiến độ</h5>
                                         <div className="space-y-2">
                                             {(() => {
                                                 const students = getStudentsInCourse(selectedCourse.name);

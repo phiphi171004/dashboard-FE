@@ -124,7 +124,7 @@ const CourseMaterials = ({ classId, materials = [] }) => {
       {/* Header với nút thêm */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <h2 className="text-2xl font-bold text-gray-800">Tài liệu học tập</h2>
+          <h2 className="text-2xl font-bold text-gray-600">Tài liệu học tập</h2>
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setMaterialType('all')}
@@ -184,7 +184,7 @@ const CourseMaterials = ({ classId, materials = [] }) => {
           <div className="mx-auto h-24 w-24 text-gray-300 mb-4">
             <FileText className="h-full w-full" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-gray-700 mb-2">
             Chưa có tài liệu nào
           </h3>
           <p className="text-gray-500 mb-4">
@@ -213,7 +213,7 @@ const CourseMaterials = ({ classId, materials = [] }) => {
 
                 {/* Nội dung */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                  <h3 className="text-lg font-semibold text-gray-600 mb-1">
                     {material.title}
                   </h3>
                   {material.description && (

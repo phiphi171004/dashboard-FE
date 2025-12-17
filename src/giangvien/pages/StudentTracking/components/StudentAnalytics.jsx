@@ -60,7 +60,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-4 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-medium text-gray-900 mb-2">{label}</p>
+          <p className="font-medium text-gray-700 mb-2">{label}</p>
           {payload.map((entry, index) => (
             <div key={index} className="flex items-center space-x-2">
               <div 
@@ -68,7 +68,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                 style={{ backgroundColor: entry.color }}
               ></div>
               <span className="text-sm text-gray-600">{entry.name}:</span>
-              <span className="text-sm font-medium text-gray-900">{entry.value}</span>
+              <span className="text-sm font-medium text-gray-700">{entry.value}</span>
             </div>
           ))}
         </div>
@@ -91,7 +91,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
           <div className="flex items-center justify-center mb-3">
             <Users className="h-8 w-8 text-primary-600 group-hover:scale-110 transition-transform" />
           </div>
-          <div className="text-2xl font-bold text-gray-900 mb-1">{studentsToAnalyze.length}</div>
+          <div className="text-2xl font-bold text-gray-700 mb-1">{studentsToAnalyze.length}</div>
           <div className="text-sm text-gray-600">Tổng sinh viên</div>
           <div className="text-xs text-primary-600 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
             Xem danh sách →
@@ -185,7 +185,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
           className="card p-6 hover:shadow-lg transition-all cursor-pointer text-left group"
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Phân Bố Hiệu Suất</h3>
+            <h3 className="text-lg font-semibold text-gray-700">Phân Bố Hiệu Suất</h3>
             <div className="text-xs text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity flex items-center">
               <span>Xem chi tiết</span>
               <ChevronRight className="h-3 w-3 ml-1" />
@@ -222,7 +222,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
           className="card p-6 hover:shadow-lg transition-all cursor-pointer text-left group"
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Trạng Thái Học Tập</h3>
+            <h3 className="text-lg font-semibold text-gray-700">Trạng Thái Học Tập</h3>
             <div className="text-xs text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity flex items-center">
               <span>Xem chi tiết</span>
               <ChevronRight className="h-3 w-3 ml-1" />
@@ -250,7 +250,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card p-6 hover:shadow-lg transition-all group">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Sinh Viên Theo Khóa Học</h3>
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-100">Sinh Viên Theo Khóa Học</h3>
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -278,7 +278,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
 
         <div className="card p-6 hover:shadow-lg transition-all group">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Mức Độ Rủi ro</h3>
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-100">Mức Độ Rủi ro</h3>
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -317,10 +317,10 @@ const StudentAnalytics = ({ students, allStudents }) => {
 
       {/* Detailed Statistics */}
       <div className="card p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Thống Kê Chi Tiết</h3>
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">Thống Kê Chi Tiết</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="space-y-4">
-            <h4 className="font-medium text-gray-900">Hiệu Suất Học Tập</h4>
+            <h4 className="font-medium text-gray-700">Hiệu Suất Học Tập</h4>
             {performanceData.map((item, index) => (
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
@@ -330,7 +330,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                   ></div>
                   <span className="text-sm text-gray-600">{item.name}</span>
                 </div>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-gray-700">
                   {item.count} ({Math.round((item.count / totalStudents) * 100)}%)
                 </span>
               </div>
@@ -338,7 +338,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
           </div>
 
           <div className="space-y-4">
-            <h4 className="font-medium text-gray-900">Trạng Thái</h4>
+            <h4 className="font-medium text-gray-700">Trạng Thái</h4>
             {statusData.map((item, index) => (
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
@@ -348,7 +348,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                   ></div>
                   <span className="text-sm text-gray-600">{item.name}</span>
                 </div>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-gray-700">
                   {item.count} ({Math.round((item.count / totalStudents) * 100)}%)
                 </span>
               </div>
@@ -356,7 +356,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
           </div>
 
           <div className="space-y-4">
-            <h4 className="font-medium text-gray-900">Mức Độ Rủi Ro</h4>
+            <h4 className="font-medium text-gray-700">Mức Độ Rủi Ro</h4>
             {riskData.map((item, index) => (
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
@@ -366,7 +366,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                   ></div>
                   <span className="text-sm text-gray-600">{item.name}</span>
                 </div>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-gray-700">
                   {item.count} ({Math.round((item.count / studentsToAnalyze.length) * 100)}%)
                 </span>
               </div>
@@ -377,7 +377,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
 
       {/* Risk Assessment Criteria */}
       <div className="card p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+        <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
           <AlertTriangle className="h-5 w-5 mr-2 text-warning-600" />
           Tiêu Chí Đánh Giá Mức Độ Rủi Ro
         </h3>
@@ -465,7 +465,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
           <div className="flex items-start">
             <BookOpen className="h-5 w-5 text-blue-600 mt-0.5 mr-3" />
             <div>
-              <h5 className="font-medium text-blue-900 mb-1">Lưu ý</h5>
+              <h5 className="font-medium text-blue-700 mb-1">Lưu ý</h5>
               <p className="text-sm text-blue-700">
                 Hệ thống đánh giá dựa trên nhiều yếu tố kết hợp. Sinh viên được phân loại tự động 
                 nhưng giảng viên có thể điều chỉnh mức độ rủi ro dựa trên đánh giá thực tế.
@@ -482,7 +482,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-80" onClick={() => setShowDetailModal(false)}></div>
             <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-5xl w-full p-6 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                <h3 className="text-2xl font-bold text-gray-700 dark:text-gray-100">
                   {modalContent.type === 'allStudents' && 'Danh sách tất cả sinh viên'}
                   {modalContent.type === 'activeStudents' && 'Sinh viên đang học tập'}
                   {modalContent.type === 'atRiskStudents' && 'Sinh viên có nguy cơ cao'}
@@ -515,7 +515,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                             <span className="text-lg font-bold text-primary-600">{student.name.charAt(0)}</span>
                           </div>
                           <div>
-                            <div className="font-medium text-gray-900">{student.name}</div>
+                            <div className="font-medium text-gray-700">{student.name}</div>
                             <div className="text-sm text-gray-600">{student.studentId} • {student.email}</div>
                           </div>
                         </div>
@@ -527,11 +527,11 @@ const StudentAnalytics = ({ students, allStudents }) => {
                       <div className="mt-3 grid grid-cols-3 gap-4 text-sm">
                         <div>
                           <div className="text-gray-600">Hoàn thành</div>
-                          <div className="font-medium text-gray-900">{student.completionRate}%</div>
+                          <div className="font-medium text-gray-700">{student.completionRate}%</div>
                         </div>
                         <div>
                           <div className="text-gray-600">Bài tập</div>
-                          <div className="font-medium text-gray-900">{student.completedAssignments}/{student.totalAssignments}</div>
+                          <div className="font-medium text-gray-700">{student.completedAssignments}/{student.totalAssignments}</div>
                         </div>
                         <div>
                           <div className="text-gray-600">Trạng thái</div>
@@ -562,25 +562,25 @@ const StudentAnalytics = ({ students, allStudents }) => {
                     <div key={idx} className="border-l-4 border-green-500 bg-green-50 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
                         <div>
-                          <div className="font-semibold text-gray-900">{student.name}</div>
+                          <div className="font-semibold text-gray-700">{student.name}</div>
                           <div className="text-sm text-gray-600">{student.studentId}</div>
                         </div>
-                        <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                        <span className="px-3 py-1 bg-green-100 text-green-600 rounded-full text-sm font-medium">
                           Đang học
                         </span>
                       </div>
                       <div className="grid grid-cols-4 gap-4 text-sm">
                         <div>
                           <div className="text-gray-600">Điểm TB</div>
-                          <div className="font-bold text-gray-900">{student.averageScore.toFixed(1)}</div>
+                          <div className="font-bold text-gray-700">{student.averageScore.toFixed(1)}</div>
                         </div>
                         <div>
                           <div className="text-gray-600">Hoàn thành</div>
-                          <div className="font-bold text-gray-900">{student.completionRate}%</div>
+                          <div className="font-bold text-gray-700">{student.completionRate}%</div>
                         </div>
                         <div>
                           <div className="text-gray-600">Bài tập</div>
-                          <div className="font-bold text-gray-900">{student.completedAssignments}/{student.totalAssignments}</div>
+                          <div className="font-bold text-gray-700">{student.completedAssignments}/{student.totalAssignments}</div>
                         </div>
                         <div>
                           <div className="text-gray-600">Rủi ro</div>
@@ -615,7 +615,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                             <span className="text-lg font-bold text-danger-600">{student.name.charAt(0)}</span>
                           </div>
                           <div>
-                            <div className="font-semibold text-gray-900">{student.name}</div>
+                            <div className="font-semibold text-gray-700">{student.name}</div>
                             <div className="text-sm text-gray-600">{student.studentId} • {student.email}</div>
                           </div>
                         </div>
@@ -643,7 +643,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                       </div>
                       {student.courses && student.courses.length > 0 && (
                         <div className="space-y-2">
-                          <div className="text-sm font-medium text-gray-900">Môn học:</div>
+                          <div className="text-sm font-medium text-gray-700">Môn học:</div>
                           {student.courses.map((course, cIdx) => (
                             <div key={cIdx} className="flex items-center justify-between text-sm bg-white rounded p-2">
                               <span className="text-gray-700">{course.name}</span>
@@ -705,7 +705,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                   </div>
 
                   <div className="space-y-2">
-                    <h4 className="font-semibold text-gray-900">Top 5 sinh viên xuất sắc:</h4>
+                    <h4 className="font-semibold text-gray-700">Top 5 sinh viên xuất sắc:</h4>
                     {modalContent.data
                       .sort((a, b) => b.averageScore - a.averageScore)
                       .slice(0, 5)
@@ -714,7 +714,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                           <div className="flex items-center space-x-3">
                             <div className="text-lg font-bold text-gray-400">#{index + 1}</div>
                             <div>
-                              <div className="font-medium text-gray-900">{student.name}</div>
+                              <div className="font-medium text-gray-700">{student.name}</div>
                               <div className="text-sm text-gray-600">{student.studentId}</div>
                             </div>
                           </div>
@@ -743,14 +743,14 @@ const StudentAnalytics = ({ students, allStudents }) => {
                   </div>
 
                   <div className="space-y-3">
-                    <h4 className="font-semibold text-gray-900">Chi tiết từng sinh viên:</h4>
+                    <h4 className="font-semibold text-gray-700">Chi tiết từng sinh viên:</h4>
                     {modalContent.data
                       .sort((a, b) => b.completionRate - a.completionRate)
                       .map((student, index) => (
                         <div key={index} className="border border-gray-200 rounded-lg p-4">
                           <div className="flex items-center justify-between mb-3">
                             <div>
-                              <div className="font-medium text-gray-900">{student.name}</div>
+                              <div className="font-medium text-gray-700">{student.name}</div>
                               <div className="text-sm text-gray-600">{student.studentId}</div>
                             </div>
                             <div className={`text-2xl font-bold ${
@@ -785,7 +785,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
               {modalContent.type === 'performance' && (
                 <div className="space-y-4">
                   <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg border border-blue-200">
-                    <h4 className="font-semibold text-gray-900 mb-4">Tổng quan phân bố điểm</h4>
+                    <h4 className="font-semibold text-gray-700 mb-4">Tổng quan phân bố điểm</h4>
                     <div className="grid grid-cols-5 gap-4">
                       {modalContent.data.map((item, idx) => (
                         <div key={idx} className="text-center">
@@ -793,7 +793,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                             {item.count}
                           </div>
                           <div className="text-xs text-gray-600">{item.name}</div>
-                          <div className="text-xs font-medium text-gray-900 mt-1">
+                          <div className="text-xs font-medium text-gray-700 mt-1">
                             {((item.count / totalStudents) * 100).toFixed(1)}%
                           </div>
                         </div>
@@ -814,7 +814,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
 
                     return (
                       <div key={idx} className="border-l-4 rounded-lg p-4" style={{ borderColor: category.color, backgroundColor: `${category.color}10` }}>
-                        <h5 className="font-semibold text-gray-900 mb-3 flex items-center justify-between">
+                        <h5 className="font-semibold text-gray-700 mb-3 flex items-center justify-between">
                           <span>{category.name}</span>
                           <span className="text-sm font-normal text-gray-600">{studentsInCategory.length} sinh viên</span>
                         </h5>
@@ -822,7 +822,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                           {studentsInCategory.map((student, sIdx) => (
                             <div key={sIdx} className="bg-white rounded p-3 flex items-center justify-between">
                               <div>
-                                <div className="font-medium text-gray-900">{student.name}</div>
+                                <div className="font-medium text-gray-700">{student.name}</div>
                                 <div className="text-sm text-gray-600">{student.studentId}</div>
                               </div>
                               <div className="text-right">
@@ -844,7 +844,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
               {modalContent.type === 'status' && (
                 <div className="space-y-4">
                   <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg border border-green-200">
-                    <h4 className="font-semibold text-gray-900 mb-4">Tổng quan trạng thái</h4>
+                    <h4 className="font-semibold text-gray-700 mb-4">Tổng quan trạng thái</h4>
                     <div className="grid grid-cols-4 gap-4">
                       {modalContent.data.map((item, idx) => (
                         <div key={idx} className="text-center">
@@ -852,7 +852,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                             {item.count}
                           </div>
                           <div className="text-xs text-gray-600">{item.name}</div>
-                          <div className="text-xs font-medium text-gray-900 mt-1">
+                          <div className="text-xs font-medium text-gray-700 mt-1">
                             {((item.count / totalStudents) * 100).toFixed(1)}%
                           </div>
                         </div>
@@ -871,14 +871,14 @@ const StudentAnalytics = ({ students, allStudents }) => {
 
                     return (
                       <div key={idx} className="border-l-4 rounded-lg p-4" style={{ borderColor: statusItem.color, backgroundColor: `${statusItem.color}10` }}>
-                        <h5 className="font-semibold text-gray-900 mb-3 flex items-center justify-between">
+                        <h5 className="font-semibold text-gray-700 mb-3 flex items-center justify-between">
                           <span>{statusItem.name}</span>
                           <span className="text-sm font-normal text-gray-600">{studentsInStatus.length} sinh viên</span>
                         </h5>
                         <div className="grid grid-cols-2 gap-3">
                           {studentsInStatus.map((student, sIdx) => (
                             <div key={sIdx} className="bg-white rounded p-3">
-                              <div className="font-medium text-gray-900">{student.name}</div>
+                              <div className="font-medium text-gray-700">{student.name}</div>
                               <div className="text-sm text-gray-600 mt-1">{student.studentId}</div>
                               <div className="flex items-center justify-between mt-2 text-xs">
                                 <span className="text-gray-600">Điểm TB: <span className="font-bold">{student.averageScore.toFixed(1)}</span></span>
@@ -897,7 +897,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
               {modalContent.type === 'courses' && (
                 <div className="space-y-4">
                   <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">Tổng quan khóa học</h4>
+                    <h4 className="font-semibold text-gray-700 dark:text-gray-100 mb-4">Tổng quan khóa học</h4>
                     <div className="grid grid-cols-3 gap-4">
                       <div className="text-center">
                         <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">{modalContent.data?.length || 0}</div>
@@ -932,7 +932,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                           <div key={idx} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                             <div className="flex items-center justify-between mb-3">
                               <div>
-                                <div className="font-semibold text-gray-900 dark:text-gray-100 text-lg">{course.name || 'Không có tên'}</div>
+                                <div className="font-semibold text-gray-700 dark:text-gray-100 text-lg">{course.name || 'Không có tên'}</div>
                                 <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                                   {course.students || 0} sinh viên đang học
                                 </div>
@@ -966,7 +966,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
               {modalContent.type === 'risk' && (
                 <div className="space-y-4">
                   <div className="bg-gradient-to-r from-red-50 to-orange-50 p-6 rounded-lg border border-red-200">
-                    <h4 className="font-semibold text-gray-900 mb-4">Tổng quan mức độ rủi ro</h4>
+                    <h4 className="font-semibold text-gray-700 mb-4">Tổng quan mức độ rủi ro</h4>
                     <div className="grid grid-cols-3 gap-4">
                       {modalContent.data.map((item, idx) => (
                         <div key={idx} className="text-center">
@@ -974,7 +974,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                             {item.count}
                           </div>
                           <div className="text-sm text-gray-600">{item.name}</div>
-                          <div className="text-xs font-medium text-gray-900 mt-1">
+                          <div className="text-xs font-medium text-gray-700 mt-1">
                             {((item.count / modalContent.students.length) * 100).toFixed(1)}%
                           </div>
                         </div>
@@ -992,7 +992,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
 
                     return (
                       <div key={idx} className="border-l-4 rounded-lg p-4" style={{ borderColor: riskItem.color, backgroundColor: `${riskItem.color}10` }}>
-                        <h5 className="font-semibold text-gray-900 mb-3 flex items-center justify-between">
+                        <h5 className="font-semibold text-gray-700 mb-3 flex items-center justify-between">
                           <span>Rủi ro {riskItem.name}</span>
                           <span className="text-sm font-normal text-gray-600">{studentsInRisk.length} sinh viên</span>
                         </h5>
@@ -1001,7 +1001,7 @@ const StudentAnalytics = ({ students, allStudents }) => {
                             <div key={sIdx} className="bg-white rounded p-3">
                               <div className="flex items-center justify-between mb-2">
                                 <div>
-                                  <div className="font-medium text-gray-900">{student.name}</div>
+                                  <div className="font-medium text-gray-700">{student.name}</div>
                                   <div className="text-sm text-gray-600">{student.studentId}</div>
                                 </div>
                                 <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ 
@@ -1014,15 +1014,15 @@ const StudentAnalytics = ({ students, allStudents }) => {
                               <div className="grid grid-cols-3 gap-3 text-xs">
                                 <div>
                                   <div className="text-gray-600">Điểm TB</div>
-                                  <div className="font-bold text-gray-900">{student.averageScore.toFixed(1)}</div>
+                                  <div className="font-bold text-gray-700">{student.averageScore.toFixed(1)}</div>
                                 </div>
                                 <div>
                                   <div className="text-gray-600">Hoàn thành</div>
-                                  <div className="font-bold text-gray-900">{student.completionRate}%</div>
+                                  <div className="font-bold text-gray-700">{student.completionRate}%</div>
                                 </div>
                                 <div>
                                   <div className="text-gray-600">Bài tập</div>
-                                  <div className="font-bold text-gray-900">{student.completedAssignments}/{student.totalAssignments}</div>
+                                  <div className="font-bold text-gray-700">{student.completedAssignments}/{student.totalAssignments}</div>
                                 </div>
                               </div>
                             </div>

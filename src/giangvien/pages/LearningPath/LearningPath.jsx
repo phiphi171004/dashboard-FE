@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen, Users, Clock, TrendingUp, CheckCircle, AlertCircle, Play, Plus } from 'lucide-react';
 import { mockDashboardData } from '../../data/mockData';
 import StudentsListModal from './components/StudentsListModal';
+import AddModuleModal from './components/AddModuleModal';
 import localStorageService from '../../services/localStorageService';
 
 const LearningPath = () => {
@@ -11,6 +12,7 @@ const LearningPath = () => {
   const [modules, setModules] = useState([]);
   const [expandedModules, setExpandedModules] = useState({});
   const [showStudentsModal, setShowStudentsModal] = useState(false);
+  const [showAddModuleModal, setShowAddModuleModal] = useState(false);
   const [allStudents, setAllStudents] = useState([]);
 
   useEffect(() => {
@@ -139,7 +141,27 @@ const LearningPath = () => {
         };
       });
 
-      setModules(courseModules);
+      // Load modules từ localStorage và merge với courseModules
+      const storedModules = JSON.parse(localStorage.getItem('giangvien_modules') || '[]');
+      
+      // Thêm icon mặc định cho modules từ localStorage
+      const storedModulesWithIcon = storedModules.map(m => ({
+        ...m,
+        icon: m.icon || '📚',
+        title: m.name, // Đảm bảo có title
+        description: m.description || ''
+      }));
+      
+      const allModules = [...courseModules, ...storedModulesWithIcon];
+      
+      console.log('📚 Loaded modules:', {
+        fromMock: courseModules.length,
+        fromStorage: storedModules.length,
+        total: allModules.length,
+        allModules: allModules
+      });
+      
+      setModules(allModules);
     } catch (error) {
       console.error('Lỗi khi load dữ liệu lộ trình học:', error);
       setModules([]);
@@ -166,6 +188,22 @@ const LearningPath = () => {
     return 'from-gray-300 to-gray-400';
   };
 
+  const handleAddModule = (newModule) => {
+    // Thêm module mới vào danh sách
+    setModules(prev => [...prev, newModule]);
+    
+    // Lưu vào localStorage với key riêng
+    try {
+      const existingModules = JSON.parse(localStorage.getItem('giangvien_modules') || '[]');
+      const updatedModules = [...existingModules, newModule];
+      localStorage.setItem('giangvien_modules', JSON.stringify(updatedModules));
+      console.log('✅ Đã thêm môn học mới:', newModule.name);
+      console.log('📊 Tổng số môn học:', updatedModules.length);
+    } catch (error) {
+      console.error('❌ Lỗi khi lưu môn học:', error);
+    }
+  };
+
   const getStatusBadge = (status) => {
     const config = {
       completed: { bg: 'bg-green-100', text: 'text-green-700', label: 'Hoàn thành' },
@@ -188,7 +226,7 @@ const LearningPath = () => {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center space-x-3">
+          <h1 className="text-3xl font-bold text-gray-700 flex items-center space-x-3">
             <span className="text-4xl">🗺️</span>
             <span>Lộ Trình Học</span>
           </h1>
@@ -197,9 +235,12 @@ const LearningPath = () => {
           </p>
         </div>
 
-        <button className="btn-primary flex items-center space-x-2">
+        <button 
+          onClick={() => setShowAddModuleModal(true)}
+          className="btn-primary flex items-center space-x-2 hover:scale-105 transition-transform"
+        >
           <Plus className="h-5 w-5" />
-          <span>Thêm Module Mới</span>
+          <span>Thêm Môn Học Mới</span>
         </button>
       </div>
 
@@ -317,7 +358,7 @@ const LearningPath = () => {
                     <div className="text-4xl">{module.icon}</div>
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
-                        <h3 className="text-xl font-bold text-gray-900">{module.title}</h3>
+                        <h3 className="text-xl font-bold text-gray-700">{module.title}</h3>
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusBadge.bg} ${statusBadge.text}`}>
                           {statusBadge.label}
                         </span>
@@ -340,7 +381,7 @@ const LearningPath = () => {
                           </div>
                         )}
                         <div className="flex items-center space-x-1">
-                          <span className="font-semibold text-gray-900">{module.progress}%</span>
+                          <span className="font-semibold text-gray-700">{module.progress}%</span>
                         </div>
                       </div>
                     </div>
@@ -357,6 +398,37 @@ const LearningPath = () => {
                     >
                       Xem chi tiết
                     </button>
+                    
+                    {/* NÚT XÓA MÔN HỌC */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (window.confirm(`Bạn có chắc chắn muốn xóa môn học "${module.title}"?\n\nLưu ý: Hành động này không thể hoàn tác!`)) {
+                          try {
+                            // Xóa khỏi localStorage
+                            const storedModules = JSON.parse(localStorage.getItem('giangvien_modules') || '[]');
+                            const filteredModules = storedModules.filter(m => m.id !== module.id);
+                            localStorage.setItem('giangvien_modules', JSON.stringify(filteredModules));
+                            
+                            // Cập nhật state
+                            setModules(prev => prev.filter(m => m.id !== module.id));
+                            
+                            console.log('✅ Đã xóa môn học:', module.title);
+                          } catch (error) {
+                            console.error('❌ Lỗi khi xóa môn học:', error);
+                            alert('Có lỗi xảy ra khi xóa môn học. Vui lòng thử lại!');
+                          }
+                        }
+                      }}
+                      className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all shadow-md hover:shadow-lg text-sm font-medium flex items-center space-x-2"
+                      title="Xóa môn học"
+                    >
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      <span>Xóa</span>
+                    </button>
+                    
                     <div className={`transform transition-transform ${isExpanded ? 'rotate-180' : ''}`}>
                       <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -394,7 +466,7 @@ const LearningPath = () => {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center space-x-2">
-                            <span className="text-sm font-medium text-gray-900">
+                            <span className="text-sm font-medium text-gray-700">
                               Tuần {week.week}: {week.title}
                             </span>
                             {week.score && (
@@ -420,7 +492,7 @@ const LearningPath = () => {
       {filteredModules.length === 0 && (
         <div className="card p-12 text-center">
           <div className="text-6xl mb-4">📚</div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">
             Không tìm thấy module nào
           </h3>
           <p className="text-gray-600">
@@ -438,6 +510,13 @@ const LearningPath = () => {
           moduleName="Lộ Trình Học"
         />
       )}
+
+      {/* Add Module Modal */}
+      <AddModuleModal
+        isOpen={showAddModuleModal}
+        onClose={() => setShowAddModuleModal(false)}
+        onAdd={handleAddModule}
+      />
     </div>
   );
 };

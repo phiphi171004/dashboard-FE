@@ -103,7 +103,7 @@ const CourseList = ({ courses }) => {
                 className={`p-2 rounded transition-colors ${
                   viewMode === 'grid'
                     ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-gray-600 hover:text-gray-700'
                 }`}
                 title="Xem dạng lưới"
               >
@@ -114,7 +114,7 @@ const CourseList = ({ courses }) => {
                 className={`p-2 rounded transition-colors ${
                   viewMode === 'list'
                     ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-gray-600 hover:text-gray-700'
                 }`}
                 title="Xem dạng danh sách"
               >
@@ -131,7 +131,7 @@ const CourseList = ({ courses }) => {
           <div className="text-gray-400 mb-4">
             <Grid3x3 size={48} className="mx-auto" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">
             Không tìm thấy khóa học
           </h3>
           <p className="text-gray-600">

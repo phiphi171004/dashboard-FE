@@ -69,7 +69,7 @@ const CourseCard = ({ course }) => {
             </div>
             <div>
               <p className="text-sm text-gray-600">Sinh viên</p>
-              <p className="text-lg font-bold text-gray-900">{course.enrolledStudents}</p>
+              <p className="text-lg font-bold text-gray-700">{course.enrolledStudents}</p>
             </div>
           </div>
         </div>

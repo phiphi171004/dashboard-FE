@@ -7,7 +7,7 @@ const StudentList = ({ students, onStudentSelect, loading }) => {
       active: { class: 'status-badge status-active', text: 'Đang học' },
       at_risk: { class: 'status-badge status-at-risk', text: 'Có nguy cơ' },
       completed: { class: 'status-badge status-completed', text: 'Hoàn thành' },
-      dropped: { class: 'status-badge bg-gray-100 text-gray-800', text: 'Đã bỏ học' }
+      dropped: { class: 'status-badge bg-gray-100 text-gray-600', text: 'Đã bỏ học' }
     };
     return statusConfig[status] || statusConfig.active;
   };
@@ -56,7 +56,7 @@ const StudentList = ({ students, onStudentSelect, loading }) => {
             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
           </svg>
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
+        <h3 className="text-lg font-medium text-gray-700 mb-2">
           Không tìm thấy sinh viên nào
         </h3>
         <p className="text-gray-500">
@@ -112,7 +112,7 @@ const StudentList = ({ students, onStudentSelect, loading }) => {
                       </div>
                     </div>
                     <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900">{student.name}</div>
+                      <div className="text-sm font-medium text-gray-700">{student.name}</div>
                       <div className="text-sm text-gray-500">{student.studentId}</div>
                     </div>
                   </div>

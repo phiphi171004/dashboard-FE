@@ -146,7 +146,7 @@ const CourseStats = ({ stats }) => {
               </div>
               <h3 className="text-gray-600 text-sm font-medium mb-1">{stat.title}</h3>
               <div className="flex items-baseline gap-1">
-                <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+                <p className="text-3xl font-bold text-gray-700">{stat.value}</p>
                 {stat.suffix && (
                   <span className="text-lg text-gray-500">{stat.suffix}</span>
                 )}
@@ -167,7 +167,7 @@ const CourseStats = ({ stats }) => {
                   <selectedStat.icon size={24} />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-gray-700">
                     {selectedStat.title}
                   </h3>
                   <p className="text-sm text-gray-600 mt-1">
@@ -188,7 +188,7 @@ const CourseStats = ({ stats }) => {
               <div className="mb-6 grid grid-cols-3 gap-4">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Giá trị hiện tại</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{selectedStat.value}</p>
+                  <p className="text-2xl font-bold text-gray-700 mt-1">{selectedStat.value}</p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600 mb-2">Thay đổi so với tháng trước</p>
@@ -202,7 +202,7 @@ const CourseStats = ({ stats }) => {
                     )}
                     <div>
                       <span className={`text-2xl font-bold ${
-                        selectedStat.change > 0 ? 'text-success-600' : selectedStat.change < 0 ? 'text-danger-600' : 'text-gray-900'
+                        selectedStat.change > 0 ? 'text-success-600' : selectedStat.change < 0 ? 'text-danger-600' : 'text-gray-700'
                       }`}>
                         {selectedStat.change === 0 ? '0' : `${selectedStat.change > 0 ? '+' : ''}${selectedStat.change}`}%
                       </span>
@@ -216,7 +216,7 @@ const CourseStats = ({ stats }) => {
                   <p className="text-sm text-gray-600">
                     {selectedStat.id === 'activeCourses' || selectedStat.id === 'totalCourses' ? 'Tổng sinh viên' : 'Số lượng'}
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">
+                  <p className="text-2xl font-bold text-gray-700 mt-1">
                     {selectedStat.id === 'activeCourses' || selectedStat.id === 'totalCourses'
                       ? stats?.totalStudents || 10  // Hiển thị tổng sinh viên thực tế
                       : selectedStat.id === 'totalStudents' 
@@ -237,7 +237,7 @@ const CourseStats = ({ stats }) => {
 
               {/* Danh sách khóa học */}
               <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                <h4 className="text-lg font-semibold text-gray-700 mb-4">
                   Danh sách khóa học
                 </h4>
                 <div className="space-y-3">
@@ -253,22 +253,22 @@ const CourseStats = ({ stats }) => {
                           <span className="text-primary-600 font-semibold">{index + 1}</span>
                         </div>
                         <div className="flex-1">
-                          <p className="font-medium text-gray-900">{course.name}</p>
+                          <p className="font-medium text-gray-700">{course.name}</p>
                           <p className="text-sm text-gray-600">{course.duration}</p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-6">
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Sinh viên</p>
-                          <p className="text-lg font-bold text-gray-900">{course.enrolledStudents}</p>
+                          <p className="text-lg font-bold text-gray-700">{course.enrolledStudents}</p>
                         </div>
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Điểm TB</p>
-                          <p className="text-lg font-bold text-gray-900">{course.averageScore.toFixed(1)}</p>
+                          <p className="text-lg font-bold text-gray-700">{course.averageScore.toFixed(1)}</p>
                         </div>
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Hoàn thành</p>
-                          <p className="text-lg font-bold text-gray-900">{course.completionRate}%</p>
+                          <p className="text-lg font-bold text-gray-700">{course.completionRate}%</p>
                         </div>
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Trạng thái</p>
@@ -282,7 +282,7 @@ const CourseStats = ({ stats }) => {
                   ))}
                 </div>
                 <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-sm text-blue-800">
+                  <p className="text-sm text-blue-600">
                     💡 <strong>Mẹo:</strong> Click vào bất kỳ khóa học nào để xem danh sách sinh viên và thông tin chi tiết
                   </p>
                 </div>
@@ -309,7 +309,7 @@ const CourseStats = ({ stats }) => {
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900">
+                <h3 className="text-xl font-semibold text-gray-700">
                   {selectedCourse.name}
                 </h3>
                 <div className="flex items-center space-x-4 text-sm text-gray-600 mt-2">
@@ -339,21 +339,21 @@ const CourseStats = ({ stats }) => {
               <div className="mb-6 grid grid-cols-3 gap-4">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Tiến độ hoàn thành</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{selectedCourse.completionRate}%</p>
+                  <p className="text-2xl font-bold text-gray-700 mt-1">{selectedCourse.completionRate}%</p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Điểm trung bình</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{selectedCourse.averageScore.toFixed(1)}</p>
+                  <p className="text-2xl font-bold text-gray-700 mt-1">{selectedCourse.averageScore.toFixed(1)}</p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Tổng sinh viên</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{selectedCourse.enrolledStudents}</p>
+                  <p className="text-2xl font-bold text-gray-700 mt-1">{selectedCourse.enrolledStudents}</p>
                 </div>
               </div>
 
               {/* Danh sách sinh viên */}
               <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                <h4 className="text-lg font-semibold text-gray-700 mb-4">
                   Danh sách sinh viên trong khóa học
                 </h4>
                 <div className="space-y-3">
@@ -367,18 +367,18 @@ const CourseStats = ({ stats }) => {
                           <span className="text-primary-600 font-semibold">{index + 1}</span>
                         </div>
                         <div className="flex-1">
-                          <p className="font-medium text-gray-900">{student.name}</p>
+                          <p className="font-medium text-gray-700">{student.name}</p>
                           <p className="text-sm text-gray-600">{student.studentId} • {student.email}</p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-6">
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Tiến độ</p>
-                          <p className="text-lg font-bold text-gray-900">{student.progress}%</p>
+                          <p className="text-lg font-bold text-gray-700">{student.progress}%</p>
                         </div>
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Điểm</p>
-                          <p className="text-lg font-bold text-gray-900">{student.score.toFixed(1)}</p>
+                          <p className="text-lg font-bold text-gray-700">{student.score.toFixed(1)}</p>
                         </div>
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Trạng thái</p>

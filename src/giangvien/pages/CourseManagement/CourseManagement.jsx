@@ -106,7 +106,7 @@ const CourseManagement = () => {
                 <BookOpen className="text-blue-600" size={32} />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Quản lý Khóa học</h1>
+                <h1 className="text-3xl font-bold text-gray-700">Quản lý Khóa học</h1>
                 <p className="text-gray-600 mt-1">
                   Quản lý và theo dõi tất cả các khóa học
                 </p>

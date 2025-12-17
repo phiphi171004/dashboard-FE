@@ -35,11 +35,11 @@ const StudentFilters = ({ filters, onFilterChange, students }) => {
     <div className="card p-6">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900">Bộ lọc tìm kiếm</h3>
+          <h3 className="text-lg font-semibold text-gray-700">Bộ lọc tìm kiếm</h3>
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
-              className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gray-700 transition-colors"
             >
               <X className="h-4 w-4" />
               <span>Xóa bộ lọc</span>

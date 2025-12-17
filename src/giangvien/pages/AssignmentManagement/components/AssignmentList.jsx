@@ -9,7 +9,7 @@ const AssignmentList = ({ assignments, onDelete }) => {
   
   const getStatusBadge = (status) => {
     const statusConfig = {
-      draft: { class: 'status-badge bg-gray-100 text-gray-800', text: 'Bản nháp', icon: FileText },
+      draft: { class: 'status-badge bg-gray-100 text-gray-600', text: 'Bản nháp', icon: FileText },
       active: { class: 'status-badge status-active', text: 'Đang mở', icon: Clock },
       upcoming: { class: 'status-badge status-pending', text: 'Sắp mở', icon: Calendar },
       completed: { class: 'status-badge status-completed', text: 'Đã đóng', icon: CheckCircle },
@@ -42,7 +42,7 @@ const AssignmentList = ({ assignments, onDelete }) => {
 
   const getSubmissionDetails = (assignment) => {
     // Danh sách đầy đủ 10 sinh viên thực tế
-    const allStudents = [
+    const ALL_STUDENTS = [
       { id: 1, name: 'Nguyễn Văn Minh', studentId: '122000001', email: 'minh.nv@student.edu.vn' },
       { id: 2, name: 'Trần Thị Hương', studentId: '122000002', email: 'huong.tt@student.edu.vn' },
       { id: 3, name: 'Lê Hoàng Nam', studentId: '122000003', email: 'nam.lh@student.edu.vn' },
@@ -55,19 +55,45 @@ const AssignmentList = ({ assignments, onDelete }) => {
       { id: 10, name: 'Ngô Thị Thu', studentId: '122000010', email: 'thu.nt@student.edu.vn' }
     ];
     
+    // Mapping sinh viên theo classId (lớp học)
+    const CLASS_STUDENTS = {
+      // Lớp 22CT111 - 4 sinh viên (ID: 1, 4, 7, 10)
+      1: [1, 4, 7, 10],  // Nhập môn lập trình
+      2: [1, 4, 7, 10],  // Kĩ thuật lập trình
+      3: [1, 4, 7, 10],  // Lập trình hướng đối tượng
+      4: [1, 4, 7, 10],  // Cấu trúc dữ liệu và giải thuật
+      
+      // Lớp 22CT112 - 3 sinh viên (ID: 2, 5, 8)
+      5: [2, 5, 8],
+      6: [2, 5, 8],
+      7: [2, 5, 8],
+      8: [2, 5, 8],
+      
+      // Lớp 22CT113 - 3 sinh viên (ID: 3, 6, 9)
+      9: [3, 6, 9],
+      10: [3, 6, 9],
+      11: [3, 6, 9],
+      12: [3, 6, 9]
+    };
+    
+    // Lấy đúng sinh viên theo classId
+    const studentIds = CLASS_STUDENTS[assignment.classId] || [];
+    const studentsInClass = ALL_STUDENTS.filter(s => studentIds.includes(s.id));
+    
     const submitted = [];
     const notSubmitted = [];
     const lateSubmitted = [];
     
-    // Lấy sinh viên theo số lượng trong assignment
-    const studentsInClass = allStudents.slice(0, assignment.totalStudents);
-    
+    // Phân loại sinh viên
     studentsInClass.forEach((student, index) => {
       if (index < assignment.submittedCount - assignment.lateSubmissions) {
+        // Đã nộp đúng hạn
         submitted.push({ ...student, submittedAt: '20/11/2024 14:30', score: 8.5 });
       } else if (index < assignment.submittedCount) {
+        // Nộp muộn
         lateSubmitted.push({ ...student, submittedAt: '23/11/2024 16:45', score: 7.0 });
       } else {
+        // Chưa nộp
         notSubmitted.push(student);
       }
     });
@@ -92,7 +118,7 @@ const AssignmentList = ({ assignments, onDelete }) => {
                 <div className="flex items-center space-x-3 mb-2">
                   <Link
                     to={`/assignments/${assignment.id}`}
-                    className="text-lg font-semibold text-gray-900 hover:text-primary-600 transition-colors"
+                    className="text-lg font-semibold text-gray-700 hover:text-primary-600 transition-colors"
                   >
                     {assignment.title}
                   </Link>
@@ -169,7 +195,7 @@ const AssignmentList = ({ assignments, onDelete }) => {
               <div>
                 <div className="flex items-center justify-between text-sm mb-1">
                   <span className="text-gray-600">Tỷ lệ nộp bài</span>
-                  <span className="font-medium text-gray-900">{submissionRate}%</span>
+                  <span className="font-medium text-gray-700">{submissionRate}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
@@ -239,7 +265,7 @@ const AssignmentList = ({ assignments, onDelete }) => {
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-bold text-gray-900">{selectedAssignment.title}</h3>
+                <h3 className="text-xl font-bold text-gray-700">{selectedAssignment.title}</h3>
                 <p className="text-sm text-gray-600 mt-1">
                   {selectedAssignment.course} - {selectedAssignment.className}
                 </p>
@@ -311,7 +337,7 @@ const AssignmentList = ({ assignments, onDelete }) => {
                     <div>
                       <div className="flex items-center space-x-2 mb-3">
                         <UserCheck className="h-5 w-5 text-success-600" />
-                        <h4 className="font-semibold text-gray-900">
+                        <h4 className="font-semibold text-gray-700">
                           Đã nộp đúng hạn ({submitted.length})
                         </h4>
                       </div>
@@ -321,7 +347,7 @@ const AssignmentList = ({ assignments, onDelete }) => {
                             <div key={student.id} className="bg-white p-3 rounded-lg border border-success-200">
                               <div className="flex items-start justify-between">
                                 <div className="flex-1">
-                                  <div className="font-medium text-gray-900">{student.name}</div>
+                                  <div className="font-medium text-gray-700">{student.name}</div>
                                   <div className="text-sm text-primary-600 font-mono">{student.studentId}</div>
                                   <div className="text-xs text-gray-500 mt-1">{student.email}</div>
                                 </div>
@@ -344,7 +370,7 @@ const AssignmentList = ({ assignments, onDelete }) => {
                     <div>
                       <div className="flex items-center space-x-2 mb-3">
                         <AlertCircle className="h-5 w-5 text-danger-600" />
-                        <h4 className="font-semibold text-gray-900">
+                        <h4 className="font-semibold text-gray-700">
                           Nộp muộn ({lateSubmitted.length})
                         </h4>
                       </div>
@@ -354,7 +380,7 @@ const AssignmentList = ({ assignments, onDelete }) => {
                             <div key={student.id} className="bg-white p-3 rounded-lg border border-danger-200">
                               <div className="flex items-start justify-between">
                                 <div className="flex-1">
-                                  <div className="font-medium text-gray-900">{student.name}</div>
+                                  <div className="font-medium text-gray-700">{student.name}</div>
                                   <div className="text-sm text-primary-600 font-mono">{student.studentId}</div>
                                   <div className="text-xs text-gray-500 mt-1">{student.email}</div>
                                 </div>
@@ -377,7 +403,7 @@ const AssignmentList = ({ assignments, onDelete }) => {
                     <div>
                       <div className="flex items-center space-x-2 mb-3">
                         <UserX className="h-5 w-5 text-warning-600" />
-                        <h4 className="font-semibold text-gray-900">
+                        <h4 className="font-semibold text-gray-700">
                           Chưa nộp ({notSubmitted.length})
                         </h4>
                       </div>
@@ -387,7 +413,7 @@ const AssignmentList = ({ assignments, onDelete }) => {
                             <div key={student.id} className="bg-white p-3 rounded-lg border border-warning-200">
                               <div className="flex items-start justify-between">
                                 <div className="flex-1">
-                                  <div className="font-medium text-gray-900">{student.name}</div>
+                                  <div className="font-medium text-gray-700">{student.name}</div>
                                   <div className="text-sm text-primary-600 font-mono">{student.studentId}</div>
                                   <div className="text-xs text-gray-500 mt-1">{student.email}</div>
                                 </div>

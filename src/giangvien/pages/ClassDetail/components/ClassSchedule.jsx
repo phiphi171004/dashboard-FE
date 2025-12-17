@@ -101,7 +101,7 @@ const ClassSchedule = ({ schedule, classId }) => {
                   
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900">{session.title}</h3>
+                      <h3 className="text-lg font-semibold text-gray-700">{session.title}</h3>
                       <span className="text-sm bg-gray-100 text-gray-600 px-2 py-1 rounded">
                         {getSessionTypeName(session.type)}
                       </span>
@@ -157,7 +157,7 @@ const ClassSchedule = ({ schedule, classId }) => {
 
               {session.materials && session.materials.length > 0 && (
                 <div className="pt-4 border-t border-gray-100">
-                  <h4 className="text-sm font-medium text-gray-900 mb-2">Tài liệu buổi học:</h4>
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">Tài liệu buổi học:</h4>
                   <div className="flex flex-wrap gap-2">
                     {session.materials.map((material, idx) => (
                       <a
@@ -178,7 +178,7 @@ const ClassSchedule = ({ schedule, classId }) => {
 
       {(!schedule || schedule.length === 0) && (
         <div className="text-center py-12">
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-gray-700 mb-2">
             Chưa có lịch học nào
           </h3>
           <p className="text-gray-500">
@@ -195,7 +195,7 @@ const ClassSchedule = ({ schedule, classId }) => {
             <div className="relative bg-white rounded-lg shadow-xl max-w-3xl w-full p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">{selectedSession.title}</h3>
+                  <h3 className="text-xl font-bold text-gray-700">{selectedSession.title}</h3>
                   <p className="text-sm text-gray-600 mt-1">{selectedSession.date}</p>
                 </div>
                 <button onClick={() => setShowAttendanceDetail(false)} className="text-gray-400 hover:text-gray-600">
@@ -231,7 +231,7 @@ const ClassSchedule = ({ schedule, classId }) => {
               </div>
 
               <div className="bg-gray-50 rounded-lg p-4">
-                <h4 className="font-semibold text-gray-900 mb-3">Cách tính điểm chuyên cần:</h4>
+                <h4 className="font-semibold text-gray-700 mb-3">Cách tính điểm chuyên cần:</h4>
                 <div className="text-sm text-gray-700 space-y-2">
                   <p>• Mỗi sinh viên <strong>có mặt</strong> được <strong className="text-success-600">10 điểm</strong></p>
                   <p>• Mỗi sinh viên <strong>đến muộn</strong> được <strong className="text-warning-600">5 điểm</strong></p>

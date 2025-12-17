@@ -60,7 +60,7 @@ const AssignmentProgress = ({ assignments, classId }) => {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900">{assignment.title}</h3>
+                    <h3 className="text-lg font-semibold text-gray-700">{assignment.title}</h3>
                     <span className={statusInfo.class}>
                       <StatusIcon className="h-3 w-3 mr-1" />
                       {statusInfo.text}
@@ -85,7 +85,7 @@ const AssignmentProgress = ({ assignments, classId }) => {
                 </div>
                 
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-gray-900 mb-1">
+                  <div className="text-2xl font-bold text-gray-700 mb-1">
                     {(assignment.averageScore || 0).toFixed(1)}
                   </div>
                   <div className="text-sm text-gray-600">Điểm trung bình</div>
@@ -96,7 +96,7 @@ const AssignmentProgress = ({ assignments, classId }) => {
                 <div>
                   <div className="flex items-center justify-between text-sm mb-1">
                     <span className="text-gray-600">Tỷ lệ nộp bài</span>
-                    <span className="font-medium text-gray-900">
+                    <span className="font-medium text-gray-700">
                       {Math.round((assignment.submittedCount / assignment.totalStudents) * 100)}%
                     </span>
                   </div>
@@ -132,7 +132,7 @@ const AssignmentProgress = ({ assignments, classId }) => {
 
       {(!assignments || assignments.length === 0) && (
         <div className="text-center py-12">
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-gray-700 mb-2">
             Chưa có bài tập nào
           </h3>
           <p className="text-gray-500">

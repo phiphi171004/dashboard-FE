@@ -45,7 +45,7 @@ const GradeDistribution = ({ data, students }) => {
       const data = payload[0].payload;
       return (
         <div className="bg-white p-4 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-medium text-gray-900 mb-1">{data.name}</p>
+          <p className="font-medium text-gray-700 mb-1">{data.name}</p>
           <p className="text-sm text-gray-600">
             Số sinh viên: <span className="font-semibold">{data.count}</span>
           </p>
@@ -71,7 +71,7 @@ const GradeDistribution = ({ data, students }) => {
           <div className="flex items-center space-x-3">
             <Users className="h-5 w-5 text-primary-600" />
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">Phân Bố Học Lực Sinh Viên</h3>
+              <h3 className="text-lg font-semibold text-gray-700">Phân Bố Học Lực Sinh Viên</h3>
               <p className="text-sm text-gray-600">Theo dõi và quản lý tất cả các lớp học được phân công</p>
             </div>
           </div>
@@ -113,12 +113,12 @@ const GradeDistribution = ({ data, students }) => {
                     style={{ backgroundColor: grade.color }}
                   ></div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">{grade.name}</p>
+                    <p className="text-sm font-medium text-gray-700">{grade.name}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
                   <div className="text-right">
-                    <p className="text-lg font-bold text-gray-900">{grade.percentage}%</p>
+                    <p className="text-lg font-bold text-gray-700">{grade.percentage}%</p>
                     <p className="text-xs text-gray-500">{grade.count} sinh viên</p>
                   </div>
                   <button
@@ -158,7 +158,7 @@ const GradeDistribution = ({ data, students }) => {
                   style={{ backgroundColor: selectedGrade.color }}
                 ></div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-gray-700">
                     {selectedGrade.name}
                   </h3>
                   <p className="text-sm text-gray-600">
@@ -188,7 +188,7 @@ const GradeDistribution = ({ data, students }) => {
                           <span className="text-primary-600 font-semibold">{index + 1}</span>
                         </div>
                         <div className="flex-1">
-                          <p className="font-medium text-gray-900">{student.name}</p>
+                          <p className="font-medium text-gray-700">{student.name}</p>
                           <p className="text-sm text-gray-600">{student.studentId} • {student.email}</p>
                         </div>
                       </div>
@@ -196,7 +196,7 @@ const GradeDistribution = ({ data, students }) => {
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Điểm trung bình</p>
                           <div className="flex items-center space-x-2">
-                            <p className="text-xl font-bold text-gray-900">
+                            <p className="text-xl font-bold text-gray-700">
                               {student.averageScore.toFixed(1)}
                             </p>
                             {getTrendIcon(student.scoreChange)}
@@ -204,7 +204,7 @@ const GradeDistribution = ({ data, students }) => {
                         </div>
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Tỷ lệ hoàn thành</p>
-                          <p className="text-xl font-bold text-gray-900">{student.completionRate}%</p>
+                          <p className="text-xl font-bold text-gray-700">{student.completionRate}%</p>
                         </div>
                         <div className="text-right">
                           <p className="text-sm text-gray-600">Trạng thái</p>

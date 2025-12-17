@@ -127,7 +127,7 @@ const ExportDataModal = ({ isOpen, onClose }) => {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <Icon size={16} className={selectedData[option.key] ? 'text-green-600' : 'text-gray-600'} />
-                          <span className="font-medium text-gray-900">{option.label}</span>
+                          <span className="font-medium text-gray-700">{option.label}</span>
                         </div>
                         <p className="text-sm text-gray-600">{option.description}</p>
                       </div>
@@ -145,7 +145,7 @@ const ExportDataModal = ({ isOpen, onClose }) => {
               <div className="flex items-start gap-3">
                 <FileText className="text-blue-600 mt-0.5" size={20} />
                 <div>
-                  <p className="text-sm font-medium text-blue-900 mb-1">
+                  <p className="text-sm font-medium text-blue-700 mb-1">
                     Lưu ý về xuất dữ liệu
                   </p>
                   <p className="text-sm text-blue-700">

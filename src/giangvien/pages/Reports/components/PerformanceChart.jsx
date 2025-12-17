@@ -4,7 +4,7 @@ const PerformanceChart = ({ data }) => {
   if (!data || data.length === 0) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Biểu đồ hiệu suất</h2>
+        <h2 className="text-xl font-bold text-gray-700 mb-4">Biểu đồ hiệu suất</h2>
         <div className="text-center py-12">
           <p className="text-gray-500">Không có dữ liệu</p>
         </div>
@@ -58,7 +58,7 @@ const PerformanceChart = ({ data }) => {
             <LineChart className="text-blue-600" size={24} />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Xu hướng học tập theo thời gian</h2>
+            <h2 className="text-xl font-bold text-gray-700">Xu hướng học tập theo thời gian</h2>
             <p className="text-sm text-gray-600">Theo dõi sự thay đổi của điểm số, tỷ lệ hoàn thành và mức độ tương tác</p>
           </div>
         </div>
@@ -68,7 +68,7 @@ const PerformanceChart = ({ data }) => {
       <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
         <div className="flex items-start space-x-2">
           <span className="text-blue-600 font-bold">ℹ️</span>
-          <div className="text-sm text-blue-800">
+          <div className="text-sm text-blue-600">
             <div className="font-semibold mb-1">Cách đọc biểu đồ:</div>
             <div className="space-y-1">
               <div>• <span className="font-medium">Trục ngang (X):</span> Thời gian theo tháng</div>

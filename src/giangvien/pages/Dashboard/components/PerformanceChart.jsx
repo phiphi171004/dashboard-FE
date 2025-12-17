@@ -21,7 +21,7 @@ const PerformanceChart = ({ data }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-4 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-medium text-gray-900 mb-2">{label}</p>
+          <p className="font-medium text-gray-700 mb-2">{label}</p>
           {payload.map((entry, index) => {
             const isScore = entry.dataKey === 'averageScore' || entry.dataKey === 'engagement';
             const displayValue = isScore ? (entry.value / 10).toFixed(1) : `${entry.value}%`;
@@ -33,7 +33,7 @@ const PerformanceChart = ({ data }) => {
                   style={{ backgroundColor: entry.color }}
                 ></div>
                 <span className="text-sm text-gray-600">{entry.name}:</span>
-                <span className="text-sm font-medium text-gray-900">{displayValue}{unit}</span>
+                <span className="text-sm font-medium text-gray-700">{displayValue}{unit}</span>
               </div>
             );
           })}
@@ -49,7 +49,7 @@ const PerformanceChart = ({ data }) => {
         <div className="flex items-center space-x-3">
           <TrendingUp className="h-5 w-5 text-primary-600" />
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Biểu Đồ Hiệu Suất</h3>
+            <h3 className="text-lg font-semibold text-gray-700">Biểu Đồ Hiệu Suất</h3>
             <p className="text-sm text-gray-600">Theo dõi xu hướng học tập theo thời gian</p>
           </div>
         </div>
@@ -186,7 +186,7 @@ const PerformanceChart = ({ data }) => {
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900">
+                <h3 className="text-xl font-semibold text-gray-700">
                   {selectedMetric.title}
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">
@@ -206,13 +206,13 @@ const PerformanceChart = ({ data }) => {
               <div className="mb-6 grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Giá trị hiện tại</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">
+                  <p className="text-2xl font-bold text-gray-700 mt-1">
                     {selectedMetric.value}{selectedMetric.id === 'completionRate' ? '%' : '/10'}
                   </p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Tổng sinh viên</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">
+                  <p className="text-2xl font-bold text-gray-700 mt-1">
                     {mockStudentTrackingData?.students?.length || 0}
                   </p>
                 </div>
@@ -220,7 +220,7 @@ const PerformanceChart = ({ data }) => {
 
               {/* Danh sách sinh viên */}
               <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                <h4 className="text-lg font-semibold text-gray-700 mb-4">
                   Danh sách sinh viên
                 </h4>
                 <div className="space-y-3">
@@ -240,18 +240,18 @@ const PerformanceChart = ({ data }) => {
                             <span className="text-primary-600 font-semibold">{index + 1}</span>
                           </div>
                           <div className="flex-1">
-                            <p className="font-medium text-gray-900">{student.name}</p>
+                            <p className="font-medium text-gray-700">{student.name}</p>
                             <p className="text-sm text-gray-600">{student.studentId} • {student.email}</p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-6">
                           <div className="text-right">
                             <p className="text-sm text-gray-600">Điểm TB</p>
-                            <p className="text-lg font-bold text-gray-900">{student.averageScore.toFixed(1)}</p>
+                            <p className="text-lg font-bold text-gray-700">{student.averageScore.toFixed(1)}</p>
                           </div>
                           <div className="text-right">
                             <p className="text-sm text-gray-600">Hoàn thành</p>
-                            <p className="text-lg font-bold text-gray-900">{student.completionRate}%</p>
+                            <p className="text-lg font-bold text-gray-700">{student.completionRate}%</p>
                           </div>
                           <div className="text-right">
                             <p className="text-sm text-gray-600">Trạng thái</p>
