@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Mail, Phone, Calendar, Clock, Award, TrendingUp, TrendingDown, AlertTriangle, BookOpen, User, ChevronRight } from 'lucide-react';
 import dataService from '../../../services/dataService';
+import { ASSIGNMENTS_LIST } from '../../../data/assignmentsData';
 
 const StudentDetailModal = ({ student, isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -32,9 +33,15 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
     const allAssignments = [];
     
     // Sử dụng recentAssignments làm base nếu có
+    // Map theo ID (ưu tiên) và title
     const recentMap = {};
     student.recentAssignments?.forEach(assignment => {
-      recentMap[assignment.title] = assignment;
+      if (assignment.id) {
+        recentMap[assignment.id] = assignment;
+      }
+      if (assignment.title) {
+        recentMap[assignment.title] = assignment;
+      }
     });
     
     student.courses?.forEach((course, courseIndex) => {
@@ -48,26 +55,62 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
         const isCompleted = i <= completedPerCourse;
         const isLate = isCompleted && i > (completedPerCourse - lateCount);
         
-        // Kiểm tra xem có trong recentAssignments không
-        const existingAssignment = recentMap[assignmentTitle];
+        // Tìm bài tập trong ASSIGNMENTS_LIST để lấy dueDate và ID chính xác
+        const assignmentTitleOnly = getAssignmentTitle(course.name, i);
+        const assignmentInList = ASSIGNMENTS_LIST.find(a => {
+          return a.title === assignmentTitleOnly && a.courseId === course.id;
+        });
+        
+        const dueDate = assignmentInList?.dueDate || `2024-12-${String(i + 5).padStart(2, '0')}`;
+        const assignmentId = assignmentInList?.id || `${courseIndex}-${i}`;
+        
+        // Kiểm tra xem có trong recentAssignments không (ưu tiên theo ID, sau đó theo title)
+        const existingAssignment = recentMap[assignmentId] || 
+          recentMap[assignmentTitleOnly] || 
+          recentMap[assignmentTitle] ||
+          null;
         
         if (existingAssignment) {
+          // Kiểm tra xem có nộp muộn không dựa trên submittedDate và dueDate thực tế
+          let actualStatus = existingAssignment.status || 'completed';
+          
+          if (existingAssignment.submittedDate && dueDate) {
+            try {
+              const submittedDate = new Date(existingAssignment.submittedDate);
+              const dueDateObj = new Date(dueDate);
+              
+              // Nếu nộp sau dueDate, đánh dấu là late
+              if (submittedDate > dueDateObj) {
+                actualStatus = 'late';
+              } else if (submittedDate <= dueDateObj && (actualStatus === 'completed' || actualStatus === 'late')) {
+                actualStatus = 'completed';
+              }
+            } catch (e) {
+              // Nếu không parse được date, giữ nguyên status
+              console.warn('Error parsing date:', e);
+            }
+          }
+          
           allAssignments.push({
             ...existingAssignment,
+            id: assignmentId,
+            title: assignmentTitle,
             courseName: course.name,
             className: course.className,
-            dueDate: `2024-12-${String(i + 5).padStart(2, '0')}`
+            status: actualStatus,
+            dueDate: dueDate
           });
         } else {
+          // Không có trong recentAssignments, suy luận từ progress
           allAssignments.push({
-            id: `${courseIndex}-${i}`,
+            id: assignmentId,
             title: assignmentTitle,
             courseName: course.name,
             className: course.className,
             status: isCompleted ? (isLate ? 'late' : 'completed') : 'missing',
             score: isCompleted ? Math.max(5, Math.min(10, course.score + (Math.random() * 2 - 1))) : 0,
             submittedDate: isCompleted ? `2024-12-${String(i).padStart(2, '0')}` : null,
-            dueDate: `2024-12-${String(i + 5).padStart(2, '0')}`
+            dueDate: dueDate
           });
         }
       }
@@ -945,25 +988,34 @@ const StudentDetailModal = ({ student, isOpen, onClose }) => {
                     <div>
                       <div className="text-gray-600">Tỷ lệ nộp đúng hạn</div>
                       <div className="font-medium text-success-600">
-                        {Math.round((student.recentAssignments?.filter(a => a.status === 'completed').length / student.recentAssignments?.length) * 100)}%
+                        {fullAssignmentList.length > 0 
+                          ? Math.round((fullAssignmentList.filter(a => a.status === 'completed').length / fullAssignmentList.length) * 100)
+                          : 0}%
                       </div>
                     </div>
                     <div>
                       <div className="text-gray-600">Tỷ lệ nộp trễ</div>
                       <div className="font-medium text-warning-600">
-                        {Math.round((student.recentAssignments?.filter(a => a.status === 'late').length / student.recentAssignments?.length) * 100)}%
+                        {fullAssignmentList.length > 0
+                          ? Math.round((fullAssignmentList.filter(a => a.status === 'late').length / fullAssignmentList.length) * 100)
+                          : 0}%
                       </div>
                     </div>
                     <div>
                       <div className="text-gray-600">Điểm trung bình bài tập</div>
                       <div className="font-medium text-gray-700">
-                        {(student.recentAssignments?.reduce((sum, a) => sum + a.score, 0) / student.recentAssignments?.filter(a => a.score > 0).length).toFixed(1)}
+                        {(() => {
+                          const submittedAssignments = fullAssignmentList.filter(a => a.score > 0);
+                          return submittedAssignments.length > 0
+                            ? (submittedAssignments.reduce((sum, a) => sum + a.score, 0) / submittedAssignments.length).toFixed(1)
+                            : '0.0';
+                        })()}
                       </div>
                     </div>
                     <div>
                       <div className="text-gray-600">Bài tập chưa nộp</div>
                       <div className="font-medium text-danger-600">
-                        {student.recentAssignments?.filter(a => a.status === 'missing').length} bài
+                        {fullAssignmentList.filter(a => a.status === 'missing').length} bài
                       </div>
                     </div>
                   </div>

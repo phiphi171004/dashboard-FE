@@ -251,49 +251,45 @@ export const mockDashboardData = {
     }
   ],
   
+  // Dữ liệu biểu đồ hiệu suất - 6 tháng (từ tháng 7/2024 đến 12/2024)
   performanceChart: [
-    {
-      date: '01/12',
-      averageScore: 7.5,
-      completionRate: 70,
-      engagement: 6.8
-    },
-    {
-      date: '02/12',
-      averageScore: 7.6,
-      completionRate: 72,
-      engagement: 7.0
-    },
-    {
-      date: '03/12',
-      averageScore: 7.4,
-      completionRate: 73,
-      engagement: 7.2
-    },
-    {
-      date: '04/12',
-      averageScore: 7.8,
-      completionRate: 75,
-      engagement: 7.4
-    },
-    {
-      date: '05/12',
-      averageScore: 8.0,
-      completionRate: 78,
-      engagement: 7.5
-    },
-    {
-      date: '06/12',
-      averageScore: 7.9,
-      completionRate: 79,
-      engagement: 7.6
-    },
-    {
-      date: '07/12',
-      averageScore: 8.1,
-      completionRate: 80,
-      engagement: 7.8
-    }
+    // Tháng 7/2024
+    { date: '01/07', fullDate: '2024-07-01', averageScore: 6.8, completionRate: 55, engagement: 5.8 },
+    { date: '08/07', fullDate: '2024-07-08', averageScore: 6.9, completionRate: 58, engagement: 6.0 },
+    { date: '15/07', fullDate: '2024-07-15', averageScore: 7.0, completionRate: 60, engagement: 6.2 },
+    { date: '22/07', fullDate: '2024-07-22', averageScore: 7.1, completionRate: 62, engagement: 6.3 },
+    { date: '29/07', fullDate: '2024-07-29', averageScore: 7.0, completionRate: 61, engagement: 6.2 },
+    // Tháng 8/2024
+    { date: '05/08', fullDate: '2024-08-05', averageScore: 7.2, completionRate: 63, engagement: 6.4 },
+    { date: '12/08', fullDate: '2024-08-12', averageScore: 7.1, completionRate: 62, engagement: 6.3 },
+    { date: '19/08', fullDate: '2024-08-19', averageScore: 7.3, completionRate: 65, engagement: 6.5 },
+    { date: '26/08', fullDate: '2024-08-26', averageScore: 7.2, completionRate: 64, engagement: 6.4 },
+    // Tháng 9/2024
+    { date: '02/09', fullDate: '2024-09-02', averageScore: 7.4, completionRate: 66, engagement: 6.6 },
+    { date: '09/09', fullDate: '2024-09-09', averageScore: 7.3, completionRate: 65, engagement: 6.5 },
+    { date: '16/09', fullDate: '2024-09-16', averageScore: 7.5, completionRate: 68, engagement: 6.7 },
+    { date: '23/09', fullDate: '2024-09-23', averageScore: 7.4, completionRate: 67, engagement: 6.6 },
+    { date: '30/09', fullDate: '2024-09-30', averageScore: 7.6, completionRate: 69, engagement: 6.8 },
+    // Tháng 10/2024
+    { date: '07/10', fullDate: '2024-10-07', averageScore: 7.5, completionRate: 68, engagement: 6.7 },
+    { date: '14/10', fullDate: '2024-10-14', averageScore: 7.7, completionRate: 70, engagement: 6.9 },
+    { date: '21/10', fullDate: '2024-10-21', averageScore: 7.6, completionRate: 69, engagement: 6.8 },
+    { date: '28/10', fullDate: '2024-10-28', averageScore: 7.8, completionRate: 72, engagement: 7.0 },
+    // Tháng 11/2024
+    { date: '04/11', fullDate: '2024-11-04', averageScore: 7.7, completionRate: 71, engagement: 6.9 },
+    { date: '11/11', fullDate: '2024-11-11', averageScore: 7.9, completionRate: 73, engagement: 7.1 },
+    { date: '18/11', fullDate: '2024-11-18', averageScore: 7.8, completionRate: 72, engagement: 7.0 },
+    { date: '25/11', fullDate: '2024-11-25', averageScore: 8.0, completionRate: 75, engagement: 7.2 },
+    // Tháng 12/2024 - Chi tiết theo ngày (7 ngày gần nhất)
+    { date: '01/12', fullDate: '2024-12-01', averageScore: 7.9, completionRate: 74, engagement: 7.1 },
+    { date: '08/12', fullDate: '2024-12-08', averageScore: 8.0, completionRate: 76, engagement: 7.3 },
+    { date: '15/12', fullDate: '2024-12-15', averageScore: 7.5, completionRate: 70, engagement: 6.8 },
+    { date: '16/12', fullDate: '2024-12-16', averageScore: 7.6, completionRate: 72, engagement: 7.0 },
+    { date: '17/12', fullDate: '2024-12-17', averageScore: 7.4, completionRate: 73, engagement: 7.2 },
+    { date: '18/12', fullDate: '2024-12-18', averageScore: 7.8, completionRate: 75, engagement: 7.4 },
+    { date: '19/12', fullDate: '2024-12-19', averageScore: 8.0, completionRate: 78, engagement: 7.5 },
+    { date: '20/12', fullDate: '2024-12-20', averageScore: 7.9, completionRate: 79, engagement: 7.6 },
+    { date: '21/12', fullDate: '2024-12-21', averageScore: 8.1, completionRate: 80, engagement: 7.8 }
   ],
 
   gradeDistribution: {
@@ -735,7 +731,7 @@ export const mockStudentTrackingData = {
         { id: 14, title: 'Đa hình', courseName: 'Lập trình hướng đối tượng', score: 9.3, submittedDate: '2024-11-01', status: 'completed' },
         { id: 4, title: 'Hàm và thủ tục', courseName: 'Nhập môn lập trình', score: 9.2, submittedDate: '2024-10-22', status: 'completed' },
         { id: 9, title: 'File I/O', courseName: 'Kĩ thuật lập trình', score: 9.1, submittedDate: '2024-10-27', status: 'completed' },
-        { id: 20, title: 'Đồ thị cơ bản', courseName: 'Cấu trúc dữ liệu và giải thuật', score: 9.2, submittedDate: '2024-11-15', status: 'completed' }
+        { id: 20, title: 'AVL Tree', courseName: 'Cấu trúc dữ liệu và giải thuật', score: 9.2, submittedDate: '2024-11-15', status: 'completed' }
       ],
       notes: [
         { author: 'TS. Nguyễn Văn An', date: '2024-12-04', content: 'Hoàn thành xuất sắc tất cả khóa học. Đề xuất làm TA.' }

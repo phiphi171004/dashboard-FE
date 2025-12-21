@@ -28,6 +28,7 @@ export const ASSIGNMENTS_LIST = [
       'Khai báo biến, các kiểu dữ liệu int/float/string/boolean, nhập xuất dữ liệu',
     course: 'Nhập môn lập trình',
     courseId: 'intro-prog',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-09-15T08:00:00',
     dueDate: '2024-09-22T23:59:00',
@@ -45,6 +46,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Viết chương trình kiểm tra điều kiện, switch-case, nested if',
     course: 'Nhập môn lập trình',
     courseId: 'intro-prog',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-09-25T08:00:00',
     dueDate: '2024-10-02T23:59:00',
@@ -62,6 +64,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Tính tổng dãy số, in bảng cửu chương, tìm số nguyên tố',
     course: 'Nhập môn lập trình',
     courseId: 'intro-prog',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-10-05T08:00:00',
     dueDate: '2024-10-12T23:59:00',
@@ -79,6 +82,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Viết hàm tính toán, truyền tham số, giá trị trả về',
     course: 'Nhập môn lập trình',
     courseId: 'intro-prog',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-10-15T08:00:00',
     dueDate: '2024-10-22T23:59:00',
@@ -96,6 +100,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Khai báo mảng, duyệt mảng, tìm min/max, sắp xếp cơ bản',
     course: 'Nhập môn lập trình',
     courseId: 'intro-prog',
+    className: 'Tất cả lớp',
     status: 'active',
     startDate: '2024-12-01T08:00:00',
     dueDate: '2024-12-20T23:59:00',
@@ -115,6 +120,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Khai báo con trỏ, toán tử &, *, truyền tham chiếu',
     course: 'Kĩ thuật lập trình',
     courseId: 'prog-technique',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-09-20T08:00:00',
     dueDate: '2024-09-27T23:59:00',
@@ -132,6 +138,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Duyệt mảng bằng con trỏ, pointer arithmetic, mảng con trỏ',
     course: 'Kĩ thuật lập trình',
     courseId: 'prog-technique',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-10-01T08:00:00',
     dueDate: '2024-10-08T23:59:00',
@@ -149,6 +156,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Cấp phát động, giải phóng bộ nhớ, tránh memory leak',
     course: 'Kĩ thuật lập trình',
     courseId: 'prog-technique',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-10-10T08:00:00',
     dueDate: '2024-10-17T23:59:00',
@@ -166,6 +174,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Mở/đóng file, đọc/ghi text file, binary file',
     course: 'Kĩ thuật lập trình',
     courseId: 'prog-technique',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-10-20T08:00:00',
     dueDate: '2024-10-27T23:59:00',
@@ -178,11 +187,12 @@ export const ASSIGNMENTS_LIST = [
   },
   {
     id: 10,
-    title: 'Struct và Union',
-    description: 'Làm việc với kiểu dữ liệu tự định nghĩa',
-    instructions: 'Định nghĩa struct, truy cập thành viên, mảng struct',
+    title: 'Đệ quy',
+    description: 'Kỹ thuật đệ quy và ứng dụng',
+    instructions: 'Viết hàm đệ quy, đệ quy đuôi, quy hoạch động',
     course: 'Kĩ thuật lập trình',
     courseId: 'prog-technique',
+    className: 'Tất cả lớp',
     status: 'active',
     startDate: '2024-12-05T08:00:00',
     dueDate: '2024-12-25T23:59:00',
@@ -202,6 +212,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Định nghĩa class, constructor, destructor, tạo object',
     course: 'Lập trình hướng đối tượng',
     courseId: 'oop',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-09-25T08:00:00',
     dueDate: '2024-10-02T23:59:00',
@@ -219,6 +230,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Private/public, getter/setter, abstract class',
     course: 'Lập trình hướng đối tượng',
     courseId: 'oop',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-10-05T08:00:00',
     dueDate: '2024-10-12T23:59:00',
@@ -236,6 +248,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Single/multiple inheritance, override methods, super',
     course: 'Lập trình hướng đối tượng',
     courseId: 'oop',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-10-15T08:00:00',
     dueDate: '2024-10-22T23:59:00',
@@ -253,6 +266,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Virtual functions, pure virtual, upcasting/downcasting',
     course: 'Lập trình hướng đối tượng',
     courseId: 'oop',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-10-25T08:00:00',
     dueDate: '2024-11-01T23:59:00',
@@ -270,6 +284,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Áp dụng các design patterns phổ biến vào bài toán thực tế',
     course: 'Lập trình hướng đối tượng',
     courseId: 'oop',
+    className: 'Tất cả lớp',
     status: 'active',
     startDate: '2024-12-10T08:00:00',
     dueDate: '2024-12-30T23:59:00',
@@ -289,6 +304,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Cài đặt linked list, thêm/xóa node, duyệt danh sách',
     course: 'Cấu trúc dữ liệu và giải thuật',
     courseId: 'data-struct-algo',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-10-01T08:00:00',
     dueDate: '2024-10-08T23:59:00',
@@ -306,6 +322,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Cài đặt stack/queue bằng mảng và linked list, ứng dụng',
     course: 'Cấu trúc dữ liệu và giải thuật',
     courseId: 'data-struct-algo',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-10-10T08:00:00',
     dueDate: '2024-10-17T23:59:00',
@@ -323,6 +340,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Cài đặt binary tree, duyệt preorder/inorder/postorder',
     course: 'Cấu trúc dữ liệu và giải thuật',
     courseId: 'data-struct-algo',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-10-20T08:00:00',
     dueDate: '2024-10-27T23:59:00',
@@ -340,6 +358,7 @@ export const ASSIGNMENTS_LIST = [
     instructions: 'Bubble sort, quick sort, binary search, linear search',
     course: 'Cấu trúc dữ liệu và giải thuật',
     courseId: 'data-struct-algo',
+    className: 'Tất cả lớp',
     status: 'completed',
     startDate: '2024-11-01T08:00:00',
     dueDate: '2024-11-08T23:59:00',
@@ -352,11 +371,12 @@ export const ASSIGNMENTS_LIST = [
   },
   {
     id: 20,
-    title: 'Đồ thị cơ bản',
-    description: 'Graph và các thuật toán BFS, DFS',
-    instructions: 'Biểu diễn đồ thị, duyệt BFS/DFS, tìm đường đi',
+    title: 'AVL Tree',
+    description: 'Cây AVL và cân bằng cây',
+    instructions: 'Cài đặt AVL tree, các phép xoay, insert/delete node',
     course: 'Cấu trúc dữ liệu và giải thuật',
     courseId: 'data-struct-algo',
+    className: 'Tất cả lớp',
     status: 'active',
     startDate: '2024-12-15T08:00:00',
     dueDate: '2025-01-05T23:59:00',
@@ -399,4 +419,286 @@ export const calculateAssignmentStats = () => {
     averageSubmissionRate: avgSubmissionRate,
     averageScore: Math.round(avgScore * 10) / 10,
   };
+};
+
+/**
+ * Tạo danh sách đầy đủ 20 bài tập cho một sinh viên dựa trên courses và progress
+ * Map với ASSIGNMENTS_LIST để có ID và thông tin chính xác
+ */
+const generateStudentFullAssignments = (student, assignmentsList = ASSIGNMENTS_LIST) => {
+  const fullAssignments = [];
+  
+  if (!student.courses || student.courses.length === 0) {
+    return [];
+  }
+
+  // Tạo map từ recentAssignments để tìm nhanh (theo ID)
+  const recentMap = {};
+  if (student.recentAssignments && Array.isArray(student.recentAssignments)) {
+    student.recentAssignments.forEach(assignment => {
+      // Map theo ID (ưu tiên nhất)
+      if (assignment.id) {
+        recentMap[assignment.id] = assignment;
+      }
+      // Map theo title để backup
+      if (assignment.title) {
+        recentMap[assignment.title] = assignment;
+      }
+    });
+  }
+
+  // Tính tổng số bài đã hoàn thành từ completedAssignments
+  const totalCompleted = student.completedAssignments || 0;
+  const totalAssignments = student.totalAssignments || assignmentsList.length;
+  const completionRate = totalAssignments > 0 ? (totalCompleted / totalAssignments) : 0;
+
+  // Duyệt qua tất cả bài tập trong ASSIGNMENTS_LIST (đảm bảo đủ 20 bài)
+  assignmentsList.forEach((assignment) => {
+    // Tìm trong recentAssignments theo ID (ưu tiên) hoặc title
+    let studentAssignment = recentMap[assignment.id] || recentMap[assignment.title];
+    
+    if (studentAssignment) {
+      // Có trong recentAssignments, dùng dữ liệu thực tế
+      // Kiểm tra xem có nộp muộn không dựa trên submittedDate và dueDate
+      let actualStatus = studentAssignment.status || 'completed';
+      
+      // Nếu có submittedDate và dueDate, kiểm tra xem có nộp muộn không
+      if (studentAssignment.submittedDate && assignment.dueDate) {
+        const submittedDate = new Date(studentAssignment.submittedDate);
+        const dueDate = new Date(assignment.dueDate);
+        
+        // Nếu nộp sau dueDate, đánh dấu là late
+        if (submittedDate > dueDate && (actualStatus === 'completed' || actualStatus === 'late')) {
+          actualStatus = 'late';
+        } else if (submittedDate <= dueDate && actualStatus === 'completed') {
+          actualStatus = 'completed';
+        }
+      }
+      
+      fullAssignments.push({
+        id: assignment.id,
+        title: assignment.title,
+        courseName: assignment.course,
+        status: actualStatus,
+        score: studentAssignment.score !== undefined && studentAssignment.score !== null 
+          ? studentAssignment.score 
+          : (studentAssignment.status === 'completed' || studentAssignment.status === 'late' ? 0 : 0),
+        submittedDate: studentAssignment.submittedDate || null
+      });
+    } else {
+      // Không có trong recentAssignments, suy luận từ completedAssignments
+      // Tính số bài đã hoàn thành cho đến bài tập này
+      const assignmentIndex = assignmentsList.findIndex(a => a.id === assignment.id);
+      const shouldBeCompleted = assignmentIndex < totalCompleted;
+      
+      if (shouldBeCompleted) {
+        // Đã hoàn thành (dựa trên completedAssignments)
+        // Tìm điểm trung bình từ môn học tương ứng
+        const course = student.courses.find(c => c.id === assignment.courseId);
+        fullAssignments.push({
+          id: assignment.id,
+          title: assignment.title,
+          courseName: assignment.course,
+          status: 'completed',
+          score: course?.score || 0,
+          submittedDate: null
+        });
+      } else {
+        // Chưa hoàn thành
+        fullAssignments.push({
+          id: assignment.id,
+          title: assignment.title,
+          courseName: assignment.course,
+          status: 'missing',
+          score: 0,
+          submittedDate: null
+        });
+      }
+    }
+  });
+
+  return fullAssignments;
+};
+
+/**
+ * Tính toán chi tiết sinh viên cho một bài tập cụ thể từ dữ liệu sinh viên
+ * 
+ * @param {Object} assignment - Bài tập cần tính toán
+ * @param {Array} students - Danh sách sinh viên với recentAssignments
+ * @returns {Object} { submitted: [], notSubmitted: [], lateSubmitted: [] }
+ */
+export const getAssignmentStudentDetails = (assignment, students) => {
+  if (!assignment || !students || students.length === 0) {
+    return { submitted: [], notSubmitted: [], lateSubmitted: [] };
+  }
+
+  const submitted = [];
+  const notSubmitted = [];
+  const lateSubmitted = [];
+
+  students.forEach(student => {
+    // Tạo danh sách đầy đủ 20 bài tập cho sinh viên này
+    const studentFullAssignments = generateStudentFullAssignments(student, ASSIGNMENTS_LIST);
+    
+    // Tìm bài tập trong danh sách đầy đủ
+    const studentAssignment = studentFullAssignments.find(a => a.id === assignment.id);
+    
+    if (studentAssignment) {
+      const submissionData = {
+        id: student.id,
+        name: student.name,
+        studentId: student.studentId,
+        email: student.email,
+        phone: student.phone,
+        score: studentAssignment.score || null,
+        submittedAt: studentAssignment.submittedDate || null,
+        status: studentAssignment.status
+      };
+
+      if (studentAssignment.status === 'completed') {
+        // Đã nộp đúng hạn
+        submitted.push(submissionData);
+      } else if (studentAssignment.status === 'late') {
+        // Nộp muộn
+        lateSubmitted.push(submissionData);
+      } else if (studentAssignment.status === 'missing') {
+        // Chưa nộp
+        notSubmitted.push(submissionData);
+      }
+    } else {
+      // Nếu không tìm thấy bài tập, coi như chưa nộp
+      notSubmitted.push({
+        id: student.id,
+        name: student.name,
+        studentId: student.studentId,
+        email: student.email,
+        phone: student.phone,
+        score: null,
+        submittedAt: null,
+        status: 'missing'
+      });
+    }
+  });
+
+  return { submitted, notSubmitted, lateSubmitted };
+};
+
+/**
+ * Tính toán số liệu bài tập từ dữ liệu sinh viên
+ * Đảm bảo đồng bộ với trang theo dõi sinh viên
+ * 
+ * @param {Array} students - Danh sách sinh viên với recentAssignments
+ * @param {Array} assignments - Danh sách bài tập (mặc định là ASSIGNMENTS_LIST)
+ * @returns {Array} Danh sách bài tập đã được cập nhật số liệu
+ */
+export const calculateAssignmentStatsFromStudents = (students, assignments = ASSIGNMENTS_LIST) => {
+  if (!students || students.length === 0) {
+    return assignments;
+  }
+
+  // Tạo map để đếm số liệu cho mỗi bài tập
+  const assignmentStats = {};
+  
+  // Khởi tạo stats cho tất cả bài tập
+  assignments.forEach(assignment => {
+    assignmentStats[assignment.id] = {
+      submittedCount: 0,
+      lateSubmissions: 0,
+      notSubmittedCount: 0,
+      totalScore: 0,
+      scoreCount: 0,
+      totalStudents: 0
+    };
+  });
+
+  // Duyệt qua tất cả sinh viên và đếm số liệu
+  students.forEach(student => {
+    // Tạo danh sách đầy đủ 20 bài tập cho sinh viên này
+    const studentFullAssignments = generateStudentFullAssignments(student, assignments);
+    
+    // Đếm số sinh viên có bài tập này (tất cả sinh viên đều có 20 bài tập)
+    assignments.forEach(assignment => {
+      assignmentStats[assignment.id].totalStudents++;
+      
+      // Tìm bài tập trong danh sách đầy đủ của sinh viên
+      const studentAssignment = studentFullAssignments.find(a => a.id === assignment.id);
+      
+      if (studentAssignment) {
+        if (studentAssignment.status === 'completed') {
+          // Đã nộp đúng hạn
+          assignmentStats[assignment.id].submittedCount++;
+          if (studentAssignment.score && studentAssignment.score > 0) {
+            assignmentStats[assignment.id].totalScore += studentAssignment.score;
+            assignmentStats[assignment.id].scoreCount++;
+          }
+        } else if (studentAssignment.status === 'late') {
+          // Nộp muộn
+          assignmentStats[assignment.id].submittedCount++;
+          assignmentStats[assignment.id].lateSubmissions++;
+          if (studentAssignment.score && studentAssignment.score > 0) {
+            assignmentStats[assignment.id].totalScore += studentAssignment.score;
+            assignmentStats[assignment.id].scoreCount++;
+          }
+        } else if (studentAssignment.status === 'missing') {
+          // Chưa nộp
+          assignmentStats[assignment.id].notSubmittedCount++;
+        }
+      } else {
+        // Nếu không tìm thấy, coi như chưa nộp
+        assignmentStats[assignment.id].notSubmittedCount++;
+      }
+    });
+  });
+
+  // Cập nhật assignments với số liệu đã tính
+  return assignments.map(assignment => {
+    const stats = assignmentStats[assignment.id] || {
+      submittedCount: 0,
+      lateSubmissions: 0,
+      notSubmittedCount: 0,
+      totalScore: 0,
+      scoreCount: 0,
+      totalStudents: 0
+    };
+
+    // Tính điểm trung bình
+    const averageScore = stats.scoreCount > 0 
+      ? Math.round((stats.totalScore / stats.scoreCount) * 10) / 10 
+      : assignment.averageScore || 0;
+
+    // Số sinh viên thực tế = số đã nộp + số chưa nộp
+    // Hoặc lấy từ totalStudents đã đếm, hoặc giữ nguyên giá trị gốc
+    const actualTotalStudents = Math.max(
+      assignment.totalStudents,
+      stats.submittedCount + stats.notSubmittedCount,
+      stats.totalStudents || 0
+    );
+
+    return {
+      ...assignment,
+      submittedCount: stats.submittedCount,
+      lateSubmissions: stats.lateSubmissions,
+      totalStudents: actualTotalStudents,
+      averageScore: averageScore
+    };
+  });
+};
+
+/**
+ * Lấy danh sách bài tập cho một lớp học cụ thể từ ASSIGNMENTS_LIST
+ * 
+ * @param {string} courseId - ID của môn học (ví dụ: 'intro-prog', 'prog-technique', 'oop', 'data-struct-algo')
+ * @param {Array} students - Danh sách sinh viên trong lớp (tùy chọn, để tính số liệu)
+ * @returns {Array} Danh sách bài tập của môn học đó
+ */
+export const getAssignmentsForClass = (courseId, students = []) => {
+  // Lọc các bài tập theo courseId
+  const classAssignments = ASSIGNMENTS_LIST.filter(a => a.courseId === courseId);
+  
+  // Nếu có students, tính toán số liệu từ dữ liệu sinh viên thực tế
+  if (students.length > 0) {
+    return calculateAssignmentStatsFromStudents(students, classAssignments);
+  }
+  
+  return classAssignments;
 };

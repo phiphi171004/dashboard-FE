@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { FileText, Clock, CheckCircle, AlertTriangle, Users, TrendingUp, TrendingDown, X, ChevronRight } from 'lucide-react';
-import { mockAssignmentData } from '../../../data/mockData';
+import { mockAssignmentData, mockStudentTrackingData } from '../../../data/mockData';
+import { getAssignmentStudentDetails } from '../../../data/assignmentsData';
+import localStorageService from '../../../services/localStorageService';
 
 const AssignmentStats = ({ data }) => {
   const [selectedStat, setSelectedStat] = useState(null);
@@ -293,18 +295,19 @@ const AssignmentStats = ({ data }) => {
 
             {/* Body */}
             <div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
-              {/* Tính toán số liệu chính xác */}
+              {/* Tính toán số liệu chính xác từ dữ liệu sinh viên */}
               {(() => {
-                const allSubmissions = mockAssignmentData.assignmentDetails.submissions || [];
-                const actualSubmitted = allSubmissions.filter(s => s.submittedAt !== null);
-                const actualLate = allSubmissions.filter(s => {
-                  if (!s.submittedAt || !selectedAssignment.dueDate) return false;
-                  return new Date(s.submittedAt) > new Date(selectedAssignment.dueDate);
-                });
+                // Lấy dữ liệu sinh viên thực tế
+                const storedStudents = localStorageService.getStudents();
+                const studentsToUse = storedStudents || mockStudentTrackingData.students;
                 
-                // Đảm bảo totalStudents >= số đã nộp để tránh số âm
-                const correctedTotalStudents = Math.max(selectedAssignment.totalStudents, actualSubmitted.length);
-                const actualNotSubmitted = correctedTotalStudents - actualSubmitted.length;
+                // Tính toán từ dữ liệu sinh viên thực tế
+                const { submitted, notSubmitted, lateSubmitted } = getAssignmentStudentDetails(selectedAssignment, studentsToUse);
+                
+                const actualSubmitted = submitted;
+                const actualLate = lateSubmitted;
+                const actualNotSubmitted = notSubmitted;
+                const correctedTotalStudents = selectedAssignment.totalStudents;
 
                 return (
                   <>
@@ -324,9 +327,9 @@ const AssignmentStats = ({ data }) => {
                         </div>
                         <div className="bg-warning-50 p-4 rounded-lg border border-warning-200">
                           <p className="text-sm text-warning-700 font-medium">Chưa nộp</p>
-                          <p className="text-2xl font-bold text-warning-600 mt-1">{actualNotSubmitted}</p>
+                          <p className="text-2xl font-bold text-warning-600 mt-1">{actualNotSubmitted.length}</p>
                           <p className="text-xs text-gray-600 mt-1">
-                            {((actualNotSubmitted / correctedTotalStudents) * 100).toFixed(0)}% sinh viên
+                            {((actualNotSubmitted.length / correctedTotalStudents) * 100).toFixed(0)}% sinh viên
                           </p>
                         </div>
                         <div className="bg-danger-50 p-4 rounded-lg border border-danger-200">
@@ -339,7 +342,7 @@ const AssignmentStats = ({ data }) => {
                       </div>
                       
                       <div className="mt-4 bg-gray-50 rounded-lg p-3 text-sm text-gray-700">
-                        <strong>Giải thích:</strong> Đã nộp ({actualSubmitted.length}) + Chưa nộp ({actualNotSubmitted}) = Tổng ({correctedTotalStudents}) sinh viên
+                        <strong>Giải thích:</strong> Đã nộp ({actualSubmitted.length}) + Chưa nộp ({actualNotSubmitted.length}) = Tổng ({correctedTotalStudents}) sinh viên
                       </div>
                     </div>
 
@@ -350,29 +353,27 @@ const AssignmentStats = ({ data }) => {
                     Sinh viên đã nộp ({actualSubmitted.length})
                   </h4>
                   <div className="space-y-2">
-                    {actualSubmitted.map((submission, index) => (
+                    {actualSubmitted.map((student, index) => (
                         <div 
-                          key={submission.id}
+                          key={student.id}
                           className="flex items-center justify-between p-3 bg-success-50 rounded-lg"
                         >
                           <div className="flex items-center space-x-3 flex-1">
                             <span className="text-success-600 font-semibold">{index + 1}</span>
                             <div>
-                              <p className="font-medium text-gray-700">{submission.studentName}</p>
-                              <p className="text-xs text-gray-600">{submission.studentId}</p>
+                              <p className="font-medium text-gray-700">{student.name}</p>
+                              <p className="text-xs text-gray-600">{student.studentId}</p>
                             </div>
                           </div>
                           <div className="flex items-center space-x-4">
                             <div className="text-right">
                               <p className="text-xs text-gray-600">Điểm</p>
                               <p className="text-sm font-bold text-gray-700">
-                                {submission.score !== null ? submission.score : 'Chưa chấm'}
+                                {student.score !== null && student.score > 0 ? student.score.toFixed(1) : 'Chưa chấm'}
                               </p>
                             </div>
-                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                              submission.status === 'graded' ? 'bg-success-100 text-success-700' : 'bg-warning-100 text-warning-700'
-                            }`}>
-                              {submission.status === 'graded' ? 'Đã chấm' : 'Chờ chấm'}
+                            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-success-100 text-success-700">
+                              Đã nộp đúng hạn
                             </span>
                           </div>
                         </div>
@@ -388,23 +389,23 @@ const AssignmentStats = ({ data }) => {
                     Sinh viên nộp muộn ({actualLate.length})
                   </h4>
                   <div className="space-y-2">
-                    {actualLate.map((submission, index) => (
+                    {actualLate.map((student, index) => (
                         <div 
-                          key={submission.id}
+                          key={student.id}
                           className="flex items-center justify-between p-3 bg-danger-50 rounded-lg"
                         >
                           <div className="flex items-center space-x-3 flex-1">
                             <span className="text-danger-600 font-semibold">{index + 1}</span>
                             <div>
-                              <p className="font-medium text-gray-700">{submission.studentName}</p>
-                              <p className="text-xs text-gray-600">{submission.studentId}</p>
+                              <p className="font-medium text-gray-700">{student.name}</p>
+                              <p className="text-xs text-gray-600">{student.studentId}</p>
                             </div>
                           </div>
                           <div className="flex items-center space-x-4">
                             <div className="text-right">
                               <p className="text-xs text-gray-600">Điểm</p>
                               <p className="text-sm font-bold text-gray-700">
-                                {submission.score !== null ? submission.score : 'Chưa chấm'}
+                                {student.score !== null && student.score > 0 ? student.score.toFixed(1) : 'Chưa chấm'}
                               </p>
                             </div>
                             <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-danger-100 text-danger-700">
@@ -418,32 +419,29 @@ const AssignmentStats = ({ data }) => {
               )}
 
               {/* Danh sách sinh viên chưa nộp */}
-              {actualNotSubmitted > 0 && (
+              {actualNotSubmitted.length > 0 && (
                 <div>
                   <h4 className="text-lg font-semibold text-gray-700 mb-3">
-                    Sinh viên chưa nộp ({actualNotSubmitted})
+                    Sinh viên chưa nộp ({actualNotSubmitted.length})
                   </h4>
                   <div className="space-y-2">
-                    {Array.from({ length: actualNotSubmitted }, (_, index) => {
-                      const submission = mockAssignmentData.assignmentDetails.submissions.find(s => s.status === 'missing');
-                      return (
+                    {actualNotSubmitted.map((student, index) => (
                         <div 
-                          key={index}
+                          key={student.id}
                           className="flex items-center justify-between p-3 bg-warning-50 rounded-lg"
                         >
                           <div className="flex items-center space-x-3 flex-1">
                             <span className="text-warning-600 font-semibold">{index + 1}</span>
                             <div>
-                              <p className="font-medium text-gray-700">{submission?.studentName || `Sinh viên ${index + 1}`}</p>
-                              <p className="text-xs text-gray-600">{submission?.studentId || `SV${String(index + 100).padStart(3, '0')}`}</p>
+                              <p className="font-medium text-gray-700">{student.name}</p>
+                              <p className="text-xs text-gray-600">{student.studentId}</p>
                             </div>
                           </div>
                           <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-warning-100 text-warning-700">
                             Chưa nộp
                           </span>
                         </div>
-                      );
-                    })}
+                      ))}
                   </div>
                 </div>
               )}

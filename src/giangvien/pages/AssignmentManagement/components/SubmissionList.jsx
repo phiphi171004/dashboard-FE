@@ -35,13 +35,19 @@ const SubmissionList = ({ submissions, assignmentId }) => {
 
   const formatDate = (dateString) => {
     if (!dateString) return 'Chưa nộp';
-    return new Date(dateString).toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'Chưa nộp';
+      return date.toLocaleDateString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (e) {
+      return 'Chưa nộp';
+    }
   };
 
   const filteredAndSortedSubmissions =
@@ -254,15 +260,16 @@ const SubmissionList = ({ submissions, assignmentId }) => {
                       {formatDate(submission.submittedAt)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {submission.score !== null ? (
+                      {submission.score !== null && submission.score !== undefined ? (
                         <div className="flex items-center">
                           <span className={`text-sm font-medium ${
-                            submission.score >= 80 ? 'text-success-600' :
-                            submission.score >= 70 ? 'text-primary-600' :
-                            submission.score >= 60 ? 'text-warning-600' :
+                            submission.score >= 8.0 ? 'text-success-600' :
+                            submission.score >= 7.0 ? 'text-primary-600' :
+                            submission.score >= 6.0 ? 'text-warning-600' :
+                            submission.score >= 5.0 ? 'text-orange-600' :
                             'text-danger-600'
                           }`}>
-                            {submission.score}%
+                            {typeof submission.score === 'number' ? submission.score.toFixed(1) : submission.score}
                           </span>
                         </div>
                       ) : (

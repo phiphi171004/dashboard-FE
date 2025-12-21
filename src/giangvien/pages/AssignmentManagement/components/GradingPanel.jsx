@@ -129,9 +129,9 @@ const GradingPanel = ({ submissions, assignmentId }) => {
                         Muộn
                       </span>
                     )}
-                    {submission.score !== null && (
+                    {submission.score !== null && submission.score !== undefined && (
                       <span className="text-sm font-medium text-success-600">
-                        {submission.score}%
+                        {typeof submission.score === 'number' ? submission.score.toFixed(1) : submission.score}
                       </span>
                     )}
                   </div>
