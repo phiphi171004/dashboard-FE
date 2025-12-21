@@ -54,7 +54,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const notificationRef = useRef(null);
-  
+
   // Search functionality
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -107,18 +107,18 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
       // Check if click is on a search result button or inside dropdown
       const isSearchResultButton = event.target.closest('button[data-search-result]');
       const isInsideDropdown = searchDropdownRef.current && searchDropdownRef.current.contains(event.target);
-      
+
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setUserMenuOpen(false);
       }
-      
+
       // Don't close search dropdown if clicking on a search result button or inside dropdown
       if (!isSearchResultButton && !isInsideDropdown) {
         if (searchRef.current && !searchRef.current.contains(event.target)) {
           setShowSearchDropdown(false);
         }
       }
-      
+
       if (notificationRef.current && !notificationRef.current.contains(event.target)) {
         setNotificationOpen(false);
       }
@@ -224,10 +224,10 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
     menuItems.forEach(item => {
       const labelMatch = item.label.toLowerCase().includes(query);
       const idMatch = item.id.toLowerCase().includes(query);
-      const keywordMatch = item.keywords && item.keywords.some(keyword => 
+      const keywordMatch = item.keywords && item.keywords.some(keyword =>
         keyword.toLowerCase().includes(query) || query.includes(keyword.toLowerCase())
       );
-      
+
       if (labelMatch || idMatch || keywordMatch) {
         results.push({
           type: 'action',
@@ -245,10 +245,10 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
 
     // 2. Tìm kiếm khóa học
     availableCourses.forEach(course => {
-      if (course.name.toLowerCase().includes(query) || 
-          course.code.toLowerCase().includes(query) ||
-          course.instructor.toLowerCase().includes(query) ||
-          course.description.toLowerCase().includes(query)) {
+      if (course.name.toLowerCase().includes(query) ||
+        course.code.toLowerCase().includes(query) ||
+        course.instructor.toLowerCase().includes(query) ||
+        course.description.toLowerCase().includes(query)) {
         results.push({
           type: 'course',
           label: course.name,
@@ -267,7 +267,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
     // 3. Tìm kiếm nhóm học tập
     studyGroups.forEach(group => {
       if (group.name.toLowerCase().includes(query) ||
-          group.courseName.toLowerCase().includes(query)) {
+        group.courseName.toLowerCase().includes(query)) {
         results.push({
           type: 'group',
           label: group.name,
@@ -286,8 +286,8 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
     // 4. Tìm kiếm bài tập nhóm
     Object.values(groupAssignments).flat().forEach(assignment => {
       if (assignment.title.toLowerCase().includes(query) ||
-          assignment.description.toLowerCase().includes(query) ||
-          assignment.groupName.toLowerCase().includes(query)) {
+        assignment.description.toLowerCase().includes(query) ||
+        assignment.groupName.toLowerCase().includes(query)) {
         results.push({
           type: 'assignment',
           label: assignment.title,
@@ -307,7 +307,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
     Object.entries(courseLessons).forEach(([courseId, lessons]) => {
       lessons.forEach(lesson => {
         if (lesson.title.toLowerCase().includes(query) ||
-            lesson.description.toLowerCase().includes(query)) {
+          lesson.description.toLowerCase().includes(query)) {
           const course = availableCourses.find(c => c.id === parseInt(courseId));
           results.push({
             type: 'lesson',
@@ -337,7 +337,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
 
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setSelectedIndex(prev => 
+        setSelectedIndex(prev =>
           prev < searchResults.length - 1 ? prev + 1 : prev
         );
       } else if (e.key === 'ArrowUp') {
@@ -380,7 +380,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
       clearAccessToken();
       sessionStorage.removeItem('user');
       sessionStorage.removeItem('dashboardType');
-      
+
       // Redirect to login
       window.location.href = '/login';
     }
@@ -390,7 +390,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
     setUserMenuOpen(false);
     setLoadingProfile(true);
     setProfileModalOpen(true);
-    
+
     try {
       const response = await authAPI.getCurrentUser();
       setProfileData(response.data.user);
@@ -412,7 +412,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
           >
             <Menu />
           </button>
-          
+
           {/* Search bar - Mobile */}
           <div className="md:hidden flex-1 min-w-0 mx-2">
             <div className="relative" ref={searchRef} style={{ zIndex: 100 }}>
@@ -436,7 +436,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
                   ×
                 </button>
               )}
-              
+
               {/* Search Dropdown Results - Mobile */}
               {showSearchDropdown && searchResults.length > 0 && (
                 <div
@@ -473,9 +473,8 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
                           result.action();
                         }
                       }}
-                      className={`w-full text-left px-4 py-3 active:bg-gray-100 transition-colors touch-manipulation ${
-                        index === selectedIndex ? 'bg-primary-50' : ''
-                      }`}
+                      className={`w-full text-left px-4 py-3 active:bg-gray-100 transition-colors touch-manipulation ${index === selectedIndex ? 'bg-primary-50' : ''
+                        }`}
                       style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent', cursor: 'pointer', userSelect: 'none' }}
                     >
                       <div className="flex items-center space-x-3">
@@ -505,7 +504,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
               )}
             </div>
           </div>
-          
+
           {/* Search bar - Desktop */}
           <div className="hidden md:flex items-center">
             <div className="relative" ref={searchRef}>
@@ -529,7 +528,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
                   ×
                 </button>
               )}
-              
+
               {/* Search Dropdown Results - Desktop */}
               {showSearchDropdown && searchResults.length > 0 && (
                 <div
@@ -540,9 +539,8 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
                     <button
                       key={`${result.type}-${result.id}`}
                       onClick={() => result.action && result.action()}
-                      className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors ${
-                        index === selectedIndex ? 'bg-primary-50' : ''
-                      }`}
+                      className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors ${index === selectedIndex ? 'bg-primary-50' : ''
+                        }`}
                     >
                       <div className="flex items-center space-x-3">
                         <span className="text-2xl">{result.icon}</span>
@@ -576,11 +574,11 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
         <div className="flex items-center space-x-3">
           {/* Notification button */}
           <div className="relative" ref={notificationRef}>
-            <button 
+            <button
               onClick={() => setNotificationOpen(!notificationOpen)}
               className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
             >
-            <Bell />
+              <Bell />
               {unreadCount > 0 && (
                 <span className="absolute top-0 right-0 h-4 w-4 bg-danger-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold">
                   {unreadCount > 9 ? '9+' : unreadCount}
@@ -595,7 +593,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
                 <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
                   <h3 className="font-semibold text-gray-900">Thông báo</h3>
                   {unreadCount > 0 && (
-                    <button 
+                    <button
                       onClick={() => {
                         // Mark all as read
                         notifications.forEach(n => n.unread = false);
@@ -624,9 +622,8 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
                               if (setCurrentPage) setCurrentPage('courses');
                             }
                           }}
-                          className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors ${
-                            notification.unread ? 'bg-blue-50' : ''
-                          }`}
+                          className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors ${notification.unread ? 'bg-blue-50' : ''
+                            }`}
                         >
                           <div className="flex items-start space-x-3">
                             <span className="text-2xl flex-shrink-0">{notification.icon}</span>
@@ -652,7 +649,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
                               </p>
                             </div>
                           </div>
-          </button>
+                        </button>
                       ))}
                     </div>
                   ) : (
@@ -664,7 +661,7 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
               </div>
             )}
           </div>
-          
+
           {/* User profile */}
           <div className="relative" ref={userMenuRef}>
             <button
@@ -674,9 +671,9 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
               <div className="hidden md:block text-right">
                 <p className="text-sm font-medium text-gray-900">{user?.full_name || 'Người dùng'}</p>
                 <p className="text-xs text-gray-500">
-                  {user?.role === 'sinh_vien' ? 'Sinh viên' : 
-                   user?.role === 'giang_vien' ? 'Giảng viên' : 
-                   user?.role === 'manage_nghanh' ? 'Quản lý Ngành' : 'User'}
+                  {user?.role === 'sinh_vien' ? 'Sinh viên' :
+                    user?.role === 'giang_vien' ? 'Giảng viên' :
+                      user?.role === 'manage_nghanh' ? 'Quản lý Ngành' : 'User'}
                 </p>
               </div>
               <div className="h-9 w-9 bg-primary-500 rounded-full flex items-center justify-center">
@@ -697,36 +694,25 @@ const HeaderNew = ({ onMenuClick, setCurrentPage }) => {
                       </span>
                     )}
                     <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full font-semibold">
-                      {user?.role === 'sinh_vien' ? 'Sinh viên' : 
-                       user?.role === 'giang_vien' ? 'Giảng viên' : 
-                       user?.role === 'manage_nghanh' ? 'Quản lý Ngành' : 'User'}
+                      {user?.role === 'sinh_vien' ? 'Sinh viên' :
+                        user?.role === 'giang_vien' ? 'Giảng viên' :
+                          user?.role === 'manage_nghanh' ? 'Quản lý Ngành' : 'User'}
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="py-1">
-                  <button 
+                  <button
                     onClick={handleProfileClick}
                     className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                   >
                     <User className="h-4 w-4 mr-3 text-gray-400" />
                     <span>Hồ sơ của tôi</span>
                   </button>
-                  
-                  <button 
-                    onClick={() => {
-                      if (setCurrentPage) setCurrentPage('profile');
-                      setUserMenuOpen(false);
-                    }}
-                    className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                  >
-                    <Settings className="h-4 w-4 mr-3 text-gray-400" />
-                    <span>Cài đặt</span>
-                  </button>
                 </div>
-                
+
                 <div className="border-t border-gray-100 py-1">
-                  <button 
+                  <button
                     onClick={handleLogout}
                     className="w-full flex items-center px-4 py-2 text-sm text-danger-600 hover:bg-danger-50 transition-colors"
                   >

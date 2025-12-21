@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { availableCourses, generateProgressData, courseExercises, organizeExercisesByLevel, calculateLevelProgress } from '../data/data';
@@ -9,7 +10,7 @@ let moreModuleInitialized = false;
 
 const initMoreModule = async () => {
   if (moreModuleInitialized) return;
-  
+
   try {
     // Highcharts cần highcharts-more module để hỗ trợ gauge chart
     const moreModule = await import('highcharts/highcharts-more.js');
@@ -27,12 +28,12 @@ const initMoreModule = async () => {
 const GaugeChart = ({ value, courseName, size = 250 }) => {
   const chartRef = useRef(null);
   const percentage = Math.min(100, Math.max(0, value));
-  
+
   // Màu sắc dựa trên giá trị
   let gaugeColor = '#ef4444'; // Red
   if (percentage >= 75) gaugeColor = '#22c55e'; // Green
   else if (percentage >= 50) gaugeColor = '#f59e0b'; // Yellow/Orange
-  
+
   const options = {
     chart: {
       type: 'gauge',
@@ -72,7 +73,7 @@ const GaugeChart = ({ value, courseName, size = 250 }) => {
           fontSize: '14px',
           color: '#666'
         },
-        formatter: function() {
+        formatter: function () {
           return this.value + '%';
         }
       },
@@ -120,7 +121,7 @@ const GaugeChart = ({ value, courseName, size = 250 }) => {
       }
     }]
   };
-  
+
   return (
     <div style={{ width: '100%', height: `${size * 0.6}px`, maxWidth: `${size}px`, margin: '0 auto', overflow: 'hidden' }}>
       <HighchartsReact
@@ -145,6 +146,10 @@ const Courses = () => {
   const isFirstRender = useRef(true);
   const [currentUser, setCurrentUser] = useState(null);
   const [selectedCourseForLessons, setSelectedCourseForLessons] = useState(null);
+  const [showSubmitModal, setShowSubmitModal] = useState(null);
+  const [submissionCode, setSubmissionCode] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionResult, setSubmissionResult] = useState(null);
   const [learningLessons, setLearningLessons] = useState({}); // { lessonId: { startTime, timer } }
   const [completedLessons, setCompletedLessons] = useState(() => {
     const saved = sessionStorage.getItem('completedLessons');
@@ -209,7 +214,7 @@ const Courses = () => {
       };
       setEnrolledCourses([...enrolledCourses, newCourse]);
       setShowEnrollModal(null);
-      
+
       // Show success notification
       setToast({
         message: `Đăng ký thành công khóa học: ${showEnrollModal.name}`,
@@ -238,7 +243,7 @@ const Courses = () => {
     // Tạo timer
     const timer = setInterval(() => {
       remaining -= 1;
-      
+
       setLearningLessons(prev => {
         if (prev[lessonId]) {
           return {
@@ -275,7 +280,7 @@ const Courses = () => {
   const calculateCourseProgress = (courseId, completedLessonsList) => {
     const lessons = courseLessons[courseId] || [];
     if (lessons.length === 0) return 0;
-    
+
     const completedCount = lessons.filter(l => completedLessonsList.includes(l.id)).length;
     return Math.round((completedCount / lessons.length) * 100);
   };
@@ -284,8 +289,8 @@ const Courses = () => {
   const updateCourseProgress = (courseId, completedLessonsList) => {
     const newProgress = calculateCourseProgress(courseId, completedLessonsList);
     setEnrolledCourses(prev => {
-      const updated = prev.map(course => 
-        course.id === courseId 
+      const updated = prev.map(course =>
+        course.id === courseId
           ? { ...course, progress: newProgress }
           : course
       );
@@ -314,7 +319,7 @@ const Courses = () => {
       const newCompleted = [...completedLessons, lessonId];
       setCompletedLessons(newCompleted);
       sessionStorage.setItem('completedLessons', JSON.stringify(newCompleted));
-      
+
       // Tìm courseId từ lesson
       const lesson = Object.values(courseLessons).flat().find(l => l.id === lessonId);
       if (lesson) {
@@ -367,8 +372,8 @@ const Courses = () => {
   });
 
   // Tạo dữ liệu cho biểu đồ tiến độ (mỗi khóa học 1 đường)
-  const progressData = enrolledCourses.length > 0 
-    ? generateProgressData(enrolledCourses) 
+  const progressData = enrolledCourses.length > 0
+    ? generateProgressData(enrolledCourses)
     : [];
 
   // Màu sắc cho từng khóa học
@@ -388,19 +393,19 @@ const Courses = () => {
   if (selectedCourseForLessons) {
     const courseId = selectedCourseForLessons.id;
     const levels = organizeExercisesByLevel(courseId);
-    
+
     // Lấy danh sách bài tập đã hoàn thành
-    const savedCompleted = typeof window !== 'undefined' 
+    const savedCompleted = typeof window !== 'undefined'
       ? JSON.parse(sessionStorage.getItem('completedExercises') || '[]')
       : [];
-    
+
     // Tính tiến độ cho từng level
     const levelsWithProgress = levels.map(level => {
       const progress = calculateLevelProgress(courseId, level.levelNumber);
-      const completedCount = level.exercises.filter(ex => 
+      const completedCount = level.exercises.filter(ex =>
         savedCompleted.includes(ex.id) || ex.completed
       ).length;
-      
+
       return {
         ...level,
         progress,
@@ -408,7 +413,7 @@ const Courses = () => {
         totalCount: level.exercises.length
       };
     });
-    
+
     // Xác định level nào được unlock (level đầu tiên luôn unlock, level tiếp theo unlock khi đạt >70%)
     const unlockedLevels = [];
     for (let i = 0; i < levelsWithProgress.length; i++) {
@@ -423,9 +428,9 @@ const Courses = () => {
         unlockedLevels.push({ ...level, isUnlocked });
       }
     }
-    
+
     // Xác định level nào cần gợi ý bài tập bổ sung (<70%)
-    const needsMorePractice = unlockedLevels.filter(level => 
+    const needsMorePractice = unlockedLevels.filter(level =>
       level.isUnlocked && level.progress < 70
     );
 
@@ -481,25 +486,24 @@ const Courses = () => {
           <div className="relative">
             {/* Timeline line */}
             <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-300 dark:bg-gray-600"></div>
-            
+
             <div className="space-y-8">
               {unlockedLevels.map((level, index) => {
                 const isLocked = !level.isUnlocked;
-                const progressColor = level.progress >= 70 ? 'bg-green-500' : 
-                                     level.progress >= 50 ? 'bg-yellow-500' : 'bg-red-500';
-                
+                const progressColor = level.progress >= 70 ? 'bg-green-500' :
+                  level.progress >= 50 ? 'bg-yellow-500' : 'bg-red-500';
+
                 return (
                   <div key={level.levelNumber} className="relative flex items-start gap-6">
                     {/* Timeline dot */}
-                    <div className={`relative z-10 flex-shrink-0 w-16 h-16 rounded-full flex items-center justify-center ${
-                      isLocked 
-                        ? 'bg-gray-300 dark:bg-gray-600' 
-                        : level.progress >= 70 
-                          ? 'bg-green-500' 
-                          : level.progress >= 50 
-                            ? 'bg-yellow-500' 
-                            : 'bg-red-500'
-                    }`}>
+                    <div className={`relative z-10 flex-shrink-0 w-16 h-16 rounded-full flex items-center justify-center ${isLocked
+                      ? 'bg-gray-300 dark:bg-gray-600'
+                      : level.progress >= 70
+                        ? 'bg-green-500'
+                        : level.progress >= 50
+                          ? 'bg-yellow-500'
+                          : 'bg-red-500'
+                      }`}>
                       {isLocked ? (
                         <span className="text-2xl">🔒</span>
                       ) : level.progress === 100 ? (
@@ -508,17 +512,16 @@ const Courses = () => {
                         <span className="text-white font-bold text-lg">{level.levelNumber}</span>
                       )}
                     </div>
-                    
+
                     {/* Content */}
                     <div className={`flex-1 pb-8 ${index < unlockedLevels.length - 1 ? 'border-b border-gray-200 dark:border-gray-700' : ''}`}>
                       <div className="card">
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex-1">
-                            <h3 className={`text-xl font-bold mb-2 ${
-                              isLocked 
-                                ? 'text-gray-400 dark:text-gray-500' 
-                                : 'text-gray-800 dark:text-white'
-                            }`}>
+                            <h3 className={`text-xl font-bold mb-2 ${isLocked
+                              ? 'text-gray-400 dark:text-gray-500'
+                              : 'text-gray-800 dark:text-white'
+                              }`}>
                               {level.name}
                             </h3>
                             {!isLocked && (
@@ -527,10 +530,9 @@ const Courses = () => {
                                   <span className="text-sm text-gray-600 dark:text-gray-400">
                                     Tiến độ: {level.completedCount}/{level.totalCount} bài tập
                                   </span>
-                                  <span className={`text-sm font-bold ${
-                                    level.progress >= 70 ? 'text-green-600' :
+                                  <span className={`text-sm font-bold ${level.progress >= 70 ? 'text-green-600' :
                                     level.progress >= 50 ? 'text-yellow-600' : 'text-red-600'
-                                  }`}>
+                                    }`}>
                                     {level.progress}%
                                   </span>
                                 </div>
@@ -555,24 +557,22 @@ const Courses = () => {
                           <div className="space-y-3">
                             {level.exercises.map((exercise) => {
                               const isCompleted = savedCompleted.includes(exercise.id) || exercise.completed;
-                              
+
                               return (
                                 <div
                                   key={exercise.id}
-                                  className={`p-4 rounded-lg border-2 ${
-                                    isCompleted
-                                      ? 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700'
-                                      : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600'
-                                  } transition-all`}
+                                  className={`p-4 rounded-lg border-2 ${isCompleted
+                                    ? 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700'
+                                    : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600'
+                                    } transition-all`}
                                 >
                                   <div className="flex items-start justify-between">
                                     <div className="flex-1">
                                       <div className="flex items-center gap-2 mb-2">
-                                        <h4 className={`font-semibold ${
-                                          isCompleted 
-                                            ? 'text-green-800 dark:text-green-200' 
-                                            : 'text-gray-800 dark:text-white'
-                                        }`}>
+                                        <h4 className={`font-semibold ${isCompleted
+                                          ? 'text-green-800 dark:text-green-200'
+                                          : 'text-gray-800 dark:text-white'
+                                          }`}>
                                           {exercise.title}
                                         </h4>
                                         {isCompleted && (
@@ -580,11 +580,10 @@ const Courses = () => {
                                             ✓ Hoàn thành
                                           </span>
                                         )}
-                                        <span className={`badge ${
-                                          exercise.level === 'Easy' ? 'bg-green-100 text-green-800' :
+                                        <span className={`badge ${exercise.level === 'Easy' ? 'bg-green-100 text-green-800' :
                                           exercise.level === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                                          'bg-red-100 text-red-800'
-                                        }`}>
+                                            'bg-red-100 text-red-800'
+                                          }`}>
                                           {exercise.level}
                                         </span>
                                       </div>
@@ -610,15 +609,13 @@ const Courses = () => {
                                       ) : (
                                         <button
                                           onClick={() => {
-                                            // TODO: Navigate to exercise page
-                                            setToast({
-                                              message: `Bắt đầu làm bài: ${exercise.title}`,
-                                              type: 'info'
-                                            });
+                                            setShowSubmitModal(exercise);
+                                            setSubmissionCode('');
+                                            setSubmissionResult(null);
                                           }}
                                           className="btn btn-primary text-sm"
                                         >
-                                          🚀 Làm bài
+                                          ✏️ Làm bài
                                         </button>
                                       )}
                                     </div>
@@ -636,6 +633,108 @@ const Courses = () => {
             </div>
           </div>
         </div>
+
+        {/* Modal: Nộp bài */}
+        {showSubmitModal && createPortal(
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4" style={{ zIndex: 99999, position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, margin: 0 }}>
+            <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    Nộp bài: {showSubmitModal.title}
+                  </h2>
+                  <button
+                    onClick={() => {
+                      setShowSubmitModal(null);
+                      setSubmissionCode('');
+                      setSubmissionResult(null);
+                    }}
+                    className="text-gray-500 hover:text-gray-700 text-2xl"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                {!submissionResult ? (
+                  <>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Nhập code của bạn:
+                      </label>
+                      <textarea
+                        value={submissionCode}
+                        onChange={(e) => setSubmissionCode(e.target.value)}
+                        placeholder="// Viết code của bạn ở đây..."
+                        className="w-full h-64 p-3 border border-gray-300 rounded-lg font-mono text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={async () => {
+                          if (!submissionCode.trim()) {
+                            setToast({ message: 'Vui lòng nhập code!', type: 'warning' });
+                            return;
+                          }
+
+                          setIsSubmitting(true);
+                          await new Promise(resolve => setTimeout(resolve, 1500));
+
+                          setSubmissionResult({
+                            passed: Math.random() > 0.3,
+                            score: Math.floor(Math.random() * 30) + 70,
+                            testsPassed: Math.floor(Math.random() * 3) + 7,
+                            testsTotal: 10
+                          });
+                          setIsSubmitting(false);
+                        }}
+                        disabled={isSubmitting}
+                        className="btn-primary flex-1"
+                      >
+                        {isSubmitting ? 'Đang chấm...' : 'Nộp bài'}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowSubmitModal(null);
+                          setSubmissionCode('');
+                        }}
+                        className="btn-secondary"
+                      >
+                        Hủy
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="space-y-4">
+                    <div className={`p-4 rounded-lg ${submissionResult.passed ? 'bg-green-50 border-2 border-green-300' : 'bg-red-50 border-2 border-red-300'
+                      }`}>
+                      <h3 className={`text-xl font-bold mb-2 ${submissionResult.passed ? 'text-green-800' : 'text-red-800'
+                        }`}>
+                        {submissionResult.passed ? '✅ Chúc mừng! Bài làm đúng' : '❌ Bài làm chưa đúng'}
+                      </h3>
+                      <p className="text-gray-700">
+                        Điểm: <span className="font-bold">{submissionResult.score}/100</span>
+                      </p>
+                      <p className="text-gray-700">
+                        Test cases: {submissionResult.testsPassed}/{submissionResult.testsTotal} passed
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setShowSubmitModal(null);
+                        setSubmissionCode('');
+                        setSubmissionResult(null);
+                      }}
+                      className="btn-primary w-full"
+                    >
+                      Đóng
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          , document.body
+        )}
       </div>
     );
   }
@@ -659,36 +758,33 @@ const Courses = () => {
           <h1 className="text-2xl font-bold text-gray-800 mb-2">Danh sách Khóa học</h1>
           <p className="text-gray-600">Đăng ký và quản lý các khóa học của bạn</p>
         </div>
-        
+
         {/* Filter */}
         <div className="flex gap-2">
           <button
             onClick={() => setFilterStatus('all')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filterStatus === 'all'
-                ? 'bg-primary-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filterStatus === 'all'
+              ? 'bg-primary-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
           >
             Tất cả ({availableCourses.length})
           </button>
           <button
             onClick={() => setFilterStatus('enrolled')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filterStatus === 'enrolled'
-                ? 'bg-primary-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filterStatus === 'enrolled'
+              ? 'bg-primary-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
           >
             Đã đăng ký ({enrolledCourses.length})
           </button>
           <button
             onClick={() => setFilterStatus('available')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filterStatus === 'available'
-                ? 'bg-primary-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filterStatus === 'available'
+              ? 'bg-primary-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
           >
             Chưa đăng ký ({availableCourses.length - enrolledCourses.length})
           </button>
@@ -717,7 +813,7 @@ const Courses = () => {
         </div>
         <div className="card text-center">
           <div className="text-3xl font-bold text-orange-600 mb-2">
-            {enrolledCourses.length > 0 
+            {enrolledCourses.length > 0
               ? Math.round(enrolledCourses.reduce((sum, c) => sum + c.progress, 0) / enrolledCourses.length)
               : 0}%
           </div>
@@ -734,19 +830,19 @@ const Courses = () => {
               {enrolledCourses.map((course) => {
                 const progress = course.progress || 0;
                 const gaugeSize = 220; // Kích thước cho 4 cột trên 1 hàng
-                
-                  return (
+
+                return (
                   <div key={course.id} className="flex flex-col items-center justify-center p-2">
                     <h3 className="font-semibold text-gray-800 dark:text-white mb-2 text-center text-base">
                       {course.name}
                     </h3>
                     <div className="w-full flex justify-center">
                       <GaugeChart value={progress} courseName={course.name} size={gaugeSize} />
-                          </div>
-                      </div>
-                    );
-                })}
-          </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           ) : (
             <div className="flex items-center justify-center h-[420px] text-gray-500 dark:text-gray-400">
               Đang tải biểu đồ...
@@ -776,7 +872,7 @@ const Courses = () => {
         {filteredCourses.map((course) => {
           const enrolled = isEnrolled(course.id);
           const enrolledCourse = enrolledCourses.find(c => c.id === course.id);
-          
+
           return (
             <div
               key={course.id}
@@ -838,10 +934,9 @@ const Courses = () => {
                     </div>
                     <div className="bg-gray-200 rounded-full h-2">
                       <div
-                        className={`h-2 rounded-full transition-all ${
-                          enrolledCourse.progress === 100 ? 'bg-green-500' : 
+                        className={`h-2 rounded-full transition-all ${enrolledCourse.progress === 100 ? 'bg-green-500' :
                           enrolledCourse.progress >= 50 ? 'bg-blue-500' : 'bg-yellow-500'
-                        }`}
+                          }`}
                         style={{ width: `${enrolledCourse.progress}%` }}
                       ></div>
                     </div>
@@ -865,12 +960,12 @@ const Courses = () => {
                     >
                       📄 Chi tiết
                     </button>
-                  <button
-                    onClick={() => handleEnroll(course)}
-                    className="flex-1 btn-accent text-sm"
-                  >
-                    ✅ Đăng ký ngay
-                  </button>
+                    <button
+                      onClick={() => handleEnroll(course)}
+                      className="flex-1 btn-accent text-sm"
+                    >
+                      ✅ Đăng ký ngay
+                    </button>
                   </>
                 )}
               </div>
@@ -881,14 +976,14 @@ const Courses = () => {
 
       {/* Course Detail Modal */}
       {selectedCourse && (
-        <div 
-          className="bg-black bg-opacity-60 flex items-center justify-center p-4" 
-          style={{ 
-            position: 'fixed', 
-            top: 0, 
-            left: 0, 
-            right: 0, 
-            bottom: 0, 
+        <div
+          className="bg-black bg-opacity-60 flex items-center justify-center p-4"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             zIndex: 9999,
             margin: 0,
             padding: '1rem'
@@ -946,8 +1041,8 @@ const Courses = () => {
                 <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">Nội dung Khóa học</h3>
                 <div className="space-y-3">
                   {selectedCourse.topics.map((topic, idx) => (
-                    <div 
-                      key={idx} 
+                    <div
+                      key={idx}
                       className="topic-item rounded-lg p-4 hover:shadow-lg transition-all hover:scale-[1.02] border-l-4 border-primary-500 dark:border-primary-400 dark:bg-gray-700/50"
                     >
                       <div className="flex items-start space-x-3">
@@ -1025,14 +1120,14 @@ const Courses = () => {
 
       {/* Enroll Confirmation Modal */}
       {showEnrollModal && (
-        <div 
-          className="bg-black bg-opacity-60 flex items-center justify-center p-4" 
-          style={{ 
-            position: 'fixed', 
-            top: 0, 
-            left: 0, 
-            right: 0, 
-            bottom: 0, 
+        <div
+          className="bg-black bg-opacity-60 flex items-center justify-center p-4"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             zIndex: 9999,
             margin: 0,
             padding: '1rem'
@@ -1069,13 +1164,115 @@ const Courses = () => {
               </button>
               <button
                 onClick={confirmEnroll}
-                  className="btn-accent"
+                className="btn-accent"
               >
                 ✅ Xác nhận đăng ký
               </button>
             </div>
           </div>
         </div>
+      )}
+
+      {/* Modal: Nộp bài */}
+      {showSubmitModal && createPortal(
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4" style={{ zIndex: 99999, position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, margin: 0 }}>
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Nộp bài: {showSubmitModal.title}
+                </h2>
+                <button
+                  onClick={() => {
+                    setShowSubmitModal(null);
+                    setSubmissionCode('');
+                    setSubmissionResult(null);
+                  }}
+                  className="text-gray-500 hover:text-gray-700 text-2xl"
+                >
+                  ×
+                </button>
+              </div>
+
+              {!submissionResult ? (
+                <>
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Nhập code của bạn:
+                    </label>
+                    <textarea
+                      value={submissionCode}
+                      onChange={(e) => setSubmissionCode(e.target.value)}
+                      placeholder="// Viết code của bạn ở đây..."
+                      className="w-full h-64 p-3 border border-gray-300 rounded-lg font-mono text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={async () => {
+                        if (!submissionCode.trim()) {
+                          setToast({ message: 'Vui lòng nhập code!', type: 'warning' });
+                          return;
+                        }
+
+                        setIsSubmitting(true);
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+
+                        setSubmissionResult({
+                          passed: Math.random() > 0.3,
+                          score: Math.floor(Math.random() * 30) + 70,
+                          testsPassed: Math.floor(Math.random() * 3) + 7,
+                          testsTotal: 10
+                        });
+                        setIsSubmitting(false);
+                      }}
+                      disabled={isSubmitting}
+                      className="btn-primary flex-1"
+                    >
+                      {isSubmitting ? 'Đang chấm...' : 'Nộp bài'}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowSubmitModal(null);
+                        setSubmissionCode('');
+                      }}
+                      className="btn-secondary"
+                    >
+                      Hủy
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="space-y-4">
+                  <div className={`p-4 rounded-lg ${submissionResult.passed ? 'bg-green-50 border-2 border-green-300' : 'bg-red-50 border-2 border-red-300'
+                    }`}>
+                    <h3 className={`text-xl font-bold mb-2 ${submissionResult.passed ? 'text-green-800' : 'text-red-800'
+                      }`}>
+                      {submissionResult.passed ? '✅ Chúc mừng! Bài làm đúng' : '❌ Bài làm chưa đúng'}
+                    </h3>
+                    <p className="text-gray-700">
+                      Điểm: <span className="font-bold">{submissionResult.score}/100</span>
+                    </p>
+                    <p className="text-gray-700">
+                      Test cases: {submissionResult.testsPassed}/{submissionResult.testsTotal} passed
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setShowSubmitModal(null);
+                      setSubmissionCode('');
+                      setSubmissionResult(null);
+                    }}
+                    className="btn-primary w-full"
+                  >
+                    Đóng
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        , document.body
       )}
 
     </div>

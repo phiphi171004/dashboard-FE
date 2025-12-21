@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { softSkills } from '../data/data';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const Profile = () => {
   const [showReportPreview, setShowReportPreview] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+  const [isDownloading, setIsDownloading] = useState(false);
+  const reportRef = useRef(null);
+
   // Khởi tạo state từ sessionStorage ngay từ đầu
   const [enrolledCourses, setEnrolledCourses] = useState(() => {
     const saved = sessionStorage.getItem('enrolledCourses');
@@ -34,7 +38,7 @@ const Profile = () => {
   const averageScore = enrolledCourses.length > 0
     ? (enrolledCourses.reduce((sum, c) => sum + (c.grade || 0), 0) / enrolledCourses.length).toFixed(1)
     : 0;
-  const avgProgress = enrolledCourses.length > 0 
+  const avgProgress = enrolledCourses.length > 0
     ? Math.round(enrolledCourses.reduce((sum, c) => sum + (c.progress || 0), 0) / enrolledCourses.length)
     : 0;
   const highestScore = enrolledCourses.length > 0
@@ -72,7 +76,7 @@ const Profile = () => {
 
       {/* Student Profile Card */}
       <div className="card relative overflow-hidden">
-        <div 
+        <div
           className="absolute inset-0 bg-gradient-to-r from-primary-500 to-primary-700"
           style={{ background: 'linear-gradient(135deg, #3f51b5 0%, #283593 100%)' }}
         ></div>
@@ -95,9 +99,9 @@ const Profile = () => {
                 <p className="text-white font-medium text-sm">{userInfo?.email || ''}</p>
                 <div className="flex items-center space-x-2 mt-2">
                   <span className="bg-white/90 text-primary-700 px-3 py-1 rounded-full text-xs font-bold">
-                    {userInfo?.role === 'sinh_vien' ? 'Sinh Viên' : 
-                     userInfo?.role === 'giang_vien' ? 'Giảng Viên' : 
-                     userInfo?.role === 'manage_nghanh' ? 'Quản Lý Ngành' : 'User'}
+                    {userInfo?.role === 'sinh_vien' ? 'Sinh Viên' :
+                      userInfo?.role === 'giang_vien' ? 'Giảng Viên' :
+                        userInfo?.role === 'manage_nghanh' ? 'Quản Lý Ngành' : 'User'}
                   </span>
                   <span className="bg-success-500 text-white px-3 py-1 rounded-full text-xs font-bold">
                     Nguy cơ: Low
@@ -128,7 +132,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="card text-center hover:scale-105 transition-transform duration-200 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-success-50 to-success-100"></div>
           <div className="relative z-10">
@@ -140,7 +144,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="card text-center hover:scale-105 transition-transform duration-200 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-primary-100"></div>
           <div className="relative z-10">
@@ -152,7 +156,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="card text-center hover:scale-105 transition-transform duration-200 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-accent-50 to-accent-100"></div>
           <div className="relative z-10">
@@ -273,37 +277,34 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className={`mt-6 p-6 rounded-xl border-l-4 ${
-              avgProgress >= 70 
-                ? 'bg-gradient-to-r from-success-50 to-success-100 border-success-500' 
-                : avgProgress >= 40
+            <div className={`mt-6 p-6 rounded-xl border-l-4 ${avgProgress >= 70
+              ? 'bg-gradient-to-r from-success-50 to-success-100 border-success-500'
+              : avgProgress >= 40
                 ? 'bg-gradient-to-r from-warning-50 to-warning-100 border-warning-500'
                 : 'bg-gradient-to-r from-danger-50 to-danger-100 border-danger-500'
-            }`}>
+              }`}>
               <div className="flex items-center space-x-3 mb-3">
                 <span className="text-3xl">
-                  {avgProgress >= 70 ? '✅' : 
-                   avgProgress >= 40 ? '⚠️' : '🚨'}
+                  {avgProgress >= 70 ? '✅' :
+                    avgProgress >= 40 ? '⚠️' : '🚨'}
                 </span>
                 <div>
                   <p className="text-lg font-bold text-gray-900">
-                    Nguy cơ học kém: 
-                    <span className={`ml-2 font-bold ${
-                      avgProgress >= 70 ? 'text-success-600' : avgProgress >= 40 ? 'text-warning-600' : 'text-danger-600'
-                    }`}>
+                    Nguy cơ học kém:
+                    <span className={`ml-2 font-bold ${avgProgress >= 70 ? 'text-success-600' : avgProgress >= 40 ? 'text-warning-600' : 'text-danger-600'
+                      }`}>
                       {avgProgress >= 70 ? 'Low' : avgProgress >= 40 ? 'Medium' : 'High'}
                     </span>
                   </p>
                 </div>
               </div>
-              <p className={`text-sm font-bold ${
-                avgProgress >= 70 ? 'text-success-700' : avgProgress >= 40 ? 'text-warning-700' : 'text-danger-700'
-              }`}>
-                {avgProgress >= 70 
-                  ? '🎉 Tiến độ học tập tốt! Hãy duy trì nhịp độ này.' 
+              <p className={`text-sm font-bold ${avgProgress >= 70 ? 'text-success-700' : avgProgress >= 40 ? 'text-warning-700' : 'text-danger-700'
+                }`}>
+                {avgProgress >= 70
+                  ? '🎉 Tiến độ học tập tốt! Hãy duy trì nhịp độ này.'
                   : avgProgress >= 40
-                  ? '⚠️ Cần chú ý hơn đến việc học. Hãy nộp bài đúng hạn.'
-                  : '🚨 Cảnh báo! Cần cải thiện tiến độ học tập ngay.'}
+                    ? '⚠️ Cần chú ý hơn đến việc học. Hãy nộp bài đúng hạn.'
+                    : '🚨 Cảnh báo! Cần cải thiện tiến độ học tập ngay.'}
               </p>
             </div>
           </div>
@@ -313,100 +314,100 @@ const Profile = () => {
       {/* DT062: Dashboard kỹ năng mềm với Radar Chart */}
       <div className="card">
         <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">📊 Dashboard Kỹ năng Mềm</h2>
-          <div className="w-full h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <RadarChart data={[
-                { 
-                  skill: 'Giao tiếp', 
-                  value: softSkills.communication * 20, 
-                  fullMark: 100 
-                },
-                { 
-                  skill: 'Làm việc nhóm', 
-                  value: softSkills.teamwork * 20, 
-                  fullMark: 100 
-                },
-                { 
-                  skill: 'Quản lý thời gian', 
-                  value: softSkills.timeManagement * 20, 
-                  fullMark: 100 
-                },
-                { 
-                  skill: 'Giải quyết vấn đề', 
-                  value: softSkills.problemSolving * 20, 
-                  fullMark: 100 
-                },
-                { 
-                  skill: 'Sáng tạo', 
-                  value: softSkills.creativity * 20, 
-                  fullMark: 100 
-                },
-                { 
-                  skill: 'Lãnh đạo', 
-                  value: softSkills.leadership * 20, 
-                  fullMark: 100 
-                }
-              ]}>
-                <PolarGrid stroke="#e5e7eb" />
-                <PolarAngleAxis 
-                  dataKey="skill" 
-                  tick={{ fill: '#4b5563', fontSize: 12, fontWeight: 600 }}
-                />
-                <PolarRadiusAxis 
-                  angle={90} 
-                  domain={[0, 100]} 
-                  tick={{ fill: '#6b7280', fontSize: 10 }}
-                />
-                <Radar
-                  name="Kỹ năng Mềm"
-                  dataKey="value"
-                  stroke="#3f51b5"
-                  fill="#3f51b5"
-                  fillOpacity={0.6}
-                  strokeWidth={2}
-                />
-                <Legend />
-                <Tooltip 
-                  formatter={(value) => [`${value}%`, 'Điểm số']}
-                  contentStyle={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                    border: '1px solid #3f51b5',
-                    borderRadius: '8px',
-                  }}
-                />
-              </RadarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3">
-            {Object.entries(softSkills).map(([skill, score]) => {
-              const skillLabels = {
-                communication: 'Giao tiếp',
-                teamwork: 'Làm việc nhóm',
-                timeManagement: 'Quản lý thời gian',
-                problemSolving: 'Giải quyết vấn đề',
-                creativity: 'Sáng tạo',
-                leadership: 'Lãnh đạo'
-              };
-              return (
-                <div key={skill} className="bg-gray-50 rounded-lg p-3 text-center">
-                  <div className="text-sm font-medium text-gray-700 mb-1">{skillLabels[skill]}</div>
-                  <div className="text-lg font-bold text-primary-500">{score.toFixed(1)}/5.0</div>
-                </div>
-              );
-            })}
+        <div className="w-full h-80">
+          <ResponsiveContainer width="100%" height="100%">
+            <RadarChart data={[
+              {
+                skill: 'Giao tiếp',
+                value: softSkills.communication * 20,
+                fullMark: 100
+              },
+              {
+                skill: 'Làm việc nhóm',
+                value: softSkills.teamwork * 20,
+                fullMark: 100
+              },
+              {
+                skill: 'Quản lý thời gian',
+                value: softSkills.timeManagement * 20,
+                fullMark: 100
+              },
+              {
+                skill: 'Giải quyết vấn đề',
+                value: softSkills.problemSolving * 20,
+                fullMark: 100
+              },
+              {
+                skill: 'Sáng tạo',
+                value: softSkills.creativity * 20,
+                fullMark: 100
+              },
+              {
+                skill: 'Lãnh đạo',
+                value: softSkills.leadership * 20,
+                fullMark: 100
+              }
+            ]}>
+              <PolarGrid stroke="#e5e7eb" />
+              <PolarAngleAxis
+                dataKey="skill"
+                tick={{ fill: '#4b5563', fontSize: 12, fontWeight: 600 }}
+              />
+              <PolarRadiusAxis
+                angle={90}
+                domain={[0, 100]}
+                tick={{ fill: '#6b7280', fontSize: 10 }}
+              />
+              <Radar
+                name="Kỹ năng Mềm"
+                dataKey="value"
+                stroke="#3f51b5"
+                fill="#3f51b5"
+                fillOpacity={0.6}
+                strokeWidth={2}
+              />
+              <Legend />
+              <Tooltip
+                formatter={(value) => [`${value}%`, 'Điểm số']}
+                contentStyle={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                  border: '1px solid #3f51b5',
+                  borderRadius: '8px',
+                }}
+              />
+            </RadarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3">
+          {Object.entries(softSkills).map(([skill, score]) => {
+            const skillLabels = {
+              communication: 'Giao tiếp',
+              teamwork: 'Làm việc nhóm',
+              timeManagement: 'Quản lý thời gian',
+              problemSolving: 'Giải quyết vấn đề',
+              creativity: 'Sáng tạo',
+              leadership: 'Lãnh đạo'
+            };
+            return (
+              <div key={skill} className="bg-gray-50 rounded-lg p-3 text-center">
+                <div className="text-sm font-medium text-gray-700 mb-1">{skillLabels[skill]}</div>
+                <div className="text-lg font-bold text-primary-500">{score.toFixed(1)}/5.0</div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
       {/* Report Preview Modal */}
       {showReportPreview && (
-        <div 
-          className="bg-black bg-opacity-60 flex items-center justify-center p-4" 
-          style={{ 
-            position: 'fixed', 
-            top: 0, 
-            left: 0, 
-            right: 0, 
-            bottom: 0, 
+        <div
+          className="bg-black bg-opacity-60 flex items-center justify-center p-4"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             zIndex: 9999,
             margin: 0,
             padding: '1rem'
@@ -425,7 +426,7 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div ref={reportRef} className="p-6 space-y-6">
               <div className="text-center border-b border-gray-200 pb-6">
                 <img
                   src={getAvatar()}
@@ -447,7 +448,7 @@ const Profile = () => {
                   <div className="bg-gray-50 p-3 rounded">
                     <p className="text-gray-700 font-medium">Tiến độ:</p>
                     <p className="font-bold text-lg text-success-600">
-                      {enrolledCourses.length > 0 
+                      {enrolledCourses.length > 0
                         ? Math.round(enrolledCourses.reduce((sum, c) => sum + c.progress, 0) / enrolledCourses.length)
                         : 0}%
                     </p>
@@ -471,7 +472,7 @@ const Profile = () => {
                   </span>
                   <span className="bg-primary-50 border border-primary-300 px-3 py-1 rounded-full text-sm text-gray-800 font-semibold">
                     🎓 {enrolledCourses.length} khóa học
-                    </span>
+                  </span>
                 </div>
               </div>
 
@@ -489,8 +490,85 @@ const Profile = () => {
               >
                 Đóng
               </button>
-              <button className="btn-primary">
-                📥 Tải xuống PDF
+              <button
+                onClick={async () => {
+                  setIsDownloading(true);
+                  try {
+                    // Simple approach: use window.print() for PDF
+                    const printWindow = window.open('', '_blank');
+                    const reportContent = reportRef.current.innerHTML;
+
+                    printWindow.document.write(`
+                      <!DOCTYPE html>
+                      <html>
+                        <head>
+                          <title>Báo cáo Học tập - ${userInfo?.mssv || 'SV'}</title>
+                          <style>
+                            body {
+                              font-family: Arial, sans-serif;
+                              padding: 20px;
+                              background: white;
+                            }
+                            .bg-gray-50 { background-color: #f9fafb !important; }
+                            .text-gray-700 { color: #374151 !important; }
+                            .text-gray-900 { color: #111827 !important; }
+                            .text-primary-500 { color: #3f51b5 !important; }
+                            .text-success-600 { color: #16a34a !important; }
+                            .font-bold { font-weight: bold !important; }
+                            .font-medium { font-medium !important; }
+                            .text-lg { font-size: 1.125rem !important; }
+                            .text-xl { font-size: 1.25rem !important; }
+                            .text-sm { font-size: 0.875rem !important; }
+                            .text-xs { font-size: 0.75rem !important; }
+                            .mb-3 { margin-bottom: 0.75rem !important; }
+                            .mb-4 { margin-bottom: 1rem !important; }
+                            .mb-6 { margin-bottom: 1.5rem !important; }
+                            .p-3 { padding: 0.75rem !important; }
+                            .rounded { border-radius: 0.25rem !important; }
+                            .border-b { border-bottom: 1px solid #e5e7eb !important; }
+                            .pb-6 { padding-bottom: 1.5rem !important; }
+                            .pt-4 { padding-top: 1rem !important; }
+                            .grid { display: grid !important; }
+                            .grid-cols-2 { grid-template-columns: repeat(2, 1fr) !important; }
+                            .gap-4 { gap: 1rem !important; }
+                            .gap-2 { gap: 0.5rem !important; }
+                            .flex { display: flex !important; }
+                            .flex-wrap { flex-wrap: wrap !important; }
+                            .text-center { text-align: center !important; }
+                            .mx-auto { margin-left: auto !important; margin-right: auto !important; }
+                            .border-4 { border-width: 4px !important; }
+                            .border-primary-500 { border-color: #3f51b5 !important; }
+                            .rounded-full { border-radius: 9999px !important; }
+                            .w-24 { width: 6rem !important; }
+                            .h-24 { height: 6rem !important; }
+                            img { max-width: 100% !important; }
+                          </style>
+                        </head>
+                        <body>
+                          ${reportContent}
+                          <script>
+                            window.onload = function() {
+                              setTimeout(function() {
+                                window.print();
+                                window.close();
+                              }, 500);
+                            };
+                          </script>
+                        </body>
+                      </html>
+                    `);
+                    printWindow.document.close();
+
+                    setIsDownloading(false);
+                  } catch (error) {
+                    console.error('Error generating PDF:', error);
+                    setIsDownloading(false);
+                  }
+                }}
+                disabled={isDownloading}
+                className="btn-primary"
+              >
+                {isDownloading ? '⏳ Đang chuẩn bị...' : '📥 Tải xuống PDF'}
               </button>
             </div>
           </div>
