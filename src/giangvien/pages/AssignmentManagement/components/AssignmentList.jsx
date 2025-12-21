@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, Users, Eye, Edit, Trash2, CheckCircle, AlertTriangle, FileText, UserCheck, UserX, AlertCircle, Info } from 'lucide-react';
+import { getAssignmentStudentDetails } from '../../../data/assignmentsData';
+import { mockStudentTrackingData } from '../../../data/mockData';
+import localStorageService from '../../../services/localStorageService';
 
 const AssignmentList = ({ assignments, onDelete }) => {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -41,60 +44,12 @@ const AssignmentList = ({ assignments, onDelete }) => {
   };
 
   const getSubmissionDetails = (assignment) => {
-    // Danh sách đầy đủ 10 sinh viên - TẤT CẢ đều làm chung 20 bài tập
-    const ALL_STUDENTS = [
-      { id: 1, name: 'Nguyễn Văn Minh', studentId: '122000001', email: 'minh.nv@student.edu.vn', avgScore: 8.5 },
-      { id: 2, name: 'Trần Thị Hương', studentId: '122000002', email: 'huong.tt@student.edu.vn', avgScore: 8.0 },
-      { id: 3, name: 'Lê Hoàng Nam', studentId: '122000003', email: 'nam.lh@student.edu.vn', avgScore: 6.0 },
-      { id: 4, name: 'Phạm Thị Lan', studentId: '122000004', email: 'lan.pt@student.edu.vn', avgScore: 7.5 },
-      { id: 5, name: 'Vũ Đức Thành', studentId: '122000005', email: 'thanh.vd@student.edu.vn', avgScore: 9.0 },
-      { id: 6, name: 'Hoàng Thị Mai', studentId: '122000006', email: 'mai.ht@student.edu.vn', avgScore: 9.2 },
-      { id: 7, name: 'Đặng Văn Hùng', studentId: '122000007', email: 'hung.dv@student.edu.vn', avgScore: 7.2 },
-      { id: 8, name: 'Bùi Thị Ngọc', studentId: '122000008', email: 'ngoc.bt@student.edu.vn', avgScore: 8.4 },
-      { id: 9, name: 'Lý Minh Tuấn', studentId: '122000009', email: 'tuan.lm@student.edu.vn', avgScore: 4.5 },
-      { id: 10, name: 'Ngô Thị Thu', studentId: '122000010', email: 'thu.nt@student.edu.vn', avgScore: 8.6 }
-    ];
+    // Lấy dữ liệu sinh viên thực tế từ localStorage hoặc mockData
+    const storedStudents = localStorageService.getStudents();
+    const studentsToUse = storedStudents || mockStudentTrackingData.students;
     
-    // Tất cả 10 sinh viên đều làm chung 20 bài tập
-    const submitted = [];
-    const notSubmitted = [];
-    const lateSubmitted = [];
-    
-    // Sắp xếp sinh viên theo điểm trung bình (cao -> thấp) để phân loại hợp lý
-    const sortedStudents = [...ALL_STUDENTS].sort((a, b) => b.avgScore - a.avgScore);
-    
-    // Phân loại sinh viên dựa trên submittedCount và lateSubmissions của bài tập
-    const onTimeCount = assignment.submittedCount - assignment.lateSubmissions;
-    const lateCount = assignment.lateSubmissions;
-    const notSubmittedCount = assignment.totalStudents - assignment.submittedCount;
-    
-    sortedStudents.forEach((student, index) => {
-      // Tạo điểm ngẫu nhiên dựa trên điểm trung bình của sinh viên
-      const baseScore = student.avgScore;
-      const randomVariation = (Math.random() - 0.5) * 1.5; // ±0.75
-      const score = Math.max(0, Math.min(10, Math.round((baseScore + randomVariation) * 10) / 10));
-      
-      if (index < onTimeCount) {
-        // Đã nộp đúng hạn
-        submitted.push({ 
-          ...student, 
-          submittedAt: formatDate(assignment.dueDate).replace(/\//g, '/') + ' 14:30', 
-          score: score 
-        });
-      } else if (index < onTimeCount + lateCount) {
-        // Nộp muộn
-        lateSubmitted.push({ 
-          ...student, 
-          submittedAt: formatDate(assignment.dueDate).replace(/\//g, '/') + ' +2 ngày', 
-          score: Math.max(0, score - 1) // Trừ điểm nộp muộn
-        });
-      } else {
-        // Chưa nộp
-        notSubmitted.push(student);
-      }
-    });
-    
-    return { submitted, notSubmitted, lateSubmitted };
+    // Tính toán từ dữ liệu sinh viên thực tế
+    return getAssignmentStudentDetails(assignment, studentsToUse);
   };
 
   return (

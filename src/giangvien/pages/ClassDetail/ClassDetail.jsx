@@ -6,7 +6,8 @@ import StudentList from './components/StudentList';
 import AssignmentProgress from './components/AssignmentProgress';
 import ClassSchedule from './components/ClassSchedule';
 import CourseMaterials from './components/CourseMaterials';
-import { mockClassData } from '../../data/mockData';
+import { mockClassData, mockStudentTrackingData } from '../../data/mockData';
+import { getAssignmentsForClass } from '../../data/assignmentsData';
 import localStorageService from '../../services/localStorageService';
 
 const ClassDetail = () => {
@@ -59,10 +60,22 @@ const ClassDetail = () => {
         // Lấy số lượng tài liệu từ localStorage
         const materials = localStorageService.getClassMaterials(classId) || [];
         
+        // Lấy danh sách bài tập từ ASSIGNMENTS_LIST dựa trên courseId của lớp
+        const storedStudents = localStorageService.getStudents();
+        const studentsToUse = storedStudents || mockStudentTrackingData.students;
+        
+        // Lọc sinh viên trong lớp này (nếu có)
+        const classStudents = studentsToUse.filter(s => 
+          details.students.some(cs => cs.id === s.id)
+        );
+        
+        // Lấy bài tập từ ASSIGNMENTS_LIST và tính toán số liệu từ dữ liệu sinh viên
+        const assignments = getAssignmentsForClass(foundClass.courseId, classStudents);
+        
         const combinedData = {
           ...foundClass,
           students: details.students,
-          assignments: details.assignments,
+          assignments: assignments, // Sử dụng assignments từ ASSIGNMENTS_LIST
           scheduleList: scheduleList,
           materials: materials,
           enrolledStudents: details.students.length, // Đồng bộ số lượng sinh viên từ students array

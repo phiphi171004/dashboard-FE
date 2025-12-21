@@ -1,0 +1,42 @@
+Tên đề tài
+Xây dựng module tìm bạn học theo năng lực và sở thích
+
+Xây dựng module  Dashboard quản lý tiến độ học lập trình cho Quản lý ngành
+
+Xây dựng module Dashboard quản lý tiến độ học lập trình cho giảng viên
+Xây dựng module Dashboard quản lý tiến độ học lập trình cho giảng viên
+Xây dựng module Dashboard quản lý tiến độ học lập trình cho sinh viên
+
+Xây dựng Module thiết kế Lộ trình Học tập Thích ứng theo năng lực (Adaptive Learning Path):
+Xây dựng module hiển thị và tích hợp hệ thống gợi ý bài tập cá nhân hóa trong LMS.
+
+
+
+Xây dựng module thao tác mới hệ thống LMS quan API
+
+Xây dựng ngân hàng bài tập lập trình theo cấp độ để phục vụ hệ thống gợi ý cá nhân hóa
+
+Xây dựng hệ thống chấm điểm Python tự động trên LMS - Cấu trúc dữ liệu và giải thuật
+
+Xây dựng hệ thống chấm điểm Python tự động trên LMS - OOP
+Xây dựng module Hệ thống gợi ý lỗi và feedback tự động trong bài các môn lập trình 2
+Xây dựng module Hệ thống gợi ý lỗi và feedback tự động trong bài các môn lập trình
+Xây dựng hệ thống chấm điểm Python tự động trên LMS - Nhập môn lập trình
+
+Ứng dụng AI phát hiện đạo văn trong bài tập lập trình
+
+Xây dựng mô hình phân tích mức độ hoàn thành và gợi ý cấp độ học tập tiếp theo cho sinh viên
+
+Đề xuất bài tập thích ứng theo tiến trình học tập (Adaptive Recommendation)
+Xây dựng module Phân loại trình độ sinh viên dựa trên điểm số và hành vi học tập
+
+Xây dựng module Phân loại và chia nhóm học tập cho  sinh viên theo nhiều tiêu chí
+
+Xây dựng Hệ thống Cảnh báo, và can thiếp sớm với sinh viên yếu trong các môn lập trình
+Đề xuất bài tập theo cấp độ năng lực (Level-based Recommendation)
+
+Xây dựng module Phân tích hành vi của  sinh viên khi tương tác với LMS để phát hiện nguy cơ học kém
+
+Xây dựng hệ thống Dashboard trực quan hóa và gợi ý cải thiện kỹ năng mềm cho sinh viên
+
+Xây dựng mô hình phân tích và đánh giá kỹ năng mềm của sinh viên dựa trên dữ liệu học tập và hoạt động nhóm

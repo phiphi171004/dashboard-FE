@@ -5,7 +5,9 @@ import AssignmentDetailHeader from './components/AssignmentDetailHeader';
 import SubmissionList from './components/SubmissionList';
 import AssignmentAnalytics from './components/AssignmentAnalytics';
 import GradingPanel from './components/GradingPanel';
-import { mockAssignmentData } from '../../data/mockData';
+import { mockAssignmentData, mockStudentTrackingData } from '../../data/mockData';
+import { calculateAssignmentStatsFromStudents, getAssignmentStudentDetails } from '../../data/assignmentsData';
+import localStorageService from '../../services/localStorageService';
 
 const AssignmentDetail = () => {
   const { id } = useParams();
@@ -22,11 +24,83 @@ const AssignmentDetail = () => {
       setLoading(true);
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 800));
-      const foundAssignment = mockAssignmentData.assignments.find(a => a.id === parseInt(id));
+      
+      // Lấy dữ liệu sinh viên để tính toán số liệu chính xác
+      const storedStudents = localStorageService.getStudents();
+      const studentsToUse = storedStudents || mockStudentTrackingData.students;
+      
+      // Tính toán số liệu bài tập từ dữ liệu sinh viên
+      const assignmentsWithStats = calculateAssignmentStatsFromStudents(
+        studentsToUse,
+        mockAssignmentData.assignments
+      );
+      
+      const foundAssignment = assignmentsWithStats.find(a => a.id === parseInt(id));
       if (foundAssignment) {
+        // Tính toán danh sách submissions từ dữ liệu sinh viên thực tế
+        const { submitted, notSubmitted, lateSubmitted } = getAssignmentStudentDetails(foundAssignment, studentsToUse);
+        
+        // Helper để tạo ngày nộp hợp lý nếu chưa có
+        const generateSubmissionDate = (submittedDate, dueDate, isLate = false) => {
+          if (submittedDate) {
+            // Nếu có submittedDate, dùng nó
+            return submittedDate;
+          }
+          
+          // Nếu không có submittedDate nhưng đã nộp (có điểm), tạo ngày nộp dựa trên dueDate
+          if (dueDate) {
+            const due = new Date(dueDate);
+            if (isLate) {
+              // Nộp muộn: thêm 1-3 ngày sau dueDate
+              due.setDate(due.getDate() + Math.floor(Math.random() * 3) + 1);
+              due.setHours(14, 30, 0, 0);
+            } else {
+              // Nộp đúng hạn: trừ 0-2 ngày trước dueDate
+              due.setDate(due.getDate() - Math.floor(Math.random() * 3));
+              due.setHours(7 + Math.floor(Math.random() * 12), Math.floor(Math.random() * 60), 0, 0);
+            }
+            return due.toISOString();
+          }
+          return null;
+        };
+        
+        // Chuyển đổi sang format submissions
+        const allSubmissions = [
+          ...submitted.map(s => {
+            const hasScore = s.score !== null && s.score !== undefined && s.score > 0;
+            const submittedAt = s.submittedAt || generateSubmissionDate(null, foundAssignment.dueDate, false);
+            
+            return {
+              id: s.id,
+              studentId: s.studentId,
+              studentName: s.name,
+              submittedAt: submittedAt,
+              status: hasScore ? 'graded' : 'submitted',
+              score: s.score || null,
+              feedback: null,
+              files: hasScore ? [{ name: `baitap_${s.studentId}.zip`, size: 2048, url: '#' }] : []
+            };
+          }),
+          ...lateSubmitted.map(s => {
+            const hasScore = s.score !== null && s.score !== undefined && s.score > 0;
+            const submittedAt = s.submittedAt || generateSubmissionDate(null, foundAssignment.dueDate, true);
+            
+            return {
+              id: s.id,
+              studentId: s.studentId,
+              studentName: s.name,
+              submittedAt: submittedAt,
+              status: hasScore ? 'graded' : 'late',
+              score: s.score || null,
+              feedback: null,
+              files: hasScore ? [{ name: `baitap_${s.studentId}.zip`, size: 2048, url: '#' }] : []
+            };
+          })
+        ];
+        
         setAssignment({
           ...foundAssignment,
-          submissions: mockAssignmentData.assignmentDetails.submissions,
+          submissions: allSubmissions,
           analytics: mockAssignmentData.assignmentDetails.analytics,
           files: mockAssignmentData.assignmentDetails.files
         });

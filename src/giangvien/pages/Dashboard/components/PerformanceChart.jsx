@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Calendar, TrendingUp, X, Users } from 'lucide-react';
 import { mockStudentTrackingData } from '../../../data/mockData';
@@ -16,6 +16,57 @@ const PerformanceChart = ({ data }) => {
     { value: '3months', label: '3 tháng qua' },
     { value: '6months', label: '6 tháng qua' }
   ];
+
+  // Lọc dữ liệu theo khoảng thời gian được chọn
+  const filteredData = useMemo(() => {
+    if (!data || data.length === 0) return [];
+    
+    const now = new Date('2024-12-21'); // Ngày hiện tại giả định
+    let daysToShow = 7;
+    
+    switch (timeRange) {
+      case '7days':
+        daysToShow = 7;
+        break;
+      case '30days':
+        daysToShow = 30;
+        break;
+      case '3months':
+        daysToShow = 90;
+        break;
+      case '6months':
+        daysToShow = 180;
+        break;
+      default:
+        daysToShow = 7;
+    }
+    
+    const startDate = new Date(now);
+    startDate.setDate(startDate.getDate() - daysToShow);
+    
+    // Lọc dữ liệu có fullDate trong khoảng thời gian
+    const filtered = data.filter(item => {
+      if (item.fullDate) {
+        const itemDate = new Date(item.fullDate);
+        return itemDate >= startDate && itemDate <= now;
+      }
+      return true;
+    });
+    
+    // Nếu không có dữ liệu sau khi lọc, trả về dữ liệu gốc
+    if (filtered.length === 0) return data;
+    
+    // Giới hạn số điểm dữ liệu hiển thị để biểu đồ không quá dày
+    const maxPoints = timeRange === '7days' ? 7 : timeRange === '30days' ? 10 : timeRange === '3months' ? 12 : 15;
+    
+    if (filtered.length <= maxPoints) return filtered;
+    
+    // Lấy mẫu đều các điểm dữ liệu
+    const step = Math.ceil(filtered.length / maxPoints);
+    const sampled = filtered.filter((_, index) => index % step === 0 || index === filtered.length - 1);
+    
+    return sampled;
+  }, [data, timeRange]);
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -42,6 +93,9 @@ const PerformanceChart = ({ data }) => {
     }
     return null;
   };
+
+  // Lấy giá trị mới nhất từ dữ liệu đã lọc
+  const latestData = filteredData.length > 0 ? filteredData[filteredData.length - 1] : null;
 
   return (
     <div className="card p-6">
@@ -71,7 +125,7 @@ const PerformanceChart = ({ data }) => {
       <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart 
-            data={data.map(d => ({
+            data={filteredData.map(d => ({
               ...d,
               averageScore: d.averageScore * 10,
               engagement: d.engagement * 10
@@ -128,7 +182,7 @@ const PerformanceChart = ({ data }) => {
             setSelectedMetric({
               id: 'averageScore',
               title: 'Điểm TB tháng này',
-              value: data && data.length > 0 ? data[data.length - 1].averageScore.toFixed(1) : '0',
+              value: latestData ? latestData.averageScore.toFixed(1) : '0',
               color: 'primary',
               description: 'Điểm trung bình của tất cả sinh viên trong tháng này'
             });
@@ -137,7 +191,7 @@ const PerformanceChart = ({ data }) => {
           className="text-center p-3 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors cursor-pointer"
         >
           <p className="text-2xl font-bold text-primary-600">
-            {data && data.length > 0 ? data[data.length - 1].averageScore.toFixed(1) : '0'}/10
+            {latestData ? latestData.averageScore.toFixed(1) : '0'}/10
           </p>
           <p className="text-sm text-gray-600">Điểm TB tháng này</p>
         </button>
@@ -146,7 +200,7 @@ const PerformanceChart = ({ data }) => {
             setSelectedMetric({
               id: 'completionRate',
               title: 'Tỷ lệ hoàn thành',
-              value: data && data.length > 0 ? Math.round(data[data.length - 1].completionRate) : '0',
+              value: latestData ? Math.round(latestData.completionRate) : '0',
               color: 'success',
               description: 'Tỷ lệ hoàn thành bài tập và khóa học của sinh viên'
             });
@@ -155,7 +209,7 @@ const PerformanceChart = ({ data }) => {
           className="text-center p-3 bg-success-50 rounded-lg hover:bg-success-100 transition-colors cursor-pointer"
         >
           <p className="text-2xl font-bold text-success-600">
-            {data && data.length > 0 ? Math.round(data[data.length - 1].completionRate) : '0'}%
+            {latestData ? Math.round(latestData.completionRate) : '0'}%
           </p>
           <p className="text-sm text-gray-600">Tỷ lệ hoàn thành</p>
         </button>
@@ -164,7 +218,7 @@ const PerformanceChart = ({ data }) => {
             setSelectedMetric({
               id: 'engagement',
               title: 'Mức độ tham gia',
-              value: data && data.length > 0 ? data[data.length - 1].engagement.toFixed(1) : '0',
+              value: latestData ? latestData.engagement.toFixed(1) : '0',
               color: 'warning',
               description: 'Mức độ tham gia và tương tác của sinh viên trong lớp học'
             });
@@ -173,7 +227,7 @@ const PerformanceChart = ({ data }) => {
           className="text-center p-3 bg-warning-50 rounded-lg hover:bg-warning-100 transition-colors cursor-pointer"
         >
           <p className="text-2xl font-bold text-warning-600">
-            {data && data.length > 0 ? data[data.length - 1].engagement.toFixed(1) : '0'}/10
+            {latestData ? latestData.engagement.toFixed(1) : '0'}/10
           </p>
           <p className="text-sm text-gray-600">Mức độ tham gia</p>
         </button>

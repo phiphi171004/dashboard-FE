@@ -5,7 +5,9 @@ import AssignmentStats from './components/AssignmentStats';
 import AssignmentFilters from './components/AssignmentFilters';
 import AssignmentList from './components/AssignmentList';
 import SmartSearchInput from '../../components/SmartSearchInput';
-import { mockAssignmentData } from '../../data/mockData';
+import { mockAssignmentData, mockStudentTrackingData } from '../../data/mockData';
+import { calculateAssignmentStatsFromStudents } from '../../data/assignmentsData';
+import localStorageService from '../../services/localStorageService';
 
 const AssignmentManagement = () => {
   const [assignments, setAssignments] = useState([]);
@@ -19,6 +21,14 @@ const AssignmentManagement = () => {
 
   useEffect(() => {
     loadAssignments();
+    
+    // Lắng nghe sự kiện refresh từ dataService
+    const handleRefresh = () => loadAssignments();
+    window.addEventListener('dataRefresh', handleRefresh);
+    
+    return () => {
+      window.removeEventListener('dataRefresh', handleRefresh);
+    };
   }, []);
 
   const loadAssignments = async () => {
@@ -26,9 +36,23 @@ const AssignmentManagement = () => {
       setLoading(true);
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 800));
-      setAssignments(mockAssignmentData.assignments);
+      
+      // Lấy dữ liệu sinh viên để tính toán số liệu chính xác
+      const storedStudents = localStorageService.getStudents();
+      const studentsToUse = storedStudents || mockStudentTrackingData.students;
+      
+      // Tính toán số liệu bài tập từ dữ liệu sinh viên để đồng bộ với trang theo dõi sinh viên
+      const assignmentsWithStats = calculateAssignmentStatsFromStudents(
+        studentsToUse,
+        mockAssignmentData.assignments
+      );
+      
+      setAssignments(assignmentsWithStats);
+      console.log('✅ Đã tính toán số liệu bài tập từ dữ liệu sinh viên');
     } catch (error) {
       console.error('Error loading assignments:', error);
+      // Fallback về dữ liệu mặc định nếu có lỗi
+      setAssignments(mockAssignmentData.assignments);
     } finally {
       setLoading(false);
     }

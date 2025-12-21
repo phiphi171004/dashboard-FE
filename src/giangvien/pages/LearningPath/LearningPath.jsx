@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, Users, Clock, TrendingUp, CheckCircle, AlertCircle, Play, Plus } from 'lucide-react';
-import { mockDashboardData } from '../../data/mockData';
+import { mockDashboardData, mockStudentTrackingData } from '../../data/mockData';
 import StudentsListModal from './components/StudentsListModal';
 import AddModuleModal from './components/AddModuleModal';
 import localStorageService from '../../services/localStorageService';
@@ -15,11 +15,51 @@ const LearningPath = () => {
   const [showAddModuleModal, setShowAddModuleModal] = useState(false);
   const [allStudents, setAllStudents] = useState([]);
 
+  // Hàm tính toán tiến độ hoàn thành của môn học từ dữ liệu sinh viên
+  const calculateCourseProgress = (courseName, students) => {
+    if (!students || students.length === 0) return { completionRate: 0, avgScore: 0, studentCount: 0 };
+    
+    // Map tên môn học với courseId
+    const courseIdMap = {
+      'Nhập môn lập trình': 'intro-prog',
+      'Kĩ thuật lập trình': 'prog-technique',
+      'Lập trình hướng đối tượng': 'oop',
+      'Cấu trúc dữ liệu và giải thuật': 'data-struct-algo'
+    };
+    
+    const courseId = courseIdMap[courseName];
+    if (!courseId) return { completionRate: 0, avgScore: 0, studentCount: 0 };
+    
+    let totalProgress = 0;
+    let totalScore = 0;
+    let studentCount = 0;
+    
+    students.forEach(student => {
+      if (student.courses && Array.isArray(student.courses)) {
+        const course = student.courses.find(c => c.id === courseId);
+        if (course) {
+          totalProgress += course.progress || 0;
+          totalScore += course.score || 0;
+          studentCount++;
+        }
+      }
+    });
+    
+    if (studentCount === 0) return { completionRate: 0, avgScore: 0, studentCount: 0 };
+    
+    return {
+      completionRate: Math.round(totalProgress / studentCount),
+      avgScore: Math.round((totalScore / studentCount) * 10) / 10,
+      studentCount
+    };
+  };
+
   useEffect(() => {
-    // Load danh sách sinh viên từ localStorage
+    // Load danh sách sinh viên từ localStorage hoặc mockData
     const storedStudents = localStorageService.getStudents();
-    console.log('📊 Loaded students:', storedStudents?.length || 0);
-    setAllStudents(storedStudents || []);
+    const studentsToUse = storedStudents || mockStudentTrackingData?.students || [];
+    console.log('📊 Loaded students:', studentsToUse.length);
+    setAllStudents(studentsToUse);
     
     try {
       // Chuyển đổi dữ liệu từ mockDashboardData.courseMonitoring thành modules
@@ -30,9 +70,14 @@ const LearningPath = () => {
       }
 
       const courseModules = mockDashboardData.courseMonitoring.map((course, index) => {
+        // Tính toán tiến độ từ dữ liệu sinh viên thực tế
+        const calculatedStats = calculateCourseProgress(course.name, studentsToUse);
         
-        // Tính toán tiến độ và trạng thái
-        const progress = course.completionRate || 0;
+        // Sử dụng dữ liệu tính toán nếu có, nếu không dùng dữ liệu mặc định
+        const progress = calculatedStats.studentCount > 0 ? calculatedStats.completionRate : (course.completionRate || 0);
+        const avgScore = calculatedStats.studentCount > 0 ? calculatedStats.avgScore : (course.averageScore || 0);
+        const studentCount = calculatedStats.studentCount > 0 ? calculatedStats.studentCount : (course.enrolledStudents || 0);
+        
         let status = 'pending';
         if (progress === 100) status = 'completed';
         else if (progress > 0) status = 'in-progress';
@@ -134,9 +179,9 @@ const LearningPath = () => {
           icon: icons[index % icons.length],
           progress: progress,
           status: status,
-          students: course.enrolledStudents || 0,
+          students: studentCount,
           duration: course.duration || '4 tuần',
-          avgScore: course.averageScore || 0,
+          avgScore: avgScore,
           weeks: weeks
         };
       });

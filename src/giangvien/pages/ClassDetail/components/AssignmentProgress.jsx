@@ -71,15 +71,19 @@ const AssignmentProgress = ({ assignments, classId }) => {
                   <div className="flex items-center space-x-6 text-sm text-gray-600">
                     <div className="flex items-center space-x-1">
                       <Calendar className="h-4 w-4" />
-                      <span>Mở: {assignment.startDate}</span>
+                      <span>Mở: {assignment.startDate ? (typeof assignment.startDate === 'string' && assignment.startDate.includes('T') 
+                        ? new Date(assignment.startDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                        : assignment.startDate) : 'N/A'}</span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <Clock className="h-4 w-4" />
-                      <span>Hạn: {assignment.dueDate}</span>
+                      <span>Hạn: {assignment.dueDate ? (typeof assignment.dueDate === 'string' && assignment.dueDate.includes('T')
+                        ? new Date(assignment.dueDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                        : assignment.dueDate) : 'N/A'}</span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <Users className="h-4 w-4" />
-                      <span>{assignment.submittedCount}/{assignment.totalStudents} nộp bài</span>
+                      <span>{assignment.submittedCount || 0}/{assignment.totalStudents || 0} nộp bài</span>
                     </div>
                   </div>
                 </div>

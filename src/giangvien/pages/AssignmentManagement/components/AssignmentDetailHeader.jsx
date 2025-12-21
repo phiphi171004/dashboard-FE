@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Edit, Trash2, Users, Clock, Calendar, FileText, CheckCircle, AlertTriangle, MapPin, X, Download } from 'lucide-react';
 import ExportDropdown from '../../../components/ExportDropdown';
+import { getAssignmentStudentDetails } from '../../../data/assignmentsData';
+import { mockStudentTrackingData } from '../../../data/mockData';
+import localStorageService from '../../../services/localStorageService';
 
 const AssignmentDetailHeader = ({ assignment }) => {
   const [showModal, setShowModal] = useState(false);
@@ -30,16 +33,21 @@ const AssignmentDetailHeader = ({ assignment }) => {
 
   const statusInfo = getStatusBadge(assignment.status);
   const StatusIcon = statusInfo.icon;
-  const submissionRate = assignment.totalStudents > 0 
-    ? Math.round((assignment.submittedCount / assignment.totalStudents) * 100)
-    : 0;
 
-  // Tính số bài nộp muộn thực tế dựa trên thời gian
-  const actualLateSubmissions = assignment.submissions 
-    ? assignment.submissions.filter(s => {
-        if (!s.submittedAt || !assignment.dueDate) return false;
-        return new Date(s.submittedAt) > new Date(assignment.dueDate);
-      }).length
+  // Lấy dữ liệu sinh viên thực tế để tính toán
+  const storedStudents = localStorageService.getStudents();
+  const studentsToUse = storedStudents || mockStudentTrackingData.students;
+  const { submitted, notSubmitted, lateSubmitted } = getAssignmentStudentDetails(assignment, studentsToUse);
+  
+  // Tính số liệu thực tế từ dữ liệu sinh viên
+  const actualSubmittedCount = submitted.length + lateSubmitted.length; // Tổng số đã nộp (đúng hạn + muộn)
+  const actualLateSubmissions = lateSubmitted.length;
+  const actualNotSubmittedCount = notSubmitted.length;
+  const actualTotalStudents = actualSubmittedCount + actualNotSubmittedCount;
+  
+  // Tính tỷ lệ nộp bài từ số liệu thực tế
+  const submissionRate = actualTotalStudents > 0 
+    ? Math.round((actualSubmittedCount / actualTotalStudents) * 100)
     : 0;
 
   const handleCategoryClick = (category) => {
@@ -47,34 +55,119 @@ const AssignmentDetailHeader = ({ assignment }) => {
     setShowModal(true);
   };
 
-  const isLateSubmission = (submission) => {
-    if (!submission.submittedAt || !assignment.dueDate) return false;
-    return new Date(submission.submittedAt) > new Date(assignment.dueDate);
+  // Helper để tạo ngày nộp hợp lý nếu chưa có
+  const generateSubmissionDate = (submittedDate, dueDate, isLate = false) => {
+    if (submittedDate) {
+      return submittedDate;
+    }
+    
+    // Nếu không có submittedDate nhưng đã nộp (có điểm), tạo ngày nộp dựa trên dueDate
+    if (dueDate) {
+      const due = new Date(dueDate);
+      if (isLate) {
+        // Nộp muộn: thêm 1-3 ngày sau dueDate
+        due.setDate(due.getDate() + Math.floor(Math.random() * 3) + 1);
+        due.setHours(14, 30, 0, 0);
+      } else {
+        // Nộp đúng hạn: trừ 0-2 ngày trước dueDate
+        due.setDate(due.getDate() - Math.floor(Math.random() * 3));
+        due.setHours(7 + Math.floor(Math.random() * 12), Math.floor(Math.random() * 60), 0, 0);
+      }
+      return due.toISOString();
+    }
+    return null;
   };
 
   const getFilteredSubmissions = () => {
-    if (!assignment.submissions || !selectedCategory) return [];
+    if (!selectedCategory) return [];
+    
+    // Sử dụng dữ liệu sinh viên thực tế
+    const { submitted, notSubmitted, lateSubmitted } = getAssignmentStudentDetails(assignment, studentsToUse);
     
     switch (selectedCategory.id) {
       case 'submitted':
-        return assignment.submissions.filter(s => s.submittedAt !== null);
+        // Đã nộp = đã nộp đúng hạn + nộp muộn
+        return [
+          ...submitted.map(s => {
+            const hasScore = s.score !== null && s.score !== undefined && s.score > 0;
+            return {
+              id: s.id,
+              studentId: s.studentId,
+              studentName: s.name,
+              submittedAt: s.submittedAt || (hasScore ? generateSubmissionDate(null, assignment.dueDate, false) : null),
+              score: s.score,
+              status: hasScore ? 'graded' : 'submitted'
+            };
+          }),
+          ...lateSubmitted.map(s => {
+            const hasScore = s.score !== null && s.score !== undefined && s.score > 0;
+            return {
+              id: s.id,
+              studentId: s.studentId,
+              studentName: s.name,
+              submittedAt: s.submittedAt || (hasScore ? generateSubmissionDate(null, assignment.dueDate, true) : null),
+              score: s.score,
+              status: hasScore ? 'graded' : 'late'
+            };
+          })
+        ];
       case 'notSubmitted':
-        // Tạo danh sách sinh viên chưa nộp (giả lập)
-        const submittedIds = assignment.submissions.map(s => s.studentId);
-        return Array.from({ length: assignment.totalStudents - assignment.submittedCount }, (_, i) => ({
-          id: `missing-${i}`,
-          studentId: `SV${String(i + 100).padStart(3, '0')}`,
-          studentName: `Sinh viên ${i + 1}`,
-          status: 'missing',
-          submittedAt: null
+        return notSubmitted.map(s => ({
+          id: s.id,
+          studentId: s.studentId,
+          studentName: s.name,
+          submittedAt: null,
+          score: null,
+          status: 'missing'
         }));
       case 'late':
-        // Lọc tất cả bài nộp muộn dựa trên thời gian nộp so với deadline
-        return assignment.submissions.filter(s => isLateSubmission(s));
+        return lateSubmitted.map(s => {
+          const hasScore = s.score !== null && s.score !== undefined && s.score > 0;
+          return {
+            id: s.id,
+            studentId: s.studentId,
+            studentName: s.name,
+            submittedAt: s.submittedAt || (hasScore ? generateSubmissionDate(null, assignment.dueDate, true) : null),
+            score: s.score,
+            status: hasScore ? 'graded' : 'late'
+          };
+        });
       case 'total':
-        return assignment.submissions;
+        // Tất cả sinh viên
+        return [
+          ...submitted.map(s => {
+            const hasScore = s.score !== null && s.score !== undefined && s.score > 0;
+            return {
+              id: s.id,
+              studentId: s.studentId,
+              studentName: s.name,
+              submittedAt: s.submittedAt || (hasScore ? generateSubmissionDate(null, assignment.dueDate, false) : null),
+              score: s.score,
+              status: hasScore ? 'graded' : 'submitted'
+            };
+          }),
+          ...lateSubmitted.map(s => {
+            const hasScore = s.score !== null && s.score !== undefined && s.score > 0;
+            return {
+              id: s.id,
+              studentId: s.studentId,
+              studentName: s.name,
+              submittedAt: s.submittedAt || (hasScore ? generateSubmissionDate(null, assignment.dueDate, true) : null),
+              score: s.score,
+              status: hasScore ? 'graded' : 'late'
+            };
+          }),
+          ...notSubmitted.map(s => ({
+            id: s.id,
+            studentId: s.studentId,
+            studentName: s.name,
+            submittedAt: null,
+            score: null,
+            status: 'missing'
+          }))
+        ];
       default:
-        return assignment.submissions;
+        return [];
     }
   };
 
@@ -132,13 +225,13 @@ const AssignmentDetailHeader = ({ assignment }) => {
           onClick={() => handleCategoryClick({
             id: 'total',
             title: 'Tổng sinh viên',
-            count: assignment.totalStudents,
+            count: actualTotalStudents,
             color: 'primary'
           })}
           className="text-center p-4 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors cursor-pointer"
         >
           <div className="text-2xl font-bold text-primary-600 mb-1">
-            {assignment.totalStudents}
+            {actualTotalStudents}
           </div>
           <div className="text-sm text-gray-600">Tổng sinh viên</div>
         </button>
@@ -147,13 +240,13 @@ const AssignmentDetailHeader = ({ assignment }) => {
           onClick={() => handleCategoryClick({
             id: 'submitted',
             title: 'Đã nộp bài',
-            count: assignment.submittedCount,
+            count: actualSubmittedCount,
             color: 'success'
           })}
           className="text-center p-4 bg-success-50 rounded-lg hover:bg-success-100 transition-colors cursor-pointer"
         >
           <div className="text-2xl font-bold text-success-600 mb-1">
-            {assignment.submittedCount}
+            {actualSubmittedCount}
           </div>
           <div className="text-sm text-gray-600">Đã nộp bài</div>
         </button>
@@ -162,13 +255,13 @@ const AssignmentDetailHeader = ({ assignment }) => {
           onClick={() => handleCategoryClick({
             id: 'notSubmitted',
             title: 'Chưa nộp bài',
-            count: assignment.totalStudents - assignment.submittedCount,
+            count: actualNotSubmittedCount,
             color: 'warning'
           })}
           className="text-center p-4 bg-warning-50 rounded-lg hover:bg-warning-100 transition-colors cursor-pointer"
         >
           <div className="text-2xl font-bold text-warning-600 mb-1">
-            {assignment.totalStudents - assignment.submittedCount}
+            {actualNotSubmittedCount}
           </div>
           <div className="text-sm text-gray-600">Chưa nộp bài</div>
         </button>
