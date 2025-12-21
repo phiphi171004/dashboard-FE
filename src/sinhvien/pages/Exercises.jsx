@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { courseExercises, getCourseTimeline, competencyByCourse, softSkills } from '../data/data';
+import { courseExercises, getCourseTimeline, getUnlockedLevels, organizeExercisesByLevel, competencyByCourse, softSkills } from '../data/data';
 
 const Exercises = () => {
   const [selectedLevel, setSelectedLevel] = useState('all');
@@ -53,14 +53,27 @@ const Exercises = () => {
     return fitPercent;
   };
 
-  // Lấy tất cả bài tập từ các khóa học đã đăng ký và tính lại fitPercent
+  // Lấy tất cả bài tập từ các khóa học đã đăng ký
+  // CHỈ hiển thị bài tập từ các level đã mở khóa
+  // Sử dụng organizeExercisesByLevel() để đồng bộ với timeline
   const allExercises = enrolledCourses.flatMap(course => {
-    const exercises = courseExercises[course.id] || [];
-    return exercises.map(ex => ({
-      ...ex,
-      calculatedFitPercent: calculateFitPercent(ex),
-      isRecommended: calculateFitPercent(ex) >= 80 // Gợi ý nếu >= 80%
-    }));
+    const levels = organizeExercisesByLevel(course.id);
+    const unlockedLevels = getUnlockedLevels(course.id);
+
+    // Chỉ lấy bài tập từ các level đã mở khóa
+    return levels
+      .filter(level => {
+        // Map level number to level name
+        const levelName = level.levelNumber === 1 ? 'Easy' :
+          level.levelNumber === 2 ? 'Medium' : 'Hard';
+        return unlockedLevels.includes(levelName);
+      })
+      .flatMap(level => level.exercises)
+      .map(ex => ({
+        ...ex,
+        calculatedFitPercent: calculateFitPercent(ex),
+        isRecommended: calculateFitPercent(ex) >= 80 // Gợi ý nếu >= 80%
+      }));
   });
 
   // Sắp xếp theo độ phù hợp giảm dần

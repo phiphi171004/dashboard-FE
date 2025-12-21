@@ -162,6 +162,7 @@ export const courseExercises = {
       courseName: "Nhập môn Lập trình",
       title: "Bài tập 1: Tính toán cơ bản",
       level: "Easy",
+      levelNumber: 1,
       fitPercent: 95,
       description: "Viết chương trình tính tổng, hiệu, tích, thương của hai số",
       estimatedTime: "1 giờ",
@@ -175,7 +176,8 @@ export const courseExercises = {
       courseId: 1,
       courseName: "Nhập môn Lập trình",
       title: "Bài tập 2: Cấu trúc điều kiện",
-      level: "Easy",
+      level: "Medium",
+      levelNumber: 1,
       fitPercent: 90,
       description: "Sử dụng if-else để giải quyết bài toán phân loại",
       estimatedTime: "2 giờ",
@@ -190,6 +192,7 @@ export const courseExercises = {
       courseName: "Nhập môn Lập trình",
       title: "Bài tập 3: Vòng lặp",
       level: "Medium",
+      levelNumber: 1,
       fitPercent: 88,
       description: "Sử dụng vòng lặp để tính tổng, giai thừa, dãy số",
       estimatedTime: "2.5 giờ",
@@ -203,7 +206,8 @@ export const courseExercises = {
       courseId: 1,
       courseName: "Nhập môn Lập trình",
       title: "Bài tập 4: Hàm và Thủ tục",
-      level: "Medium",
+      level: "Hard",
+      levelNumber: 1,
       fitPercent: 85,
       description: "Tạo các hàm để tính toán và xử lý dữ liệu",
       estimatedTime: "3 giờ",
@@ -218,10 +222,73 @@ export const courseExercises = {
       courseName: "Nhập môn Lập trình",
       title: "Bài tập 5: Dự án tổng hợp",
       level: "Hard",
+      levelNumber: 1,
       fitPercent: 92,
       description: "Xây dựng chương trình quản lý đơn giản sử dụng tất cả kiến thức đã học",
       estimatedTime: "4 giờ",
       skills: ["Tổng hợp", "Dự án", "Thực hành"],
+      completed: false,
+      points: 10,
+      criteria: ["Kỹ năng lập trình cơ bản", "Giải quyết vấn đề", "Code quality"]
+    },
+    // Level 2 - Demo (sẽ mở khi hoàn thành >=70% Level 1)
+    {
+      id: 106,
+      courseId: 1,
+      courseName: "Nhập môn Lập trình",
+      title: "Bài tập 6: Mảng và Chuỗi",
+      level: "Easy",
+      levelNumber: 2,
+      fitPercent: 90,
+      description: "Làm việc với mảng và chuỗi ký tự",
+      estimatedTime: "2 giờ",
+      skills: ["Array", "String", "Manipulation"],
+      completed: false,
+      points: 10,
+      criteria: ["Kỹ năng lập trình cơ bản"]
+    },
+    {
+      id: 107,
+      courseId: 1,
+      courseName: "Nhập môn Lập trình",
+      title: "Bài tập 7: Xử lý File",
+      level: "Medium",
+      levelNumber: 2,
+      fitPercent: 85,
+      description: "Đọc và ghi file văn bản",
+      estimatedTime: "3 giờ",
+      skills: ["File I/O", "Data Processing"],
+      completed: false,
+      points: 10,
+      criteria: ["Kỹ năng lập trình cơ bản", "Giải quyết vấn đề"]
+    },
+    // Level 3 - Demo (sẽ mở khi hoàn thành >=70% Level 2)
+    {
+      id: 108,
+      courseId: 1,
+      courseName: "Nhập môn Lập trình",
+      title: "Bài tập 8: Thuật toán Sắp xếp",
+      level: "Medium",
+      levelNumber: 3,
+      fitPercent: 80,
+      description: "Implement các thuật toán sắp xếp cơ bản",
+      estimatedTime: "4 giờ",
+      skills: ["Sorting", "Algorithms"],
+      completed: false,
+      points: 10,
+      criteria: ["Thuật toán & Cấu trúc dữ liệu"]
+    },
+    {
+      id: 109,
+      courseId: 1,
+      courseName: "Nhập môn Lập trình",
+      title: "Bài tập 9: Dự án Cuối khóa",
+      level: "Hard",
+      levelNumber: 3,
+      fitPercent: 88,
+      description: "Xây dựng ứng dụng hoàn chỉnh",
+      estimatedTime: "6 giờ",
+      skills: ["Project", "Full Stack", "Integration"],
       completed: false,
       points: 10,
       criteria: ["Kỹ năng lập trình cơ bản", "Giải quyết vấn đề", "Code quality"]
@@ -499,6 +566,45 @@ export const getCourseTimeline = (courseId) => {
       status
     };
   }).filter(item => item.totalExercises > 0); // Chỉ hiển thị level có bài tập
+};
+
+// Hàm xác định các level đã mở khóa cho một khóa học
+// Level 1 (Easy) luôn mở, Level 2 mở khi Level 1 đạt >=70%, Level 3 mở khi Level 2 đạt >=70%
+export const getUnlockedLevels = (courseId) => {
+  const exercises = courseExercises[courseId] || [];
+
+  if (exercises.length === 0) {
+    return ['Easy']; // Mặc định Level 1 luôn mở
+  }
+
+  const levels = ['Easy', 'Medium', 'Hard'];
+  const unlockedLevels = ['Easy']; // Level 1 luôn mở khóa
+
+  // Kiểm tra tiến độ Level 1 (Easy)
+  const level1Exercises = exercises.filter(ex => ex.level === 'Easy');
+  const level1Completed = level1Exercises.filter(ex => ex.completed).length;
+  const level1Progress = level1Exercises.length > 0
+    ? Math.round((level1Completed / level1Exercises.length) * 100)
+    : 0;
+
+  // Nếu Level 1 đạt >= 70%, mở khóa Level 2
+  if (level1Progress >= 70) {
+    unlockedLevels.push('Medium');
+
+    // Kiểm tra tiến độ Level 2 (Medium)
+    const level2Exercises = exercises.filter(ex => ex.level === 'Medium');
+    const level2Completed = level2Exercises.filter(ex => ex.completed).length;
+    const level2Progress = level2Exercises.length > 0
+      ? Math.round((level2Completed / level2Exercises.length) * 100)
+      : 0;
+
+    // Nếu Level 2 đạt >= 70%, mở khóa Level 3
+    if (level2Progress >= 70) {
+      unlockedLevels.push('Hard');
+    }
+  }
+
+  return unlockedLevels;
 };
 
 export const errorStats = [
@@ -1724,7 +1830,7 @@ export const plagiarismWarnings = [
 export const organizeExercisesByLevel = (courseId) => {
   const exercises = courseExercises[courseId] || [];
 
-  // Nhóm bài tập theo level
+  // Nhóm bài tập theo levelNumber (nếu có), fallback về level (Easy/Medium/Hard)
   const levelMap = {
     1: { name: 'Level 1: Tân thủ', exercises: [], levelNumber: 1 },
     2: { name: 'Level 2: Trung bình', exercises: [], levelNumber: 2 },
@@ -1732,13 +1838,19 @@ export const organizeExercisesByLevel = (courseId) => {
   };
 
   exercises.forEach(exercise => {
-    let level = 1; // Default
-    if (exercise.level === 'Easy') level = 1;
-    else if (exercise.level === 'Medium') level = 2;
-    else if (exercise.level === 'Hard') level = 3;
+    // Ưu tiên sử dụng levelNumber nếu có, nếu không thì dùng level
+    let levelNum = exercise.levelNumber;
 
-    if (levelMap[level]) {
-      levelMap[level].exercises.push(exercise);
+    if (!levelNum) {
+      // Fallback: map level (Easy/Medium/Hard) sang levelNumber
+      if (exercise.level === 'Easy') levelNum = 1;
+      else if (exercise.level === 'Medium') levelNum = 2;
+      else if (exercise.level === 'Hard') levelNum = 3;
+      else levelNum = 1; // Default
+    }
+
+    if (levelMap[levelNum]) {
+      levelMap[levelNum].exercises.push(exercise);
     }
   });
 
