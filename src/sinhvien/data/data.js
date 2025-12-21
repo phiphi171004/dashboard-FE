@@ -23,7 +23,7 @@ export const generateProgressData = (enrolledCourses, courseLessons = {}) => {
   }
 
   // Lấy danh sách bài học đã hoàn thành từ sessionStorage
-  const savedCompletedLessons = typeof window !== 'undefined' 
+  const savedCompletedLessons = typeof window !== 'undefined'
     ? JSON.parse(sessionStorage.getItem('completedLessons') || '[]')
     : [];
 
@@ -37,12 +37,12 @@ export const generateProgressData = (enrolledCourses, courseLessons = {}) => {
     { week: "Tuần 7", target: 87.5 },
     { week: "Tuần 8", target: 100 }
   ];
-  
+
   // Tính tiến độ thực tế cho từng khóa học
   const courseProgressMap = {};
   enrolledCourses.forEach((course) => {
     let actualProgress = 0;
-    
+
     // Ưu tiên tính từ bài học đã hoàn thành
     const lessons = courseLessons[course.id] || [];
     if (lessons.length > 0) {
@@ -53,20 +53,20 @@ export const generateProgressData = (enrolledCourses, courseLessons = {}) => {
       const courseExs = courseExercises[course.id] || [];
       const totalExercises = courseExs.length;
       const completedExercises = courseExs.filter(ex => ex.completed).length;
-      actualProgress = totalExercises > 0 
+      actualProgress = totalExercises > 0
         ? Math.min(100, Math.round((completedExercises / totalExercises) * 100))
         : 0;
     }
-    
+
     // Sử dụng tiến độ từ course.progress nếu có (được cập nhật từ trang bài học)
     // Đây là nguồn dữ liệu chính xác nhất
     if (course.progress !== undefined && course.progress !== null) {
       actualProgress = course.progress;
     }
-    
+
     courseProgressMap[course.id] = actualProgress;
   });
-  
+
   // Tính tiến độ cho từng khóa học riêng biệt
   // Hiển thị tiến độ thực tế từ bài học đã hoàn thành
   // Bỏ logic tính tuần, chỉ hiển thị tiến độ thực tế
@@ -79,12 +79,12 @@ export const generateProgressData = (enrolledCourses, courseLessons = {}) => {
     // Tính tiến độ cho từng khóa học
     enrolledCourses.forEach((course) => {
       const actualProgress = courseProgressMap[course.id] || 0;
-      
+
       // Hiển thị tiến độ thực tế ở tất cả các tuần
       // User học tới đâu thì tiến độ tới đó, không phân bổ theo tuần
       // Hiển thị tiến độ thực tế ở tất cả các tuần từ tuần 1
       let weeklyProgress = actualProgress;
-    
+
       // Sử dụng tên khóa học làm key (loại bỏ ký tự đặc biệt để làm key hợp lệ)
       const courseKey = course.name.replace(/[^a-zA-Z0-9]/g, '_');
       dataPoint[courseKey] = weeklyProgress;
@@ -445,38 +445,61 @@ export const courseExercises = {
   ]
 };
 
-export const learningPath = [
-  {
-    id: 1,
-    title: "HTML & CSS Cơ bản",
-    status: "completed",
-    date: "Tuần 1-2"
-  },
-  {
-    id: 2,
-    title: "JavaScript ES6+",
-    status: "completed",
-    date: "Tuần 3-4"
-  },
-  {
-    id: 3,
-    title: "React Fundamentals",
-    status: "current",
-    date: "Tuần 5-7"
-  },
-  {
-    id: 4,
-    title: "State Management",
-    status: "upcoming",
-    date: "Tuần 8-9"
-  },
-  {
-    id: 5,
-    title: "Backend with Node.js",
-    status: "upcoming",
-    date: "Tuần 10-12"
+// Hàm tạo timeline động cho từng khóa học dựa trên bài tập
+// Timeline chia theo 3 level: Easy, Medium, Hard
+export const getCourseTimeline = (courseId) => {
+  const exercises = courseExercises[courseId] || [];
+
+  if (exercises.length === 0) {
+    return [];
   }
-];
+
+  const levels = ['Easy', 'Medium', 'Hard'];
+  const levelLabels = {
+    'Easy': 'Cơ bản',
+    'Medium': 'Trung bình',
+    'Hard': 'Nâng cao'
+  };
+
+  return levels.map((level, index) => {
+    const levelExercises = exercises.filter(ex => ex.level === level);
+    const completed = levelExercises.filter(ex => ex.completed).length;
+    const total = levelExercises.length;
+    const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+    // Xác định trạng thái
+    let status = 'upcoming';
+    if (progress === 100) {
+      status = 'completed';
+    } else if (progress > 0) {
+      status = 'current';
+    } else if (index === 0) {
+      // Level đầu tiên luôn là current nếu chưa hoàn thành
+      status = 'current';
+    } else {
+      // Level tiếp theo chỉ mở khi level trước đạt >= 70%
+      const prevLevelExercises = exercises.filter(ex => ex.level === levels[index - 1]);
+      const prevCompleted = prevLevelExercises.filter(ex => ex.completed).length;
+      const prevProgress = prevLevelExercises.length > 0
+        ? Math.round((prevCompleted / prevLevelExercises.length) * 100)
+        : 0;
+
+      if (prevProgress >= 70) {
+        status = 'current';
+      }
+    }
+
+    return {
+      id: index + 1,
+      level,
+      title: `Level ${index + 1}: ${levelLabels[level]}`,
+      totalExercises: total,
+      completedExercises: completed,
+      progress,
+      status
+    };
+  }).filter(item => item.totalExercises > 0); // Chỉ hiển thị level có bài tập
+};
 
 export const errorStats = [
   { type: "Syntax Error", count: 15, color: "#dc2626" }, // Danger (màu chuẩn CSS)
@@ -1700,25 +1723,25 @@ export const plagiarismWarnings = [
 // Level được xác định dựa trên độ khó: Easy = Level 1, Medium = Level 2, Hard = Level 3
 export const organizeExercisesByLevel = (courseId) => {
   const exercises = courseExercises[courseId] || [];
-  
+
   // Nhóm bài tập theo level
   const levelMap = {
     1: { name: 'Level 1: Tân thủ', exercises: [], levelNumber: 1 },
     2: { name: 'Level 2: Trung bình', exercises: [], levelNumber: 2 },
     3: { name: 'Level 3: Nâng cao', exercises: [], levelNumber: 3 }
   };
-  
+
   exercises.forEach(exercise => {
     let level = 1; // Default
     if (exercise.level === 'Easy') level = 1;
     else if (exercise.level === 'Medium') level = 2;
     else if (exercise.level === 'Hard') level = 3;
-    
+
     if (levelMap[level]) {
       levelMap[level].exercises.push(exercise);
     }
   });
-  
+
   // Chỉ trả về các level có bài tập
   return Object.values(levelMap).filter(level => level.exercises.length > 0);
 };
@@ -1728,16 +1751,16 @@ export const organizeExercisesByLevel = (courseId) => {
 export const calculateLevelProgress = (courseId, levelNumber) => {
   const levelData = organizeExercisesByLevel(courseId).find(l => l.levelNumber === levelNumber);
   if (!levelData || levelData.exercises.length === 0) return 0;
-  
+
   // Lấy danh sách bài tập đã hoàn thành từ sessionStorage hoặc từ state
-  const savedCompleted = typeof window !== 'undefined' 
+  const savedCompleted = typeof window !== 'undefined'
     ? JSON.parse(sessionStorage.getItem('completedExercises') || '[]')
     : [];
-  
-  const completedCount = levelData.exercises.filter(ex => 
+
+  const completedCount = levelData.exercises.filter(ex =>
     savedCompleted.includes(ex.id) || ex.completed
   ).length;
-  
+
   return Math.round((completedCount / levelData.exercises.length) * 100);
 };
 

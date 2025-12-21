@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { courseExercises, learningPath, competencyByCourse, softSkills } from '../data/data';
+import { courseExercises, getCourseTimeline, competencyByCourse, softSkills } from '../data/data';
 
 const Exercises = () => {
   const [selectedLevel, setSelectedLevel] = useState('all');
@@ -13,7 +13,9 @@ const Exercises = () => {
   const [isGettingFeedback, setIsGettingFeedback] = useState(false);
   const [submissionResult, setSubmissionResult] = useState(null);
   const [feedbackResult, setFeedbackResult] = useState(null);
-  
+  const [showRecalculateModal, setShowRecalculateModal] = useState(false);
+  const [isRecalculating, setIsRecalculating] = useState(false);
+
   // Khởi tạo state từ sessionStorage ngay từ đầu
   const [enrolledCourses, setEnrolledCourses] = useState(() => {
     const saved = sessionStorage.getItem('enrolledCourses');
@@ -39,7 +41,7 @@ const Exercises = () => {
 
     // Tính điểm trung bình
     const avgScore = criteriaCount > 0 ? totalScore / criteriaCount : 0;
-    
+
     // Điều chỉnh dựa trên độ khó của bài tập
     let difficultyMultiplier = 1;
     if (exercise.level === 'Easy') difficultyMultiplier = 1.1;
@@ -62,7 +64,7 @@ const Exercises = () => {
   });
 
   // Sắp xếp theo độ phù hợp giảm dần
-  const sortedExercises = [...allExercises].sort((a, b) => 
+  const sortedExercises = [...allExercises].sort((a, b) =>
     b.calculatedFitPercent - a.calculatedFitPercent
   );
 
@@ -205,11 +207,10 @@ const Exercises = () => {
                     <button
                       key={level}
                       onClick={() => setSelectedLevel(level)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                        selectedLevel === level
-                          ? 'bg-primary-600 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${selectedLevel === level
+                        ? 'bg-primary-600 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
                     >
                       {level === 'all' ? 'Tất cả' : level}
                     </button>
@@ -269,11 +270,11 @@ const Exercises = () => {
                     </h2>
                     <button
                       onClick={() => {
-                        // TODO: Gọi API tính lại năng lực và gợi ý bài tập
-                        alert('Đang tính lại năng lực và gợi ý bài tập...');
+                        setShowRecalculateModal(true);
+                        setIsRecalculating(true);
                         // Simulate API call
                         setTimeout(() => {
-                          alert('Đã tính lại năng lực và cập nhật gợi ý bài tập!');
+                          setIsRecalculating(false);
                         }, 1500);
                       }}
                       className="btn-primary text-sm px-4 py-2"
@@ -281,7 +282,7 @@ const Exercises = () => {
                       🔄 Tính lại
                     </button>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {filteredCourseExs.map((exercise) => (
                       <div key={exercise.id} className="card hover:scale-[1.02] transition-transform relative">
@@ -322,21 +323,21 @@ const Exercises = () => {
 
                         <div className="flex flex-col gap-2 pt-4 border-t border-gray-200">
                           <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600">⏱️ {exercise.estimatedTime}</span>
+                            <span className="text-sm text-gray-600">⏱️ {exercise.estimatedTime}</span>
                           </div>
                           <div className="flex gap-2">
-                            <button 
+                            <button
                               onClick={() => setShowSubmitModal(exercise)}
                               className="btn-primary text-sm flex-1"
                             >
                               {exercise.completed ? 'Nộp lại' : 'Nộp bài'}
                             </button>
-                            <button 
+                            <button
                               onClick={() => setShowFeedbackModal(exercise)}
                               className="btn-accent text-sm flex-1"
                             >
                               AI Feedback
-                          </button>
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -387,21 +388,21 @@ const Exercises = () => {
 
                   <div className="flex flex-col gap-2 pt-4 border-t border-gray-200">
                     <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">⏱️ {exercise.estimatedTime}</span>
+                      <span className="text-sm text-gray-600">⏱️ {exercise.estimatedTime}</span>
                     </div>
                     <div className="flex gap-2">
-                      <button 
+                      <button
                         onClick={() => setShowSubmitModal(exercise)}
                         className="btn-primary text-sm flex-1"
                       >
                         {exercise.completed ? 'Nộp lại' : 'Nộp bài'}
                       </button>
-                      <button 
+                      <button
                         onClick={() => setShowFeedbackModal(exercise)}
                         className="btn-accent text-sm flex-1"
                       >
                         AI Feedback
-                    </button>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -433,7 +434,7 @@ const Exercises = () => {
                   creativity: '🎨',
                   leadership: '👑'
                 };
-                
+
                 return (
                   <div key={skill} className="bg-white rounded-lg p-3 border border-gray-200">
                     <div className="flex items-center justify-between mb-2">
@@ -455,40 +456,105 @@ const Exercises = () => {
             </div>
           </div>
 
-          {/* Learning Path */}
+          {/* Lộ trình Bài tập theo Khóa học */}
           <div className="card">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">Lộ trình Học tập</h2>
-            <div className="relative">
-              <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-300 hidden md:block"></div>
-              <div className="space-y-6">
-                {learningPath.map((path, index) => (
-                  <div key={path.id} className="relative flex items-start">
-                    <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center font-bold z-10 ${
-                        path.status === 'completed'
-                          ? 'bg-success-500 text-white'
-                          : path.status === 'current'
-                          ? 'bg-primary-500 text-white'
-                          : 'bg-gray-200 text-gray-600'
-                      }`}
-                    >
-                      {path.status === 'completed' ? '✓' : index + 1}
-                    </div>
-                    <div className="ml-6 flex-1">
-                      <div className="bg-white p-4 rounded-lg border-2 border-gray-200 hover:border-primary-300 transition-colors">
-                        <h3 className="font-bold text-gray-800 mb-1">{path.title}</h3>
-                        <p className="text-sm text-gray-600">{path.date}</p>
-                        {path.status === 'current' && (
-                          <span className="inline-block mt-2 text-xs bg-primary-100 text-primary-800 px-2 py-1 rounded">
-                            Đang học
-                          </span>
-                        )}
-                      </div>
+            <h2 className="text-xl font-bold text-gray-800 mb-6">🗺️ Lộ trình Bài tập theo Khóa học</h2>
+
+            {enrolledCourses.map((course, courseIndex) => {
+              const timeline = getCourseTimeline(course.id);
+
+              if (timeline.length === 0) return null;
+
+              return (
+                <div key={course.id} className={`${courseIndex > 0 ? 'mt-8 pt-8 border-t border-gray-200' : ''}`}>
+                  {/* Course Header */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="text-3xl">{course.thumbnail}</div>
+                    <div>
+                      <h3 className="font-bold text-gray-800">{course.name}</h3>
+                      <p className="text-sm text-gray-600">{course.code}</p>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
+
+                  {/* Timeline */}
+                  <div className="relative ml-6">
+                    {/* Vertical line */}
+                    <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-300"></div>
+
+                    <div className="space-y-4">
+                      {timeline.map((item, index) => {
+                        const isCompleted = item.status === 'completed';
+                        const isCurrent = item.status === 'current';
+                        const isLocked = item.status === 'upcoming';
+
+                        return (
+                          <div key={item.id} className="relative flex items-start gap-4">
+                            {/* Timeline dot */}
+                            <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${isCompleted ? 'bg-green-500 text-white' :
+                              isCurrent ? 'bg-blue-500 text-white' :
+                                'bg-gray-300 text-gray-600'
+                              }`}>
+                              {isCompleted ? '✓' : isLocked ? '🔒' : item.id}
+                            </div>
+
+                            {/* Content */}
+                            <div className="flex-1 pb-2">
+                              <div className={`p-3 rounded-lg border-2 ${isCompleted ? 'bg-green-50 border-green-300' :
+                                isCurrent ? 'bg-blue-50 border-blue-300' :
+                                  'bg-gray-50 border-gray-200'
+                                }`}>
+                                <div className="flex items-center justify-between mb-2">
+                                  <h4 className={`font-semibold ${isLocked ? 'text-gray-500' : 'text-gray-800'
+                                    }`}>
+                                    {item.title}
+                                  </h4>
+                                  <span className={`text-xs px-2 py-1 rounded ${isCompleted ? 'bg-green-100 text-green-800' :
+                                    isCurrent ? 'bg-blue-100 text-blue-800' :
+                                      'bg-gray-100 text-gray-600'
+                                    }`}>
+                                    {isCompleted ? 'Hoàn thành' : isCurrent ? 'Đang học' : 'Chưa mở'}
+                                  </span>
+                                </div>
+
+                                <div className="flex items-center justify-between text-sm mb-2">
+                                  <span className="text-gray-600">
+                                    {item.completedExercises}/{item.totalExercises} bài tập
+                                  </span>
+                                  <span className={`font-bold ${item.progress === 100 ? 'text-green-600' :
+                                    item.progress >= 70 ? 'text-blue-600' :
+                                      'text-gray-600'
+                                    }`}>
+                                    {item.progress}%
+                                  </span>
+                                </div>
+
+                                {!isLocked && (
+                                  <div className="w-full bg-gray-200 rounded-full h-2">
+                                    <div
+                                      className={`h-2 rounded-full transition-all ${item.progress === 100 ? 'bg-green-500' :
+                                        item.progress >= 70 ? 'bg-blue-500' :
+                                          'bg-orange-500'
+                                        }`}
+                                      style={{ width: `${item.progress}%` }}
+                                    ></div>
+                                  </div>
+                                )}
+
+                                {isLocked && index > 0 && (
+                                  <p className="text-xs text-gray-500 mt-1">
+                                    Hoàn thành ≥70% level trước để mở khóa
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </>
       )}
@@ -557,9 +623,8 @@ const Exercises = () => {
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
-                          className={`h-2 rounded-full ${
-                            submissionResult.passed ? 'bg-success-500' : 'bg-warning-500'
-                          }`}
+                          className={`h-2 rounded-full ${submissionResult.passed ? 'bg-success-500' : 'bg-warning-500'
+                            }`}
                           style={{ width: `${(submissionResult.testsPassed / submissionResult.testsTotal) * 100}%` }}
                         ></div>
                       </div>
@@ -714,6 +779,42 @@ const Exercises = () => {
                     Đóng
                   </button>
                 </div>
+              )}
+            </div>
+          </div>
+        </div>
+        , document.body
+      )}
+
+      {/* Modal: Tính lại năng lực */}
+      {showRecalculateModal && createPortal(
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4" style={{ zIndex: 99999, position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, margin: 0 }}>
+          <div className="bg-white rounded-lg max-w-md w-full p-6">
+            <div className="text-center">
+              {isRecalculating ? (
+                <>
+                  <div className="mb-4">
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-600 mx-auto"></div>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Đang tính toán...</h3>
+                  <p className="text-gray-600">
+                    Đang phân tích năng lực và cập nhật gợi ý bài tập phù hợp cho bạn
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="mb-4 text-6xl">✅</div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Hoàn thành!</h3>
+                  <p className="text-gray-600 mb-6">
+                    Đã tính lại năng lực và cập nhật gợi ý bài tập thành công
+                  </p>
+                  <button
+                    onClick={() => setShowRecalculateModal(false)}
+                    className="btn-primary w-full"
+                  >
+                    Đóng
+                  </button>
+                </>
               )}
             </div>
           </div>
