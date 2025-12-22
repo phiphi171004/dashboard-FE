@@ -56,17 +56,21 @@ const Exercises = () => {
   // Lấy tất cả bài tập từ các khóa học đã đăng ký
   // CHỈ hiển thị bài tập từ các level đã mở khóa
   // Sử dụng organizeExercisesByLevel() để đồng bộ với timeline
+  console.log('📚 Enrolled Courses:', enrolledCourses);
   const allExercises = enrolledCourses.flatMap(course => {
     const levels = organizeExercisesByLevel(course.id);
     const unlockedLevels = getUnlockedLevels(course.id);
 
+    console.log('🔍 Course:', course.name, '(ID:', course.id, ')');
+    console.log('📊 Levels:', levels);
+    console.log('🔓 Unlocked Levels:', unlockedLevels);
+
     // Chỉ lấy bài tập từ các level đã mở khóa
-    return levels
+    const filteredExercises = levels
       .filter(level => {
-        // Map level number to level name
-        const levelName = level.levelNumber === 1 ? 'Easy' :
-          level.levelNumber === 2 ? 'Medium' : 'Hard';
-        return unlockedLevels.includes(levelName);
+        const isUnlocked = unlockedLevels.includes(level.levelNumber);
+        console.log(`  Level ${level.levelNumber} (${level.name}): ${isUnlocked ? '✅ Unlocked' : '🔒 Locked'} - ${level.exercises.length} exercises`);
+        return isUnlocked;
       })
       .flatMap(level => level.exercises)
       .map(ex => ({
@@ -74,18 +78,25 @@ const Exercises = () => {
         calculatedFitPercent: calculateFitPercent(ex),
         isRecommended: calculateFitPercent(ex) >= 80 // Gợi ý nếu >= 80%
       }));
+
+    console.log('✅ Filtered exercises for course:', filteredExercises.length);
+    return filteredExercises;
   });
+
+  console.log('🎯 TOTAL allExercises:', allExercises.length, allExercises);
 
   // Sắp xếp theo độ phù hợp giảm dần
   const sortedExercises = [...allExercises].sort((a, b) =>
     b.calculatedFitPercent - a.calculatedFitPercent
   );
 
+  console.log('🔍 Selected filters - Course:', selectedCourse, 'Level:', selectedLevel);
   const filteredExercises = sortedExercises.filter((exercise) => {
     const levelMatch = selectedLevel === 'all' || exercise.level === selectedLevel;
     const courseMatch = selectedCourse === 'all' || exercise.courseId === parseInt(selectedCourse);
     return levelMatch && courseMatch;
   });
+  console.log('📋 filteredExercises after UI filters:', filteredExercises.length);
 
   const getLevelColor = (level) => {
     switch (level) {
@@ -261,17 +272,11 @@ const Exercises = () => {
 
           {/* Exercise Cards by Course */}
           {selectedCourse === 'all' ? (
-            // Nhóm theo khóa học
+            // Nhóm theo khóa học - SỬ DỤNG filteredExercises đã được lọc theo unlock level
             enrolledCourses.map(course => {
-              const courseExs = courseExercises[course.id] || [];
-              const courseExsWithFit = courseExs.map(ex => ({
-                ...ex,
-                calculatedFitPercent: calculateFitPercent(ex),
-                isRecommended: calculateFitPercent(ex) >= 80
-              }));
-              const filteredCourseExs = courseExsWithFit
-                .filter(ex => selectedLevel === 'all' || ex.level === selectedLevel)
-                .sort((a, b) => b.calculatedFitPercent - a.calculatedFitPercent);
+              // Lấy bài tập của khóa học này từ filteredExercises (đã lọc theo unlock level)
+              const filteredCourseExs = filteredExercises
+                .filter(ex => ex.courseId === course.id);
 
               if (filteredCourseExs.length === 0) return null;
 

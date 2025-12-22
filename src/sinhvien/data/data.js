@@ -569,19 +569,18 @@ export const getCourseTimeline = (courseId) => {
 };
 
 // Hàm xác định các level đã mở khóa cho một khóa học
-// Level 1 (Easy) luôn mở, Level 2 mở khi Level 1 đạt >=70%, Level 3 mở khi Level 2 đạt >=70%
+// Level 1 luôn mở, Level 2 mở khi Level 1 đạt >=70%, Level 3 mở khi Level 2 đạt >=70%
 export const getUnlockedLevels = (courseId) => {
   const exercises = courseExercises[courseId] || [];
 
   if (exercises.length === 0) {
-    return ['Easy']; // Mặc định Level 1 luôn mở
+    return [1]; // Mặc định Level 1 luôn mở
   }
 
-  const levels = ['Easy', 'Medium', 'Hard'];
-  const unlockedLevels = ['Easy']; // Level 1 luôn mở khóa
+  const unlockedLevels = [1]; // Level 1 luôn mở khóa
 
-  // Kiểm tra tiến độ Level 1 (Easy)
-  const level1Exercises = exercises.filter(ex => ex.level === 'Easy');
+  // Kiểm tra tiến độ Level 1
+  const level1Exercises = exercises.filter(ex => ex.levelNumber === 1);
   const level1Completed = level1Exercises.filter(ex => ex.completed).length;
   const level1Progress = level1Exercises.length > 0
     ? Math.round((level1Completed / level1Exercises.length) * 100)
@@ -589,10 +588,10 @@ export const getUnlockedLevels = (courseId) => {
 
   // Nếu Level 1 đạt >= 70%, mở khóa Level 2
   if (level1Progress >= 70) {
-    unlockedLevels.push('Medium');
+    unlockedLevels.push(2);
 
-    // Kiểm tra tiến độ Level 2 (Medium)
-    const level2Exercises = exercises.filter(ex => ex.level === 'Medium');
+    // Kiểm tra tiến độ Level 2
+    const level2Exercises = exercises.filter(ex => ex.levelNumber === 2);
     const level2Completed = level2Exercises.filter(ex => ex.completed).length;
     const level2Progress = level2Exercises.length > 0
       ? Math.round((level2Completed / level2Exercises.length) * 100)
@@ -600,7 +599,7 @@ export const getUnlockedLevels = (courseId) => {
 
     // Nếu Level 2 đạt >= 70%, mở khóa Level 3
     if (level2Progress >= 70) {
-      unlockedLevels.push('Hard');
+      unlockedLevels.push(3);
     }
   }
 
